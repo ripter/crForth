@@ -1,2 +1,3 @@
+#include <stdbool.h>
 
-char* TestGetNext(void);
+bool TestGetNext(void);

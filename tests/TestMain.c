@@ -4,12 +4,9 @@
 int main(void) {
   printf("Starting tests...\n");
 
-  printf("Testing: GetNext...\n");
-  if (TestGetNext()) {
-    printf("Tests passed!\n");
-  } else {
-    printf("Tests failed!\n");
-  }
+  printf("\nTesting: GetNext...\n");
+  TestGetNext();
+
 
   return 0;
 }
