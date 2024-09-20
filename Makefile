@@ -8,11 +8,12 @@ CFLAGS = -std=c99 -Wall -Wextra -pedantic
 RAYLIB_CFLAGS = $(shell pkg-config --cflags raylib)
 RAYLIB_LIBS = $(shell pkg-config --libs raylib)
 
+# Shared Source Files
+SHARED_SRC = ./src/GetNext.c
 # Source files
-SRC = ./src/main.c
-
+SRC = ./src/main.c $(SHARED_SRC)
 # Test files
-TEST_SRC = ./tests/test_main.c
+TEST_SRC = ./tests/TestMain.c ./tests/TestGetNext.c $(SHARED_SRC)
 
 # Output binary folder and name
 BUILD_DIR = ./build

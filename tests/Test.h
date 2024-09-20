@@ -1,0 +1,2 @@
+
+char* TestGetNext(void);

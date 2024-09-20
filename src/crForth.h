@@ -1,0 +1,2 @@
+
+char* GetNext(void);
