@@ -11,17 +11,34 @@ RAYLIB_LIBS = $(shell pkg-config --libs raylib)
 # Source files
 SRC = ./src/main.c
 
+# Test files
+TEST_SRC = ./tests/test_main.c
+
 # Output binary folder and name
 BUILD_DIR = ./build
 OUT = $(BUILD_DIR)/crForth
+TEST_OUT = $(BUILD_DIR)/crForth_test
 
 # Build target
-all: $(OUT)
+all: $(BUILD_DIR) $(OUT)
 
-# Link the executable
+# Compile and run tests
+test: $(TEST_OUT)
+	./$(TEST_OUT)
+
+# Create the build folder if it doesn't exist
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
+# Compile main executable
 $(OUT): $(SRC)
 	$(CC) $(CFLAGS) $(RAYLIB_CFLAGS) -o $(OUT) $(SRC) $(RAYLIB_LIBS)
+
+$(TEST_OUT): $(TEST_SRC) $(SRC)
+	$(CC) $(CFLAGS) $(RAYLIB_CFLAGS) -o $(TEST_OUT) $(TEST_SRC) $(RAYLIB_LIBS)
+
 
 # Clean target to remove the binary
 clean:
 	rm -f $(OUT)
+	rm -f $(TEST_OUT)
