@@ -7,7 +7,7 @@
 // Program main entry point
 //------------------------------------------------------------------------------------
 int main(void) { 
-  char* nextWord = GetNext();
-  printf("%s", nextWord);
+  char* nextWord = GetNext(stdin);
+  printf("%s\n", nextWord);
   return 0; 
 }
