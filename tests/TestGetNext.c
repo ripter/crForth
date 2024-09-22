@@ -78,7 +78,7 @@ MU_TEST(multiple_words_newline) {
 }
 
 MU_TEST(empty_string) {
-  char* testValue = "";
+  char* testValue = " \n\t";
   char* expected = NULL;
   SILENCE_STDERR();
   OPEN_STREAM(testValue);
@@ -97,17 +97,42 @@ MU_TEST(trailing_whitespace) {
   mu_assert_string_eq(actual, expected);
 }
 
+MU_TEST(prog_simple_1) {
+  char* testValue = "2 3 4 + + .";
+  char* actual = NULL;
+  OPEN_STREAM(testValue);
+  // should be able to get each word in the program
+  actual = GetNext(inputStream); ;
+  mu_assert_string_eq(actual, "2");
+
+  actual = GetNext(inputStream); ;
+  mu_assert_string_eq(actual, "3");
+
+  actual = GetNext(inputStream); ;
+  mu_assert_string_eq(actual, "4");
+
+  actual = GetNext(inputStream); ;
+  mu_assert_string_eq(actual, "+");
+  actual = GetNext(inputStream); ;
+  mu_assert_string_eq(actual, "+");
+
+  actual = GetNext(inputStream); ;
+  mu_assert_string_eq(actual, ".");
+  CLOSE_STREAM();
+}
+
 
 bool TestGetNext(void) {
 
+  MU_RUN_TEST(empty_string);
   MU_RUN_TEST(basic_string_1);
   MU_RUN_TEST(basic_string_2);
   MU_RUN_TEST(leading_whitespace);
   MU_RUN_TEST(word_too_long);
   MU_RUN_TEST(tab_delimited_words);
   MU_RUN_TEST(multiple_words_newline);
-  MU_RUN_TEST(empty_string);
   MU_RUN_TEST(trailing_whitespace);
+  MU_RUN_TEST(prog_simple_1);
   
 
   MU_REPORT();

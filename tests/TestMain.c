@@ -4,9 +4,11 @@
 int main(void) {
   printf("Starting tests...\n");
 
-  printf("\nTesting: GetNext...\n");
+  printf("\n*** GetNext Tests ***\n");
   TestGetNext();
 
+  printf("\n*** Dictionary Tests ***\n");
+  TestDictionary();
 
   return 0;
 }

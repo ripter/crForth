@@ -9,11 +9,12 @@ RAYLIB_CFLAGS = $(shell pkg-config --cflags raylib)
 RAYLIB_LIBS = $(shell pkg-config --libs raylib)
 
 # Shared Source Files
-SHARED_SRC = ./src/GetNext.c
+# Include all .c files in src/** except for src/main.c
+SHARED_SRC = $(shell find src -name '*.c' ! -name 'main.c')
 # Source files
 SRC = ./src/main.c $(SHARED_SRC)
 # Test files
-TEST_SRC = ./tests/TestMain.c ./tests/TestGetNext.c $(SHARED_SRC)
+TEST_SRC = $(wildcard ./tests/*.c) $(SHARED_SRC)
 
 # Output binary folder and name
 BUILD_DIR = ./build
