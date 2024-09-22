@@ -7,8 +7,8 @@
 #include "Dictionary.h"
 
 
-// Create a new dictionary (allocates memory using Raylib's MemAlloc)
-Dictionary* NewDictionary(void) {
+// Create a new dictionary of string -> function pointers
+Dictionary* CreateDictionary(void) {
     Dictionary* dict = (Dictionary*)MemAlloc(sizeof(Dictionary));
     dict->map = kh_init(dict);  // Initialize the khash dictionary
     return dict;
@@ -23,7 +23,7 @@ void FreeDictionary(Dictionary* dict) {
 }
 
 // Add a new key-function pair to the dictionary
-int AddItem(Dictionary* dict, const char* key, func_ptr_t func) {
+int AddItem(Dictionary* dict, const char* key, xt_func_ptr func) {
     int ret;
     khint_t k = kh_put(dict, dict->map, key, &ret);  // Insert key
     if (ret == -1) return 0;  // Insertion failed
@@ -48,7 +48,7 @@ int HasItem(Dictionary* dict, const char* key) {
 }
 
 // Get a function pointer associated with a key
-func_ptr_t GetItem(Dictionary* dict, const char* key) {
+xt_func_ptr GetItem(Dictionary* dict, const char* key) {
     khint_t k = kh_get(dict, dict->map, key);  // Find key
     if (k != kh_end(dict->map)) {
         return kh_value(dict->map, k);  // Return the function pointer
@@ -57,7 +57,7 @@ func_ptr_t GetItem(Dictionary* dict, const char* key) {
 }
 
 // Set a new function pointer for an existing key
-int SetItem(Dictionary* dict, const char* key, func_ptr_t func) {
+int SetItem(Dictionary* dict, const char* key, xt_func_ptr func) {
     khint_t k = kh_get(dict, dict->map, key);  // Find key
     if (k != kh_end(dict->map)) {
         kh_value(dict->map, k) = func;  // Set new function pointer
@@ -101,7 +101,7 @@ int main(void) {
     }
 
     // Get and call a function from the dictionary
-    func_ptr_t func = GetItem(dict, "func1");
+    xt_func_ptr func = GetItem(dict, "func1");
     if (func) func();  // Calls testFunction1
 
     // Print all the keys in the dictionary
