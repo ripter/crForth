@@ -23,12 +23,20 @@ int main(void) {
   AddCoreWords(&state);
   
   // Loaded and Ready! Show the version and prompt the user.
-  printf("crForth %s\n", APP_VERSION);
+  printf("           ______         _   _         \n"); 
+  printf("          |  ____|       | | | |        \n"); 
+  printf("  ___ _ __| |__ ___  _ __| |_| |__      \n");
+  printf(" / __| '__|  __/ _ \\| '__| __| '_ \\   \n");
+  printf("| (__| |  | | | (_) | |  | |_| | | |    \n");
+  printf(" \\___|_|  |_|  \\___/|_|   \\__|_| |_| \n");
+  printf("                                        \n");
+  printf("crForth version: %s\n", APP_VERSION);
+  printf("Type 'bye' to exit.\n\n");
 
 
   // Main loop, read words from stdin and process them
   while( (word = GetNextWord(stdin)) ) {
-    printf("Word: %s\n", word);
+    // printf("\nGot Word: %s\n", word);
     // for now, hard break on "bye"
     if (TextIsEqual(word, "bye")) {
       break;
