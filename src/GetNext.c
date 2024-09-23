@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <ctype.h> 
 #include "raylib.h"
 
 #include "crForth.h"
@@ -50,3 +51,29 @@ bool IsWhitespace(char c) {
   return c == ' ' || c == '\t' || c == '\n';
 }
 
+bool IsNumber(const char* word) {
+    // Check if the word is empty
+    if (word == NULL || *word == '\0') {
+        return false;
+    }
+
+    // Check if the first character is a sign (+ or -)
+    if (*word == '+' || *word == '-') {
+        word++;  // Move to the next character
+    }
+
+    // Ensure at least one digit after the optional sign
+    if (*word == '\0') {
+        return false;
+    }
+
+    // Check if the rest of the word contains only digits
+    while (*word) {
+        if (!isdigit((unsigned char)*word)) {
+            return false;
+        }
+        word++;
+    }
+
+    return true;
+}

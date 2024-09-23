@@ -4,7 +4,7 @@
 #include "crForth.h"
 #include "Dictionary.h"
 #include "Stack.h"
-#include "ThreadState.h"
+#include "KernelState.h"
 #include "core/CoreWords.h"
 
 
@@ -12,37 +12,41 @@
 // Program main entry point
 //------------------------------------------------------------------------------------
 int main(void) { 
-  Dictionary dict = {0};
-  CellStack dataStack = {0};
-  CellStack returnStack = {0};
+  KernelState state = {0};
   char* word; // Current word being processed.
 
-  // Initialize the stacks
-  InitCellStack(&dataStack);
-  InitCellStack(&returnStack);
+  // Initialize the kernel state
+  InitKernelState(&state);
 
-  // Initialize the dictionary
-  InitDictionary(&dict);
-
+  // Add the core words to the dictionary
+  AddCoreWords(&state);
   // Add the + word to the dictionary
-  AddItem(&dict, "+", (xt_func_ptr)Add);
-  AddItem(&dict, ".", (xt_func_ptr)Dot);
+  // AddItem(&state->dict, "+", (xt_func_ptr)Add);
+  // AddItem(&state->dict, ".", (xt_func_ptr)Dot);
   
   // Loaded and Ready! Show the version and prompt the user.
   printf("crForth %s\n", APP_VERSION);
 
 
-  // Main loop
+  // Main loop, read words from stdin and process them
   while( (word = GetNext(stdin)) ) {
+    // for now, hard break on "bye"
     if (TextIsEqual(word, "bye")) {
       break;
     }
-    if (HasItem(&dict, word)) {
-      xt_func_ptr func = GetItem(&dict, word);
-      func(NULL);
-    } else {
-      printf("Unknown word: %s\n", word);
-      PushCellStack(&dataStack, (cell_t)word);
+    // If the word is in the dictionary, execute it.
+    if (HasItem(&state.dict, word)) {
+      xt_func_ptr func = GetItem(&state.dict, word);
+      func(&state);
+    } 
+    // Else, attempt to convert the word to a number and push it to the stack.
+    else if (IsNumber(word)) {
+      cell_t num = (cell_t)atoi(word);
+      PushCellStack(&state.dataStack, num);
+    }
+    // Else, unknown word.
+    else {
+      printf(" Unknown word: %s\n", word);
     }
 
     printf(" ok\n");
@@ -50,10 +54,7 @@ int main(void) {
 
 
 
-  // Free the stacks
-  FreeCellStack(&dataStack);
-  FreeCellStack(&returnStack);
-  // Free the dictionary
-  FreeDictionary(&dict);
+  // Free the KernelState
+  FreeKernelState(&state);
   return 0; 
 }

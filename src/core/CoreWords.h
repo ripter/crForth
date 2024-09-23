@@ -1,9 +1,11 @@
 #ifndef COREWORDS_H
 #define COREWORDS_H
 
-#include "../ThreadState.h"
+#include "../KernelState.h"
 
-void Add(ThreadState* state);
-void Dot(ThreadState* state);
+void AddCoreWords(KernelState *state);
+
+void Add(KernelState *state);
+void Dot(KernelState *state);
 
 #endif // COREWORDS_H

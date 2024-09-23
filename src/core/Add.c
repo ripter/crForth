@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include "../ThreadState.h"
+#include "../KernelState.h"
 
-void Add(ThreadState* state) {
+void Add(KernelState* state) {
   (void)state;
   // int a = PopInt(state->dataStack);
   // int b = PopInt(state->dataStack);

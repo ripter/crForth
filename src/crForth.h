@@ -12,5 +12,6 @@ typedef uintptr_t cell_t;
 
 char* GetNext(FILE* input);
 bool IsWhitespace(char c);
+bool IsNumber(const char* word);
 
 #endif // CRFORTH_H
