@@ -2,11 +2,12 @@
 #define THREADSTATE_H
 
 #include "./Dictionary.h"
+#include "./Stack.h"
 
 typedef struct {
   Dictionary *dict;
-  void *dataStack;
-  void *returnSack;
+  CellStack *dataStack;
+  CellStack *returnSack;
 } ThreadState;
 
 #endif // THREADSTATE_H

@@ -15,7 +15,7 @@ typedef struct {
 } Dictionary;
 
 // Function prototypes
-Dictionary *CreateDictionary(void);
+void InitDictionary(Dictionary *dict);
 void FreeDictionary(Dictionary *dict);
 int AddItem(Dictionary *dict, const char *key, xt_func_ptr func);
 int RemoveItem(Dictionary *dict, const char *key);

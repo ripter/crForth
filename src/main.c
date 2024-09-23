@@ -12,18 +12,21 @@
 // Program main entry point
 //------------------------------------------------------------------------------------
 int main(void) { 
-  Dictionary *dict = CreateDictionary();
-  CellStack dataStack;
-  CellStack returnStack;
+  Dictionary dict = {0};
+  CellStack dataStack = {0};
+  CellStack returnStack = {0};
   char* word; // Current word being processed.
 
   // Initialize the stacks
   InitCellStack(&dataStack);
   InitCellStack(&returnStack);
 
+  // Initialize the dictionary
+  InitDictionary(&dict);
+
   // Add the + word to the dictionary
-  AddItem(dict, "+", (xt_func_ptr)Add);
-  AddItem(dict, ".", (xt_func_ptr)Dot);
+  AddItem(&dict, "+", (xt_func_ptr)Add);
+  AddItem(&dict, ".", (xt_func_ptr)Dot);
   
   // Loaded and Ready! Show the version and prompt the user.
   printf("crForth %s\n", APP_VERSION);
@@ -34,8 +37,8 @@ int main(void) {
     if (TextIsEqual(word, "bye")) {
       break;
     }
-    if (HasItem(dict, word)) {
-      xt_func_ptr func = GetItem(dict, word);
+    if (HasItem(&dict, word)) {
+      xt_func_ptr func = GetItem(&dict, word);
       func(NULL);
     } else {
       printf("Unknown word: %s\n", word);
@@ -51,6 +54,6 @@ int main(void) {
   FreeCellStack(&dataStack);
   FreeCellStack(&returnStack);
   // Free the dictionary
-  FreeDictionary(dict);
+  FreeDictionary(&dict);
   return 0; 
 }
