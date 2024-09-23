@@ -9,7 +9,7 @@
 
 // Returns the next word from the input stream
 // You are responsible for freeing the memory allocated by this function.
-char* GetNext(FILE* input) {
+char* GetNextWord(FILE* input) {
   char wordBuffer[MAX_WORD_LENGTH]; 
   int wordLength = 0;
   char c;

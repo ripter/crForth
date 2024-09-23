@@ -21,9 +21,6 @@ void FreeDictionary(Dictionary *dict) {
 // Add a new key-function pair to the dictionary
 bool AddItem(Dictionary *dict, const char *key, xt_func_ptr func) {
   int ret;
-  printf("Adding key: %s\n", key);
-  key = TextToLower(key); // Keys are case insensitive, conver to lower case
-  printf("Lowered key: %s\n", key);
   khint_t k = kh_put(dict, dict->map, key, &ret); // Insert key
   if (ret == -1)
     return 0;                    // Insertion failed
@@ -33,7 +30,6 @@ bool AddItem(Dictionary *dict, const char *key, xt_func_ptr func) {
 
 // Remove an item from the dictionary
 bool RemoveItem(Dictionary *dict, const char *key) {
-  key = TextToLower(key); // Keys are case insensitive, conver to lower case
   khint_t k = kh_get(dict, dict->map, key); // Find key
   if (k != kh_end(dict->map)) {
     kh_del(dict, dict->map, k); // Remove the key-value pair
@@ -44,16 +40,12 @@ bool RemoveItem(Dictionary *dict, const char *key) {
 
 // Check if a key exists in the dictionary
 bool HasItem(Dictionary *dict, const char *key) {
-  printf("Checking for key: %s\n", key);
-  key = TextToLower(key); // Keys are case insensitive, conver to lower case
-  printf("Lowered key: %s\n", key);
   khint_t k = kh_get(dict, dict->map, key); // Find key
   return k != kh_end(dict->map);
 }
 
 // Get a function pointer associated with a key
 xt_func_ptr GetItem(Dictionary *dict, const char *key) {
-  key = TextToLower(key); // Keys are case insensitive, conver to lower case
   khint_t k = kh_get(dict, dict->map, key); // Find key
   if (k != kh_end(dict->map)) {
     return kh_value(dict->map, k); // Return the function pointer
@@ -63,7 +55,6 @@ xt_func_ptr GetItem(Dictionary *dict, const char *key) {
 
 // Set a new function pointer for an existing key
 bool SetItem(Dictionary *dict, const char *key, xt_func_ptr func) {
-  key = TextToLower(key); // Keys are case insensitive, conver to lower case
   khint_t k = kh_get(dict, dict->map, key); // Find key
   if (k != kh_end(dict->map)) {
     kh_value(dict->map, k) = func; // Set new function pointer

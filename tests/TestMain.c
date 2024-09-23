@@ -4,7 +4,7 @@
 int main(void) {
   printf("Starting tests...\n");
 
-  printf("\n*** GetNext Tests ***\n");
+  printf("\n*** GetNextWord Tests ***\n");
   TestGetNext();
 
   printf("\n*** Dictionary Tests ***\n");

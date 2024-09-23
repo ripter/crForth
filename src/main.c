@@ -27,7 +27,7 @@ int main(void) {
 
 
   // Main loop, read words from stdin and process them
-  while( (word = GetNext(stdin)) ) {
+  while( (word = GetNextWord(stdin)) ) {
     printf("Word: %s\n", word);
     // for now, hard break on "bye"
     if (TextIsEqual(word, "bye")) {
@@ -37,7 +37,6 @@ int main(void) {
     // If there is a CONTROL word, execute it instead of the word.
     // Let it replace the word with the word it wants to execute.
     if (state.controlWord != NULL) {
-      printf("Control Word: %s\n", state.controlWord);
       funcForWord = GetItem(&state.dict, state.controlWord);
       word = funcForWord(&state, word);
     }
@@ -49,13 +48,11 @@ int main(void) {
 
     // If the word is in the dictionary, execute it.
     if (HasItem(&state.dict, word) == true) {
-      printf("Executing word: %s\n", word);
       funcForWord = GetItem(&state.dict, word);
       funcForWord(&state, word);
     } 
     // Else, attempt to convert the word to a number and push it to the stack.
     else if (IsNumber(word)) {
-      printf("Pushing number: %s\n", word);
       cell_t num = (cell_t)atoi(word);
       PushCellStack(&state.dataStack, num);
     }

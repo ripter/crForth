@@ -10,7 +10,7 @@
 
 typedef uintptr_t cell_t;
 
-char* GetNext(FILE* input);
+char* GetNextWord(FILE* input);
 bool IsWhitespace(char c);
 bool IsNumber(const char* word);
 
