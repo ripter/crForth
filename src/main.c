@@ -3,6 +3,7 @@
 
 #include "crForth.h"
 #include "Dictionary.h"
+#include "Stack.h"
 #include "ThreadState.h"
 #include "core/CoreWords.h"
 
@@ -11,8 +12,14 @@
 // Program main entry point
 //------------------------------------------------------------------------------------
 int main(void) { 
-  Dictionary* dict = CreateDictionary();
+  Dictionary *dict = CreateDictionary();
+  CellStack dataStack;
+  CellStack returnStack;
   char* word; // Current word being processed.
+
+  // Initialize the stacks
+  InitCellStack(&dataStack);
+  InitCellStack(&returnStack);
 
   // Add the + word to the dictionary
   AddItem(dict, "+", (xt_func_ptr)Add);
@@ -23,7 +30,7 @@ int main(void) {
 
 
   // Main loop
-  while( word = GetNext(stdin)) {
+  while( (word = GetNext(stdin)) ) {
     if (TextIsEqual(word, "bye")) {
       break;
     }
@@ -32,13 +39,18 @@ int main(void) {
       func(NULL);
     } else {
       printf("Unknown word: %s\n", word);
+      PushCellStack(&dataStack, (cell_t)word);
     }
+
+    printf(" ok\n");
   }
 
 
 
-
-
+  // Free the stacks
+  FreeCellStack(&dataStack);
+  FreeCellStack(&returnStack);
+  // Free the dictionary
   FreeDictionary(dict);
   return 0; 
 }
