@@ -24,7 +24,8 @@ char* GetNext(FILE* input) {
     if (IsWhitespace(c) && wordLength > 0) { break; }
     // Make sure we don't exceed the max word length
     if (wordLength >= (MAX_WORD_LENGTH) ) { fprintf(stderr, "\nError: Word too long to process\n"); return NULL; }
-    wordBuffer[wordLength] = c;
+    wordBuffer[wordLength] = tolower(c); // save as lowercase
+    // wordBuffer[wordLength] = c; 
     wordLength += 1;
   }
 
@@ -43,37 +44,4 @@ char* GetNext(FILE* input) {
   memcpy(word, wordBuffer, wordLength * sizeof(char));
   word[wordLength] = '\0'; // Null-terminate 
   return word;
-}
-
-
-// Returns true if the character is a whitespace character
-bool IsWhitespace(char c) {
-  return c == ' ' || c == '\t' || c == '\n';
-}
-
-bool IsNumber(const char* word) {
-    // Check if the word is empty
-    if (word == NULL || *word == '\0') {
-        return false;
-    }
-
-    // Check if the first character is a sign (+ or -)
-    if (*word == '+' || *word == '-') {
-        word++;  // Move to the next character
-    }
-
-    // Ensure at least one digit after the optional sign
-    if (*word == '\0') {
-        return false;
-    }
-
-    // Check if the rest of the word contains only digits
-    while (*word) {
-        if (!isdigit((unsigned char)*word)) {
-            return false;
-        }
-        word++;
-    }
-
-    return true;
 }

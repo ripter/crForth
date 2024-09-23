@@ -19,33 +19,41 @@ void FreeDictionary(Dictionary *dict) {
 }
 
 // Add a new key-function pair to the dictionary
-int AddItem(Dictionary *dict, const char *key, xt_func_ptr func) {
+bool AddItem(Dictionary *dict, const char *key, xt_func_ptr func) {
   int ret;
+  printf("Adding key: %s\n", key);
+  key = TextToLower(key); // Keys are case insensitive, conver to lower case
+  printf("Lowered key: %s\n", key);
   khint_t k = kh_put(dict, dict->map, key, &ret); // Insert key
   if (ret == -1)
     return 0;                    // Insertion failed
   kh_value(dict->map, k) = func; // Set the function pointer as the value
-  return 1;                      // Success
+  return true;                   // Success
 }
 
 // Remove an item from the dictionary
-int RemoveItem(Dictionary *dict, const char *key) {
+bool RemoveItem(Dictionary *dict, const char *key) {
+  key = TextToLower(key); // Keys are case insensitive, conver to lower case
   khint_t k = kh_get(dict, dict->map, key); // Find key
   if (k != kh_end(dict->map)) {
     kh_del(dict, dict->map, k); // Remove the key-value pair
-    return 1;                   // Success
+    return true;                // Success
   }
-  return 0; // Key not found
+  return false; // Key not found
 }
 
 // Check if a key exists in the dictionary
-int HasItem(Dictionary *dict, const char *key) {
+bool HasItem(Dictionary *dict, const char *key) {
+  printf("Checking for key: %s\n", key);
+  key = TextToLower(key); // Keys are case insensitive, conver to lower case
+  printf("Lowered key: %s\n", key);
   khint_t k = kh_get(dict, dict->map, key); // Find key
-  return k != kh_end(dict->map);            // Return 1 if found, 0 otherwise
+  return k != kh_end(dict->map);
 }
 
 // Get a function pointer associated with a key
 xt_func_ptr GetItem(Dictionary *dict, const char *key) {
+  key = TextToLower(key); // Keys are case insensitive, conver to lower case
   khint_t k = kh_get(dict, dict->map, key); // Find key
   if (k != kh_end(dict->map)) {
     return kh_value(dict->map, k); // Return the function pointer
@@ -54,13 +62,14 @@ xt_func_ptr GetItem(Dictionary *dict, const char *key) {
 }
 
 // Set a new function pointer for an existing key
-int SetItem(Dictionary *dict, const char *key, xt_func_ptr func) {
+bool SetItem(Dictionary *dict, const char *key, xt_func_ptr func) {
+  key = TextToLower(key); // Keys are case insensitive, conver to lower case
   khint_t k = kh_get(dict, dict->map, key); // Find key
   if (k != kh_end(dict->map)) {
     kh_value(dict->map, k) = func; // Set new function pointer
-    return 1;                      // Success
+    return true;                      // Success
   }
-  return 0; // Key not found
+  return false; // Key not found
 }
 
 // Print all the keys in the dictionary
@@ -72,47 +81,3 @@ void GetKeys(Dictionary *dict) {
     }
   }
 }
-
-// Test functions for function pointers
-void testFunction1(void) { printf("Test Function 1 executed!\n"); }
-
-void testFunction2(void) { printf("Test Function 2 executed!\n"); }
-
-/*
-// Main function to demonstrate the usage of the dictionary
-int main(void) {
-    // Create a new dictionary
-    Dictionary* dict = NewDictionary();
-
-    // Add items to the dictionary
-    AddItem(dict, "func1", testFunction1);
-    AddItem(dict, "func2", testFunction2);
-
-    // Check if a key exists
-    if (HasItem(dict, "func1")) {
-        printf("func1 exists in the dictionary.\n");
-    }
-
-    // Get and call a function from the dictionary
-    xt_func_ptr func = GetItem(dict, "func1");
-    if (func) func();  // Calls testFunction1
-
-    // Print all the keys in the dictionary
-    GetKeys(dict);
-
-    // Set a new function for an existing key
-    SetItem(dict, "func1", testFunction2);
-
-    // Get and call the updated function from the dictionary
-    func = GetItem(dict, "func1");
-    if (func) func();  // Calls testFunction2
-
-    // Remove an item from the dictionary
-    RemoveItem(dict, "func2");
-
-    // Free the dictionary
-    FreeDictionary(dict);
-
-    return 0;
-}
-*/

@@ -4,7 +4,7 @@
 #include "./libs/klib/khash.h"
 
 // Define the type for the function pointers (void func(void))
-typedef void (*xt_func_ptr)(void *);
+typedef char* (*xt_func_ptr)(void *, char* word);
 
 // Create a khash map with string keys and function pointer values
 KHASH_MAP_INIT_STR(dict, xt_func_ptr)
@@ -17,11 +17,11 @@ typedef struct {
 // Function prototypes
 void InitDictionary(Dictionary *dict);
 void FreeDictionary(Dictionary *dict);
-int AddItem(Dictionary *dict, const char *key, xt_func_ptr func);
-int RemoveItem(Dictionary *dict, const char *key);
-int HasItem(Dictionary *dict, const char *key);
+bool AddItem(Dictionary *dict, const char *key, xt_func_ptr func);
+bool RemoveItem(Dictionary *dict, const char *key);
+bool HasItem(Dictionary *dict, const char *key);
 xt_func_ptr GetItem(Dictionary *dict, const char *key);
-int SetItem(Dictionary *dict, const char *key, xt_func_ptr func);
+bool SetItem(Dictionary *dict, const char *key, xt_func_ptr func);
 void GetKeys(Dictionary *dict);
 
 #endif // DICTIONARY_H

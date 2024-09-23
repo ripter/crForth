@@ -3,9 +3,9 @@
 #include "../KernelState.h"
 #include "../Stack.h"
 
-void Dot(KernelState* state) {
+char* Dot(KernelState* state, char* word) {
+  (void)word; // UNUSED
   cell_t a = PopCellStack(&state->dataStack);
   printf("%ld\n", a);
-  // int a = PopInt(state->dataStack);
-  // printf("%d\n", a);
+  return NULL;
 }

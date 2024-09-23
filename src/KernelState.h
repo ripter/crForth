@@ -1,6 +1,7 @@
 #ifndef KERNELSTATE_H
 #define KERNELSTATE_H
 
+#include <stdbool.h>
 #include "./Dictionary.h"
 #include "./Stack.h"
 
@@ -8,6 +9,8 @@ typedef struct {
   Dictionary dict;
   CellStack dataStack;
   CellStack returnSack;
+  bool IsInCompileMode;
+  char* controlWord;
 } KernelState;
 
 

@@ -14,15 +14,13 @@
 int main(void) { 
   KernelState state = {0};
   char* word; // Current word being processed.
+  xt_func_ptr funcForWord = NULL; // Function pointer to the current word's executable code.
 
   // Initialize the kernel state
   InitKernelState(&state);
 
   // Add the core words to the dictionary
   AddCoreWords(&state);
-  // Add the + word to the dictionary
-  // AddItem(&state->dict, "+", (xt_func_ptr)Add);
-  // AddItem(&state->dict, ".", (xt_func_ptr)Dot);
   
   // Loaded and Ready! Show the version and prompt the user.
   printf("crForth %s\n", APP_VERSION);
@@ -30,17 +28,34 @@ int main(void) {
 
   // Main loop, read words from stdin and process them
   while( (word = GetNext(stdin)) ) {
+    printf("Word: %s\n", word);
     // for now, hard break on "bye"
     if (TextIsEqual(word, "bye")) {
       break;
     }
+
+    // If there is a CONTROL word, execute it instead of the word.
+    // Let it replace the word with the word it wants to execute.
+    if (state.controlWord != NULL) {
+      printf("Control Word: %s\n", state.controlWord);
+      funcForWord = GetItem(&state.dict, state.controlWord);
+      word = funcForWord(&state, word);
+    }
+
+    // If the word is NULL, skip it.
+    if (word == NULL) {
+      continue;
+    }
+
     // If the word is in the dictionary, execute it.
-    if (HasItem(&state.dict, word)) {
-      xt_func_ptr func = GetItem(&state.dict, word);
-      func(&state);
+    if (HasItem(&state.dict, word) == true) {
+      printf("Executing word: %s\n", word);
+      funcForWord = GetItem(&state.dict, word);
+      funcForWord(&state, word);
     } 
     // Else, attempt to convert the word to a number and push it to the stack.
     else if (IsNumber(word)) {
+      printf("Pushing number: %s\n", word);
       cell_t num = (cell_t)atoi(word);
       PushCellStack(&state.dataStack, num);
     }
@@ -48,8 +63,6 @@ int main(void) {
     else {
       printf(" Unknown word: %s\n", word);
     }
-
-    printf(" ok\n");
   }
 
 

@@ -5,7 +5,8 @@
 
 void AddCoreWords(KernelState *state);
 
-void Add(KernelState *state);
-void Dot(KernelState *state);
+char* Add(KernelState* state, char* word);
+char* Dot(KernelState* state, char* word);
+char* BranchNZ(KernelState *state, char* word);
 
 #endif // COREWORDS_H
