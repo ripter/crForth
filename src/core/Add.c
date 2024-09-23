@@ -2,9 +2,7 @@
 #include "../KernelState.h"
 
 void Add(KernelState* state) {
-  (void)state;
-  // int a = PopInt(state->dataStack);
-  // int b = PopInt(state->dataStack);
-  // PushInt(state->dataStack, a + b);
-  printf("TODO: Implement Add\n");
+  cell_t a = PopCellStack(&state->dataStack);
+  cell_t b = PopCellStack(&state->dataStack);
+  PushCellStack(&state->dataStack, a + b);
 }
