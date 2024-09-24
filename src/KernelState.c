@@ -7,7 +7,6 @@ void InitKernelState(KernelState *state) {
   InitCellStack(&state->dataStack);
   InitCellStack(&state->returnSack);
   state->IsInCompileMode = false;
-  state->controlWord = NULL;
 }
 
 
@@ -16,6 +15,5 @@ void FreeKernelState(KernelState *state) {
   FreeCellStack(&state->dataStack);
   FreeCellStack(&state->returnSack);
   state->IsInCompileMode = false;
-  state->controlWord = NULL;
 }
 

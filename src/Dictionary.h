@@ -2,9 +2,8 @@
 #define DICTIONARY_H
 
 #include "./libs/klib/khash.h"
+#include "./crForth.h"
 
-// Define the type for the function pointers (void func(void))
-typedef char* (*xt_func_ptr)(void *, char* word);
 
 // Create a khash map with string keys and function pointer values
 KHASH_MAP_INIT_STR(dict, xt_func_ptr)

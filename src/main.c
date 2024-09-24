@@ -42,22 +42,23 @@ int main(void) {
       break;
     }
 
-    // If there is a CONTROL word, execute it instead of the word.
-    // Let it replace the word with the word it wants to execute.
-    if (state.controlWord != NULL) {
-      funcForWord = GetItem(&state.dict, state.controlWord);
+    // Is there an address on the return (control) stack?
+    if (!IsCellStackEmpty(&state.returnSack)) {
+      funcForWord = (xt_func_ptr) PopCellStack(&state.returnSack);
+      // Run the address, passing it the current word.
+      // It'll return a word to execute, or NULL to finish processing this word.
       word = funcForWord(&state, word);
+      // If the word is NULL, skip it.
+      if (word == NULL) {
+        continue;
+      }
     }
 
-    // If the word is NULL, skip it.
-    if (word == NULL) {
-      continue;
-    }
 
     // If the word is in the dictionary, execute it.
     if (HasItem(&state.dict, word) == true) {
       funcForWord = GetItem(&state.dict, word);
-      funcForWord(&state, word);
+      funcForWord(&state, NULL);
     } 
     // Else, attempt to convert the word to a number and push it to the stack.
     else if (IsNumber(word)) {

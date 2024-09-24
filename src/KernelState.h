@@ -10,7 +10,6 @@ typedef struct {
   CellStack dataStack;
   CellStack returnSack;
   bool IsInCompileMode;
-  char* controlWord;
 } KernelState;
 
 

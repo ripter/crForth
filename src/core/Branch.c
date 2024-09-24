@@ -1,60 +1,53 @@
 #include "../KernelState.h"
 
-// Branch is an immediate word.
+// ( C: "<spaces>number --" )
+// Parse a number delimited by a space and skip the number of words specified by the parsed number.
+// Branch is an immediate word that controls the flow by skipping words.
 char* Branch(KernelState *state, char* word) {
-  (void)state; // Unused
-  (void)word; // Unused
+  // first time we are called, we need to initialize the loop.
+  if (word == NULL) {
+    PushCellStack(&state->returnSack, -1); // Sentinel value for the loop counter.
+    PushCellStack(&state->returnSack, (cell_t)Branch);
+    // We are done, return NULL to finish processing this word and move to the next one.
+    return NULL;
+  }
+
+  // Get the loop counter from the return stack.
+  cell_t loopCounter = PopCellStack(&state->returnSack);
+
+  // If it's the sentinel value, the word is the loop count.
+  if (loopCounter == -1) {
+    cell_t num = (cell_t)atoi(word);
+    loopCounter = num; 
+  }
+
+  // If the loop counter is zero, we are done.
+  if (loopCounter == 0) {
+    return NULL;
+  }
+
+  // Decrement the loop and update the return stack.
+  PushCellStack(&state->returnSack, loopCounter - 1);
+  PushCellStack(&state->returnSack, (cell_t)Branch);
   return NULL;
 }
+
+
 
 // Branch if the top of the stack is not zero.
 // Branch is an immediate word.
 char* BranchNZ(KernelState *state, char* word) {
-  // If there is no control word, initalize the "loop" by pushing two values, (shouldRun, loopCount).
-  if (state->controlWord == NULL) {
-    state->controlWord = word;
-    // When we do know the count, do we run the word?
-    cell_t top = PopCellStack(&state->dataStack);
-    // Not Zero? Run the word.
-    if (top != 0) {
-      PushCellStack(&state->returnSack, true);
-    } else {
-      PushCellStack(&state->returnSack, false);
-    }
-    // We do not know the loop counter yet, so put a special value on the return stack.
-    PushCellStack(&state->returnSack, -1);
+  (void)word;
+  bool testValue = (bool)PopCellStack(&state->dataStack);
+
+  if (testValue) {
+    printf("BranchNZ: Branching\n");
     return NULL;
   }
-
-  // Get the LoopCount from the Return Stack.
-  cell_t loopCounter = PopCellStack(&state->returnSack);
-
-  // The first word after us is the loop counter,
-  // to find it, look for the special value on the return stack.
-  if (loopCounter == -1) {
-    cell_t num = (cell_t)atoi(word);
-    PushCellStack(&state->returnSack, num);
-    return NULL;
+  else {
+    printf("BranchNZ: Skipping\n");
+    PushCellStack(&state->returnSack, (cell_t)Branch);
   }
 
-  // Get the shouldRun from the Return Stack.
-  bool shouldRun = (bool)PopCellStack(&state->returnSack);
-
-  // If the loop counter is zero, we are done.
-  if (loopCounter == 0) {
-    state->controlWord = NULL;
-    return NULL;
-  }
-
-  // Push the shouldRun back on the return stack.
-  PushCellStack(&state->returnSack, shouldRun);
-  // Decrement the loop counter and put it back on the return stack.
-  PushCellStack(&state->returnSack, loopCounter - 1);
-
-  // If the top of the stack is not zero, return the word to execute.
-  if (shouldRun) {
-    return word;
-  }
-  // else, skip the word.
   return NULL;
 }
