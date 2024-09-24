@@ -115,5 +115,5 @@ bool TestBranch(void) {
   MU_RUN_TEST(branchnz_basic_false);
 
   MU_REPORT();
-  return true;
+  return MU_EXIT_CODE;
 }
