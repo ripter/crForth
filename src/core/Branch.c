@@ -1,7 +1,14 @@
 #include "../KernelState.h"
 
+// Branch is an immediate word.
+char* Branch(KernelState *state, char* word) {
+  (void)state; // Unused
+  (void)word; // Unused
+  return NULL;
+}
 
 // Branch if the top of the stack is not zero.
+// Branch is an immediate word.
 char* BranchNZ(KernelState *state, char* word) {
   // If there is no control word, initalize the "loop" by pushing two values, (shouldRun, loopCount).
   if (state->controlWord == NULL) {
