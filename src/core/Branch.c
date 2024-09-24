@@ -37,15 +37,18 @@ char* Branch(KernelState *state, char* word) {
 // ( flag C: "<spaces>number" -- )
 // Executes or skips a branch based on the value on the data stack.
 char* BranchNZ(KernelState *state, char* word) {
-  (void)word;
-  bool testValue = (bool)PopCellStack(&state->dataStack);
+  if (word != NULL) {
+    // Consume the number and end the word.
+    return NULL;
+  }
 
+  bool testValue = (bool)PopCellStack(&state->dataStack);
   if (testValue) {
-    printf("BranchNZ: Running the branch code.\n");
+    // We still need to consume the number.
+    PushCellStack(&state->returnStack, (cell_t)BranchNZ);
     return NULL;
   }
   else {
-    printf("BranchNZ: Skipping branch code.\n");
     return Branch(state, NULL);
   }
 
