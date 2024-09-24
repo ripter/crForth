@@ -6,7 +6,7 @@
 #include "./core/CoreWords.h"
 
 // Runs the Forth Kernel using the given KernelState and input stream.
-void DoForth(KernelState *state, FILE* inputStream) {
+void DoForth(KernelState *state, FILE *inputStream) {
   char* word; // Current word being processed.
   xt_func_ptr funcForWord = NULL; // Function pointer to the current word's executable code.
 

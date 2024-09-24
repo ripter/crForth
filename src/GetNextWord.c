@@ -11,6 +11,8 @@
 // Returns the next word from the input stream
 // You are responsible for freeing the memory allocated by this function.
 char* GetNextWord(FILE* input) {
+  // Make sure the stream is valid
+  if (feof(input)) { return NULL; }
   char wordBuffer[MAX_WORD_LENGTH]; 
   int wordLength = 0;
   char c;

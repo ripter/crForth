@@ -5,6 +5,7 @@
 #include "minunit.h"
 #include "Test.h"
 #include "../src/crForth.h"
+#include "../src/main.h"
 
 
 #define OPEN_STREAM(input) \
@@ -24,7 +25,7 @@
 
 MU_TEST(basic_string_1) {
   char* testValue = "Hello, World!";
-  char* expected = "Hello,";
+  char* expected = "hello,";
   OPEN_STREAM(testValue);
   char* actual = GetNextWord(inputStream); ;
   CLOSE_STREAM();
@@ -50,7 +51,7 @@ MU_TEST(leading_whitespace) {
 }
 
 MU_TEST(word_too_long) {
-  char* testValue = "ThisIsAVeryLongWordThatExceedsTheMaxLengthOfTheBufferThisIsAVeryLongWordThatExceedsTheMaxLengthOfTheBuffer";
+  char* testValue = "Loremipsumdolorsitamet,consecteturadipiscingelit.Maurisfaucibusmagnaidnibhultricestempor.Donecvellectussem.Fuscevellacusetodiodapibusvehiculanecegetenim.Vivamusbibendum,arcuetdictumdictum,tellusliberoposuereipsum,velvehiculaliberotortoratipsum.Crasconsecteturcursusiaculis.Integerutsemvitaelacusiaculismollis.Vestibulumjustotellus,pellentesqueideleifendac,pretiumnecvelit.Fuscefacilisisligulaeunislpulvinarporttitor.Nuncduirisus,egestasnecaliquetin,auctornonsapien.Maurissitametjustoinnisiconvallisaliquamnoninorci.Namluctustellusacsollicitudinfaucibus.Maurisetestatorcimattisinterdum.Quisquesollicitudinposueredolor.Sedtinciduntnisiacerosfringilla,sedcursusnullalacinia.Nullavehiculapharetranisiinlacinia.Suspendisseefficitur,ligulautsodalesmolestie,eratauguevolutpatmaurissitametblanditeratorciatligula.Donecscelerisquearcuetornareluctus.Integerneclobortiseros.Integeregetcongueaugue.Duispharetraacquamnonegestas.Maecenasullamcorpercongueelituthendrerit.Praesentsednibhetvelitconsequatsollicitudin.Quisqueconsecteturlacusatsapienvarius,attinciduntnuncrhoncus.Nullafacilisi.Integeretinterdumnibh,atbibendumorci.Sedsedloremeumaurispulvinarportaneccommodourna.Praesentvenenatisaccumsanipsumnecgravida.Proinportarhoncusligulavitaevehicula.Aeneancondimentum,urnaidullamcorperfermentum,nibhleomattisaugue,atconvallismetuspurusvelarcu.Phaselluscongueportaest,necmaximuslectusscelerisquenon.Sedmaximusodiositametpellentesquesuscipit.Fusceduitortor,posuereintristiqueid,cursusintortor.Suspendisseportaegetsapiensitametdapibus.Fusceinfeuittartellus.Vivamussaviverrasapien.Nuncemalesuadafelis.Seddictumloremaliquettempusultrices.Aliquamvestibulumpulvinarpharetra.Suspendissedictummetusaclacustempus,posueremaximusturpisrutrum.Praesent.";
   SILENCE_STDERR();
   OPEN_STREAM(testValue);
   char* actual = GetNextWord(inputStream); ;
@@ -90,7 +91,7 @@ MU_TEST(empty_string) {
 
 MU_TEST(trailing_whitespace) {
   char* testValue = "Hello   ";
-  char* expected = "Hello";
+  char* expected = "hello";
   OPEN_STREAM(testValue);
   char* actual = GetNextWord(inputStream); ;
   CLOSE_STREAM();

@@ -2,7 +2,7 @@
 #include "Test.h"
 
 int main(void) {
-  printf("Starting tests...\n");
+  // printf("Starting tests...\n");
 
   printf("\n*** GetNextWord Tests ***\n");
   TestGetNext();
