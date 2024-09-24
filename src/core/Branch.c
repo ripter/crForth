@@ -33,9 +33,8 @@ char* Branch(KernelState *state, char* word) {
 }
 
 
-
-// Branch if the top of the stack is not zero.
-// Branch is an immediate word.
+// ( flag C: "<spaces>number" -- )
+// Executes or skips a branch based on the value on the data stack.
 char* BranchNZ(KernelState *state, char* word) {
   (void)word;
   bool testValue = (bool)PopCellStack(&state->dataStack);

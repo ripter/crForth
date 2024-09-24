@@ -5,7 +5,7 @@
 
 
 char* DotS(KernelState* state, char* word) {
-  (void)word;
+  (void)word; // Unused parameter
   size_t stackSize = CellStackSize(&state->dataStack);
   size_t returnStackSize = CellStackSize(&state->returnStack);
 
@@ -23,5 +23,6 @@ char* DotS(KernelState* state, char* word) {
     printf("%ld ", value); 
   }
   printf(" \n");
+
   return NULL;
 }

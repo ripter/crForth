@@ -6,7 +6,8 @@
 
 
 
-bool TestDictionary(void) {
+
+bool TestBranch(void) {
   printf("TODO: Implement Dictionary tests\n");
   return true;
 }

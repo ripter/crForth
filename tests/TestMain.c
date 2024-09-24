@@ -7,8 +7,8 @@ int main(void) {
   printf("\n*** GetNextWord Tests ***\n");
   TestGetNext();
 
-  printf("\n*** Dictionary Tests ***\n");
-  TestDictionary();
+  printf("\n*** Branch Tests ***\n");
+  TestBranch();
 
   return 0;
 }
