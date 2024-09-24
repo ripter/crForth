@@ -5,6 +5,7 @@
 #include "raylib.h"
 
 #include "crForth.h"
+#include "main.h"
 
 
 // Returns the next word from the input stream

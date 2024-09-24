@@ -1,4 +1,5 @@
 #include "../KernelState.h"
+#include "../Stack.h"
 
 // ( C: "<spaces>number --" )
 // Parse a number delimited by a space and skip the number of words specified by the parsed number.

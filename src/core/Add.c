@@ -1,5 +1,7 @@
 #include <stdio.h>
+
 #include "../KernelState.h"
+#include "../Stack.h"
 
 char* Add(KernelState* state, char* word) {
   (void)word; // UNUSED

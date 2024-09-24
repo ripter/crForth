@@ -1,3 +1,4 @@
+#include "../crForth.h"
 #include "CoreWords.h"
 
 // Adds the Core Words to the dictionary.

@@ -2,6 +2,7 @@
 #define CRFORTH_H
 
 #include <stdio.h>
+#include <stdbool.h>
 
 #define APP_VERSION "0.0.1-dev"
 
@@ -22,8 +23,6 @@ typedef intptr_t cell_t;
 //  - A branching word, like "branch", will be executed as: `word = Branch(&state, word);`
 typedef char* (*xt_func_ptr)(void *, char* word);
 
-char* GetNextWord(FILE* input);
-bool IsWhitespace(char c);
-bool IsNumber(const char* word);
+
 
 #endif // CRFORTH_H
