@@ -41,12 +41,12 @@ char* BranchNZ(KernelState *state, char* word) {
   bool testValue = (bool)PopCellStack(&state->dataStack);
 
   if (testValue) {
-    printf("BranchNZ: Branching\n");
+    printf("BranchNZ: Running the branch code.\n");
     return NULL;
   }
   else {
-    printf("BranchNZ: Skipping\n");
-    PushCellStack(&state->returnSack, (cell_t)Branch);
+    printf("BranchNZ: Skipping branch code.\n");
+    return Branch(state, NULL);
   }
 
   return NULL;
