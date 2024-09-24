@@ -6,6 +6,7 @@
 void AddCoreWords(KernelState *state);
 
 char* Add(KernelState* state, char* word);
+char* Subtract(KernelState* state, char* word);
 char* Dot(KernelState* state, char* word);
 char* Branch(KernelState *state, char* word); 
 char* BranchNZ(KernelState *state, char* word);
