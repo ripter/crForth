@@ -15,6 +15,8 @@ void FreeCellStack(CellStack *stack);
 void PushCellStack(CellStack *stack, cell_t value);
 cell_t PopCellStack(CellStack *stack);
 bool IsCellStackEmpty(CellStack *stack);
+size_t CellStackSize(CellStack *stack);
+cell_t ViewCellStack(CellStack *stack, size_t index);
 
 
 #endif // STACK_H

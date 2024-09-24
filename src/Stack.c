@@ -27,3 +27,16 @@ cell_t PopCellStack(CellStack *stack) {
 bool IsCellStackEmpty(CellStack *stack) {
   return kv_size(*stack) == 0;
 }
+
+size_t CellStackSize(CellStack *stack) {
+  return kv_size(*stack);
+}
+
+cell_t ViewCellStack(CellStack *stack, size_t index) {
+  if (index < kv_size(*stack)) {
+    return kv_A(*stack, index);
+  } else {
+    TraceLog(LOG_WARNING, "Index out of bounds");
+    return (cell_t){0}; /* Return zero-initialized value */
+  }
+}
