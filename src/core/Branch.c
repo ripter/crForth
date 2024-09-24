@@ -6,14 +6,14 @@
 char* Branch(KernelState *state, char* word) {
   // first time we are called, we need to initialize the loop.
   if (word == NULL) {
-    PushCellStack(&state->returnSack, -1); // Sentinel value for the loop counter.
-    PushCellStack(&state->returnSack, (cell_t)Branch);
+    PushCellStack(&state->returnStack, -1); // Sentinel value for the loop counter.
+    PushCellStack(&state->returnStack, (cell_t)Branch);
     // We are done, return NULL to finish processing this word and move to the next one.
     return NULL;
   }
 
   // Get the loop counter from the return stack.
-  cell_t loopCounter = PopCellStack(&state->returnSack);
+  cell_t loopCounter = PopCellStack(&state->returnStack);
 
   // If it's the sentinel value, the word is the loop count.
   if (loopCounter == -1) {
@@ -27,8 +27,8 @@ char* Branch(KernelState *state, char* word) {
   }
 
   // Decrement the loop and update the return stack.
-  PushCellStack(&state->returnSack, loopCounter - 1);
-  PushCellStack(&state->returnSack, (cell_t)Branch);
+  PushCellStack(&state->returnStack, loopCounter - 1);
+  PushCellStack(&state->returnStack, (cell_t)Branch);
   return NULL;
 }
 

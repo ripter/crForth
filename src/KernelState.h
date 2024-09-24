@@ -8,7 +8,7 @@
 typedef struct {
   Dictionary dict;
   CellStack dataStack;
-  CellStack returnSack;
+  CellStack returnStack;
   bool IsInCompileMode;
 } KernelState;
 

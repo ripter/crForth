@@ -43,8 +43,8 @@ int main(void) {
     }
 
     // Is there an address on the return (control) stack?
-    if (!IsCellStackEmpty(&state.returnSack)) {
-      funcForWord = (xt_func_ptr) PopCellStack(&state.returnSack);
+    if (!IsCellStackEmpty(&state.returnStack)) {
+      funcForWord = (xt_func_ptr) PopCellStack(&state.returnStack);
       // Run the address, passing it the current word.
       // It'll return a word to execute, or NULL to finish processing this word.
       word = funcForWord(&state, word);

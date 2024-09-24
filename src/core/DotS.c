@@ -7,7 +7,7 @@
 char* DotS(KernelState* state, char* word) {
   (void)word;
   size_t stackSize = CellStackSize(&state->dataStack);
-  size_t returnStackSize = CellStackSize(&state->returnSack);
+  size_t returnStackSize = CellStackSize(&state->returnStack);
 
   printf("Data Stack: ");
   for (size_t i = 0; i < stackSize; i++) {
@@ -19,7 +19,7 @@ char* DotS(KernelState* state, char* word) {
 
   printf("Return Stack: ");
   for (size_t i = 0; i < returnStackSize; i++) {
-    cell_t value = ViewCellStack(&state->returnSack, i);
+    cell_t value = ViewCellStack(&state->returnStack, i);
     printf("%ld ", value); 
   }
   printf(" \n");
