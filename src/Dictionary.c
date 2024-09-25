@@ -26,7 +26,7 @@ bool AddItemToDictionary(Dictionary *dict, const char *key, xt_func_ptr func) {
     return 0;                     // Insertion failed
   }
   kh_value(dict->map, k) = func;  // Set the function pointer as the value
-  dict->last_key = key;           // Track the last added key
+  dict->lastKey = key;            // Track the last added key
   return true;                    // Success
 }
 
@@ -76,8 +76,8 @@ void GetKeysInDictionary(Dictionary *dict) {
 }
 
 xt_func_ptr GetLastItemFromDictionary(Dictionary *dict) {
-  if (dict->last_key != NULL) {
-    return GetItemFromDictionary(dict, dict->last_key);
+  if (dict->lastKey != NULL) {
+    return GetItemFromDictionary(dict, dict->lastKey);
   }
   return NULL; // No last item exists
 }

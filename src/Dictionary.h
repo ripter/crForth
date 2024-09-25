@@ -11,7 +11,7 @@ KHASH_MAP_INIT_STR(dict, xt_func_ptr)
 // Dictionary type definition
 typedef struct {
   khash_t(dict) * map; // Hash map for storing keys and function pointers
-  const char *last_key; // Keep track of the last key added
+  const char *lastKey; // Keep track of the last key added
 } Dictionary;
 
 // Function prototypes
