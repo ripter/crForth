@@ -5,7 +5,7 @@ char* Colon(KernelState *state, char *word) {
   // First time : is called, we need to consume the next word to get the name of the new word.
   // So push Colon back onto the return stack and return NULL.
   if (word == NULL) {
-    PushCellStack(&state->returnStack, (cell_t)Colon);
+    PushToCellStack(&state->returnStack, (cell_t)Colon);
     return NULL;
   }
 

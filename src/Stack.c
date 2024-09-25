@@ -11,7 +11,7 @@ void FreeCellStack(CellStack *stack) {
   kv_destroy(*stack);
 }
 
-void PushCellStack(CellStack *stack, cell_t value) {
+void PushToCellStack(CellStack *stack, cell_t value) {
   kv_push(cell_t, *stack, value);
 }
 

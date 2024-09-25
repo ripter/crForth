@@ -12,7 +12,7 @@ typedef kvec_t(cell_t) CellStack;
 
 void InitCellStack(CellStack *stack);
 void FreeCellStack(CellStack *stack);
-void PushCellStack(CellStack *stack, cell_t value);
+void PushToCellStack(CellStack *stack, cell_t value);
 cell_t PopCellStack(CellStack *stack);
 bool IsCellStackEmpty(CellStack *stack);
 size_t CellStackSize(CellStack *stack);

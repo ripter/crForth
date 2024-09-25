@@ -38,7 +38,7 @@ void DoForth(KernelState *state, FILE *inputStream) {
     // Else, attempt to convert the word to a number and push it to the stack.
     else if (IsNumber(word)) {
       cell_t num = (cell_t)atoi(word);
-      PushCellStack(&state->dataStack, num);
+      PushToCellStack(&state->dataStack, num);
     }
     // Else, unknown word.
     else {
