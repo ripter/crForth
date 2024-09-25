@@ -22,10 +22,12 @@ void FreeDictionary(Dictionary *dict) {
 bool AddItemToDictionary(Dictionary *dict, const char *key, xt_func_ptr func) {
   int ret;
   khint_t k = kh_put(dict, dict->map, key, &ret); // Insert key
-  if (ret == -1)
-    return 0;                    // Insertion failed
-  kh_value(dict->map, k) = func; // Set the function pointer as the value
-  return true;                   // Success
+  if (ret == -1) {
+    return 0;                     // Insertion failed
+  }
+  kh_value(dict->map, k) = func;  // Set the function pointer as the value
+  dict->last_key = key;           // Track the last added key
+  return true;                    // Success
 }
 
 // Remove an item from the dictionary
@@ -71,4 +73,11 @@ void GetKeysInDictionary(Dictionary *dict) {
       printf("Key: %s\n", kh_key(dict->map, k));
     }
   }
+}
+
+xt_func_ptr GetLastItemFromDictionary(Dictionary *dict) {
+  if (dict->last_key != NULL) {
+    return GetItemFromDictionary(dict, dict->last_key);
+  }
+  return NULL; // No last item exists
 }
