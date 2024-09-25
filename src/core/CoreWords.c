@@ -8,6 +8,8 @@ void AddCoreWords(KernelState *state) {
   AddItem(&state->dict, "-", (xt_func_ptr)Subtract);
   AddItem(&state->dict, ".", (xt_func_ptr)Dot);
   AddItem(&state->dict, "branch", (xt_func_ptr)Branch);
-  AddItem(&state->dict, "branch?", (xt_func_ptr)BranchNZ);
+  AddItem(&state->dict, "branch?", (xt_func_ptr)BranchZ);
   AddItem(&state->dict, ".s", (xt_func_ptr)DotS);
+  AddItem(&state->dict, ":", (xt_func_ptr)Colon);
+  AddItem(&state->dict, ";", (xt_func_ptr)SemiColon);
 }
