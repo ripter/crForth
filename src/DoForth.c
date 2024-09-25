@@ -2,12 +2,14 @@
 #include "main.h"
 #include "KernelState.h"
 #include "Dictionary.h"
+#include "WordMetadata.h"
 
 #include "./core/CoreWords.h"
 
 // Runs the Forth Kernel using the given KernelState and input stream.
 void DoForth(KernelState *state, FILE *inputStream) {
   char* word; // Current word being processed.
+  WordMetadata* wordMeta; // Metadata for the current word.
   xt_func_ptr funcForWord = NULL; // Function pointer to the current word's executable code.
 
   // Main loop, read words from stdin and process them
@@ -31,7 +33,8 @@ void DoForth(KernelState *state, FILE *inputStream) {
 
     // If the word is in the dictionary, execute it.
     if (HasItemInDictionary(&state->dict, word) == true) {
-      funcForWord = GetItemFromDictionary(&state->dict, word);
+      wordMeta = GetItemFromDictionary(&state->dict, word);
+      funcForWord = wordMeta->func;
       // printf("Executing word: %s %p\n", word, (void *)funcForWord);
       funcForWord(state, NULL);
     } 

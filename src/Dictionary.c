@@ -14,27 +14,46 @@ void InitDictionary(Dictionary *dict) {
 
 void FreeDictionary(Dictionary *dict) {
   if (dict->map) {
+    khint_t k;
+    for (k = kh_begin(dict->map); k != kh_end(dict->map); ++k) {
+      if (kh_exist(dict->map, k)) {
+        WordMetadata *metadata = &kh_value(dict->map, k);
+        MemFree(metadata->data);  // Free any dynamically allocated data in WordMetadata
+        MemFree(metadata);        // Free the WordMetadata struct itself
+      }
+    }
     kh_destroy(dict, dict->map); // Destroy the khash map
   }
 }
 
-// Add a new key-function pair to the dictionary
-bool AddItemToDictionary(Dictionary *dict, const char *key, xt_func_ptr func) {
+// Add a new key-WordMetadata pair to the dictionary
+// Example usage: AddItemToDictionary(dict, "+", (WordMetadata){Add, false, NULL});
+// Example usage: AddItemToDictionary(&state->dict, "++", (WordMetadata){RunForth, false, strdup("1 +")});
+bool AddItemToDictionary(Dictionary *dict, const char *key, WordMetadata meta) {
   int ret;
   khint_t k = kh_put(dict, dict->map, key, &ret); // Insert key
   if (ret == -1) {
-    return 0;                     // Insertion failed
+    return false; // Insertion failed
   }
-  kh_value(dict->map, k) = func;  // Set the function pointer as the value
-  dict->lastKey = key;            // Track the last added key
-  return true;                    // Success
+
+  WordMetadata *meta_copy = InitWordMeta(meta.func, meta.isImmediate, meta.data);
+  if (!meta_copy) {
+    return false; // Handle memory allocation failure
+  }
+
+  kh_value(dict->map, k) = *meta_copy;  // Store the value
+  dict->lastKey = key;                  // Track the last added key
+  return true;                          // Success
 }
+
 
 // Remove an item from the dictionary
 bool RemoveItemFromDictionary(Dictionary *dict, const char *key) {
   khint_t k = kh_get(dict, dict->map, key); // Find key
   if (k != kh_end(dict->map)) {
-    kh_del(dict, dict->map, k); // Remove the key-value pair
+    WordMetadata *meta = &kh_value(dict->map, k);
+    FreeWordMeta(meta);         // Free the WordMetadata using the helper function
+    kh_del(dict, dict->map, k); // Remove the key-value pair from the map
     return true;                // Success
   }
   return false; // Key not found
@@ -47,23 +66,32 @@ bool HasItemInDictionary(Dictionary *dict, const char *key) {
 }
 
 // Get a function pointer associated with a key
-xt_func_ptr GetItemFromDictionary(Dictionary *dict, const char *key) {
+WordMetadata* GetItemFromDictionary(Dictionary *dict, const char *key) {
   khint_t k = kh_get(dict, dict->map, key); // Find key
   if (k != kh_end(dict->map)) {
-    return kh_value(dict->map, k); // Return the function pointer
+    return &kh_value(dict->map, k); // Return the meta
   }
   return NULL; // Key not found
 }
 
-// Set a new function pointer for an existing key
-bool SetItemInDictionary(Dictionary *dict, const char *key, xt_func_ptr func) {
+// Set a new WordMetadata for an existing key
+bool SetItemInDictionary(Dictionary *dict, const char *key, WordMetadata meta) {
   khint_t k = kh_get(dict, dict->map, key); // Find key
   if (k != kh_end(dict->map)) {
-    kh_value(dict->map, k) = func; // Set new function pointer
-    return true;                      // Success
+    WordMetadata *meta_copy = InitWordMeta(meta.func, meta.isImmediate, meta.data);
+    if (!meta_copy) {
+      return false; // Handle memory allocation failure
+    }
+
+    WordMetadata *old_meta = &kh_value(dict->map, k);
+    FreeWordMeta(old_meta); // Free the old value
+
+    kh_value(dict->map, k) = *meta_copy; // Store the new value
+    return true;                         // Success
   }
   return false; // Key not found
 }
+
 
 // Print all the keys in the dictionary
 void GetKeysInDictionary(Dictionary *dict) {
@@ -75,7 +103,7 @@ void GetKeysInDictionary(Dictionary *dict) {
   }
 }
 
-xt_func_ptr GetLastItemFromDictionary(Dictionary *dict) {
+WordMetadata* GetLastItemFromDictionary(Dictionary *dict) {
   if (dict->lastKey != NULL) {
     return GetItemFromDictionary(dict, dict->lastKey);
   }
