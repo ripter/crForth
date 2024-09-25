@@ -26,7 +26,7 @@ MU_TEST(basic_plus_one_test) {
   DoForth(&state, inputStream);
   CLOSE_STREAM();
 
-  cell_t result = PopCellStack(&state.dataStack);
+  cell_t result = PopFromCellStack(&state.dataStack);
   mu_check(result == 19);
 }
 

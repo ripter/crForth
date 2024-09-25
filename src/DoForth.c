@@ -20,7 +20,7 @@ void DoForth(KernelState *state, FILE *inputStream) {
 
     // Is there an address on the return (control) stack?
     if (!IsCellStackEmpty(&state->returnStack)) {
-      funcForWord = (xt_func_ptr) PopCellStack(&state->returnStack);
+      funcForWord = (xt_func_ptr) PopFromCellStack(&state->returnStack);
       // Run the address, passing it the current word.
       // It'll return a word to execute, or NULL to finish processing this word.
       word = funcForWord(state, word);

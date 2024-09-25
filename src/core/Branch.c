@@ -14,7 +14,7 @@ char* Branch(KernelState *state, char* word) {
   }
 
   // Get the loop counter from the return stack.
-  cell_t loopCounter = PopCellStack(&state->returnStack);
+  cell_t loopCounter = PopFromCellStack(&state->returnStack);
 
   // If it's the sentinel value, the word is the loop count.
   if (loopCounter == -1) {
@@ -43,7 +43,7 @@ char* BranchZ(KernelState *state, char* word) {
     return NULL;
   }
 
-  bool testValue = (bool)PopCellStack(&state->dataStack);
+  bool testValue = (bool)PopFromCellStack(&state->dataStack);
   if (testValue) {
     // We still need to consume the number.
     PushToCellStack(&state->returnStack, (cell_t)BranchZ);

@@ -25,7 +25,7 @@ MU_TEST(branch_test) {
   CLOSE_STREAM();
 
   // Check that the TOS is still our sentinel value.
-  cell_t result = PopCellStack(&state.dataStack);
+  cell_t result = PopFromCellStack(&state.dataStack);
   mu_check(result == 19);
 }
 
@@ -54,7 +54,7 @@ MU_TEST(branch_jump_0) {
   CLOSE_STREAM();
 
   // Check that the TOS is still our sentinel value.
-  cell_t result = PopCellStack(&state.dataStack);
+  cell_t result = PopFromCellStack(&state.dataStack);
   mu_check(result == 9);
 }
 
@@ -69,7 +69,7 @@ MU_TEST(branch_jump_1) {
   CLOSE_STREAM();
 
   // Check that the TOS is still our sentinel value.
-  cell_t result = PopCellStack(&state.dataStack);
+  cell_t result = PopFromCellStack(&state.dataStack);
   mu_check(result == 15);
 }
 
@@ -85,7 +85,7 @@ MU_TEST(branchnz_basic_true) {
   DoForth(&state, inputStream);
   CLOSE_STREAM();
 
-  cell_t result = PopCellStack(&state.dataStack);
+  cell_t result = PopFromCellStack(&state.dataStack);
   mu_check(result == 9);
   mu_check(IsCellStackEmpty(&state.dataStack));
 }
