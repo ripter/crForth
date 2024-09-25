@@ -16,11 +16,11 @@ typedef struct {
 // Function prototypes
 void InitDictionary(Dictionary *dict);
 void FreeDictionary(Dictionary *dict);
-bool AddItem(Dictionary *dict, const char *key, xt_func_ptr func);
-bool RemoveItem(Dictionary *dict, const char *key);
-bool HasItem(Dictionary *dict, const char *key);
-xt_func_ptr GetItem(Dictionary *dict, const char *key);
-bool SetItem(Dictionary *dict, const char *key, xt_func_ptr func);
-void GetKeys(Dictionary *dict);
+bool AddItemToDictionary(Dictionary *dict, const char *key, xt_func_ptr func);
+bool RemoveItemFromDictionary(Dictionary *dict, const char *key);
+bool HasItemInDictionary(Dictionary *dict, const char *key);
+xt_func_ptr GetItemFromDictionary(Dictionary *dict, const char *key);
+bool SetItemInDictionary(Dictionary *dict, const char *key, xt_func_ptr func);
+void GetKeysInDictionary(Dictionary *dict);
 
 #endif // DICTIONARY_H

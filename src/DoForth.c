@@ -30,8 +30,8 @@ void DoForth(KernelState *state, FILE *inputStream) {
     }
 
     // If the word is in the dictionary, execute it.
-    if (HasItem(&state->dict, word) == true) {
-      funcForWord = GetItem(&state->dict, word);
+    if (HasItemInDictionary(&state->dict, word) == true) {
+      funcForWord = GetItemFromDictionary(&state->dict, word);
       // printf("Executing word: %s %p\n", word, (void *)funcForWord);
       funcForWord(state, NULL);
     } 
