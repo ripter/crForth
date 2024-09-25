@@ -2,8 +2,10 @@
 #include "../Stack.h"
 
 char* SemiColon(KernelState *state, char *word) {
-  (void)state; // Unused
   (void)word; // Unused
-  printf("TODO: Implement Semicolon\n");
+  // Stop Compile Mode
+  state->IsInCompileMode = false;
+  // Save the compiled code to the dictionary
+  printf("TODO: Save compiled code to dictionary\n");
   return NULL;
 }
