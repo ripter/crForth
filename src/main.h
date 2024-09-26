@@ -7,7 +7,7 @@
 
 
 void DoForth(KernelState *state, FILE* inputStream);
-char* GetNextWord(FILE* input);
+bool GetNextWord(FILE* input, char* buffer, size_t bufferSize);
 bool IsWhitespace(char c);
 bool IsNumber(const char* word);
 

@@ -18,4 +18,9 @@ char* DotS(KernelState* state, char* word);
 char* SemiColon(KernelState *state, char *word);
 char* Subtract(KernelState* state, char* word);
 
+//
+// Helper functions
+//
+char* DoForthString(KernelState *state, char *word);
+
 #endif // COREWORDS_H

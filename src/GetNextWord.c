@@ -8,43 +8,42 @@
 #include "main.h"
 
 
-// Returns the next word from the input stream
-// You are responsible for freeing the memory allocated by this function.
-char* GetNextWord(FILE* input) {
+// Reads the next word from the input stream, storing it in the buffer.
+bool GetNextWord(FILE* input, char* buffer, size_t bufferSize) {
   // Make sure the stream is valid
-  if (feof(input)) { return NULL; }
-  char wordBuffer[MAX_WORD_LENGTH]; 
-  int wordLength = 0;
+  if (feof(input)) { return false; }
+    
+  size_t wordLength = 0;
   char c;
 
   // Loop until we reach the end of the file or a whitespace character
-  while ((c = fgetc(input)) ) {
+  while ((c = fgetc(input))) {
     // Check for both types of EOF, break or error.
-    if ((c == EOF) && feof(input)) { break; } // End of file reached, handle like like end of word.
-    if ((c == EOF) && ferror(input)) { fprintf(stderr, "\nError: reading from file\n"); return NULL; }
-    // ignore leading whitespace, bail on trailing whitespace.
+    if ((c == EOF) && feof(input)) { break; } // End of file reached, handle like end of word.
+    if ((c == EOF) && ferror(input)) { 
+      fprintf(stderr, "\nError: reading from file\n"); 
+      return false; 
+    }
+    // Ignore leading whitespace, bail on trailing whitespace.
     if (IsWhitespace(c) && wordLength == 0) { continue; }
     if (IsWhitespace(c) && wordLength > 0) { break; }
-    // Make sure we don't exceed the max word length
-    if (wordLength >= (MAX_WORD_LENGTH) ) { fprintf(stderr, "\nError: Word too long to process\n"); return NULL; }
-    wordBuffer[wordLength] = tolower(c); // save as lowercase
-    // wordBuffer[wordLength] = c; 
+
+    // Make sure we don't exceed the buffer size
+    if (wordLength >= (bufferSize - 1)) { // -1 for null terminator
+      fprintf(stderr, "\nError: Word too long to process\n");
+      return false;
+    }
+
+    buffer[wordLength] = tolower(c); // Save as lowercase
     wordLength += 1;
   }
 
+  // If we didn't read any characters, return false
   if (wordLength == 0) {
-    fprintf(stderr, "\nError: reading from file. Unable to reach any characters.\n");
-    return NULL;
+      return false;
   }
 
-  // Allocate a new string to hold the word, including the \0  
-  char* word = MemAlloc(sizeof(char) * (wordLength+1));
-  if (word == NULL) {
-    fprintf(stderr, "\nError: Memory allocation failed\n");
-    return NULL;
-  }
-  // Copy the word from the buffer to the new string, ensuring null-termination
-  memcpy(word, wordBuffer, wordLength * sizeof(char));
-  word[wordLength] = '\0'; // Null-terminate 
-  return word;
+  // Null-terminate the string
+  buffer[wordLength] = '\0'; 
+  return true;
 }
