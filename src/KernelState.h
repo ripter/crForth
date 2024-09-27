@@ -1,9 +1,9 @@
 #ifndef KERNELSTATE_H
 #define KERNELSTATE_H
 
-#include <stdbool.h>
-#include "./Dictionary.h"
-#include "./Stack.h"
+#include "crForth.h"
+#include "Dictionary.h"
+#include "Stack.h"
 
 // The KernelState struct holds the state of the Forth system.
 typedef struct {
@@ -13,7 +13,6 @@ typedef struct {
   bool IsInCompileMode;             // Are we in compile mode?
   char wordBuffer[MAX_WORD_LENGTH]; // Buffer for the current word being processed.
 } KernelState;
-
 
 void InitKernelState(KernelState *state);
 void FreeKernelState(KernelState *state);

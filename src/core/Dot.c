@@ -2,10 +2,10 @@
 
 #include "../KernelState.h"
 #include "../Stack.h"
+#include "../WordMetadata.h"
 
-char* Dot(KernelState* state, char* word) {
-  (void)word; // UNUSED
+void Dot(KernelState* state, WordMetadata *wordMeta) {
+  (void)wordMeta; // UNUSED
   cell_t a = PopFromCellStack(&state->dataStack);
-  printf("%ld\n", a);
-  return NULL;
+  printf("%ld ", a);
 }

@@ -1,8 +1,6 @@
+#include "raylib.h"
 #include "crForth.h"
 #include "main.h"
-#include "KernelState.h"
-#include "Dictionary.h"
-#include "WordMetadata.h"
 
 #include "./core/CoreWords.h"
 
@@ -26,10 +24,7 @@ void DoForth(KernelState *state, FILE *inputStream) {
       funcForWord = (xt_func_ptr) PopFromCellStack(&state->returnStack);
       // Run the address, passing it the current word.
       // It'll return a word to execute, or NULL to finish processing this word.
-      word = funcForWord(state, word);
-      if (word == NULL) {
-        continue;
-      }
+      funcForWord(state, NULL);
     }
 
     // If the word is in the dictionary, execute it.
@@ -37,7 +32,7 @@ void DoForth(KernelState *state, FILE *inputStream) {
       wordMeta = GetItemFromDictionary(&state->dict, word);
       funcForWord = wordMeta->func;
       // printf("Executing word: %s %p\n", word, (void *)funcForWord);
-      funcForWord(state, NULL);
+      funcForWord(state, wordMeta);
     } 
     // Else, attempt to convert the word to a number and push it to the stack.
     else if (IsNumber(word)) {

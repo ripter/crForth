@@ -1,11 +1,13 @@
+#include <stdio.h>
 #include <string.h>
 
 #include "../KernelState.h"
 #include "../Stack.h"
+#include "../WordMetadata.h"
 
 
-char* DotS(KernelState* state, char* word) {
-  (void)word; // Unused parameter
+void DotS(KernelState* state, WordMetadata *wordMeta) {
+  (void)wordMeta; // Unused parameter
   size_t stackSize = CellStackSize(&state->dataStack);
   size_t returnStackSize = CellStackSize(&state->returnStack);
 
@@ -23,6 +25,4 @@ char* DotS(KernelState* state, char* word) {
     printf("%ld ", value); 
   }
   printf(" \n");
-
-  return NULL;
 }

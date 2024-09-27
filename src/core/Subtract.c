@@ -2,11 +2,11 @@
 
 #include "../KernelState.h"
 #include "../Stack.h"
+#include "../WordMetadata.h"
 
-char* Subtract(KernelState* state, char* word) {
-  (void)word; // UNUSED
+void Subtract(KernelState* state, WordMetadata *wordMeta) {
+  (void)wordMeta; // UNUSED
   cell_t a = PopFromCellStack(&state->dataStack);
   cell_t b = PopFromCellStack(&state->dataStack);
   PushToCellStack(&state->dataStack, b - a);
-  return NULL;
 }

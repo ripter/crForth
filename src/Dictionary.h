@@ -2,9 +2,7 @@
 #define DICTIONARY_H
 
 #include "./libs/klib/khash.h"
-#include "./crForth.h"
-#include "./WordMetadata.h"
-
+#include "WordMetadata.h"
 
 // Create a khash map with string keys and function pointer values
 KHASH_MAP_INIT_STR(dict, WordMetadata)
@@ -19,6 +17,7 @@ typedef struct {
 void InitDictionary(Dictionary *dict);
 void FreeDictionary(Dictionary *dict);
 bool AddItemToDictionary(Dictionary *dict, const char *key, WordMetadata meta);
+bool AddWordToDictionary(Dictionary *dict, WordMetadata wordMeta);
 bool RemoveItemFromDictionary(Dictionary *dict, const char *key);
 bool HasItemInDictionary(Dictionary *dict, const char *key);
 WordMetadata* GetItemFromDictionary(Dictionary *dict, const char *key);

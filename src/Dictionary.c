@@ -27,23 +27,16 @@ void FreeDictionary(Dictionary *dict) {
 }
 
 // Add a new key-WordMetadata pair to the dictionary
-// Example usage: AddItemToDictionary(dict, "+", (WordMetadata){Add, false, NULL});
-// Example usage: AddItemToDictionary(&state->dict, "++", (WordMetadata){RunForth, false, strdup("1 +")});
-bool AddItemToDictionary(Dictionary *dict, const char *key, WordMetadata meta) {
+bool AddWordToDictionary(Dictionary *dict, WordMetadata wordMeta) {
   int ret;
-  khint_t k = kh_put(dict, dict->map, key, &ret); // Insert key
+  khint_t k = kh_put(dict, dict->map, wordMeta.name, &ret); // Insert key
   if (ret == -1) {
     return false; // Insertion failed
   }
 
-  WordMetadata *meta_copy = InitWordMeta(meta.func, meta.isImmediate, meta.data);
-  if (!meta_copy) {
-    return false; // Handle memory allocation failure
-  }
-
-  kh_value(dict->map, k) = *meta_copy;  // Store the value
-  dict->lastKey = key;                  // Track the last added key
-  return true;                          // Success
+  kh_value(dict->map, k) = wordMeta;  // Store the value
+  dict->lastKey = wordMeta.name;      // Track the last added key
+  return true;                        // Success
 }
 
 
@@ -75,19 +68,14 @@ WordMetadata* GetItemFromDictionary(Dictionary *dict, const char *key) {
 }
 
 // Set a new WordMetadata for an existing key
-bool SetItemInDictionary(Dictionary *dict, const char *key, WordMetadata meta) {
+bool SetItemInDictionary(Dictionary *dict, const char *key, WordMetadata wordMeta) {
   khint_t k = kh_get(dict, dict->map, key); // Find key
   if (k != kh_end(dict->map)) {
-    WordMetadata *meta_copy = InitWordMeta(meta.func, meta.isImmediate, meta.data);
-    if (!meta_copy) {
-      return false; // Handle memory allocation failure
-    }
-
     WordMetadata *old_meta = &kh_value(dict->map, k);
     FreeWordMeta(old_meta); // Free the old value
 
-    kh_value(dict->map, k) = *meta_copy; // Store the new value
-    return true;                         // Success
+    kh_value(dict->map, k) = wordMeta; // Store the new value
+    return true;                       // Success
   }
   return false; // Key not found
 }

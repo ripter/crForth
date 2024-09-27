@@ -2,6 +2,7 @@
 #define COREWORDS_H
 
 #include "../KernelState.h"
+#include "../WordMetadata.h"
 
 // Adds all of the core words to the dictionary.
 void AddCoreWords(KernelState *state);
@@ -9,14 +10,14 @@ void AddCoreWords(KernelState *state);
 //
 // Core Words
 //
-char* Add(KernelState* state, char* word);
-char* Branch(KernelState *state, char* word); 
-char* BranchZ(KernelState *state, char* word);
-char* Colon(KernelState *state, char *word);
-char* Dot(KernelState* state, char* word);
-char* DotS(KernelState* state, char* word);
-char* SemiColon(KernelState *state, char *word);
-char* Subtract(KernelState* state, char* word);
+void Add(KernelState *state, WordMetadata *wordMeta);
+void Branch(KernelState *state, WordMetadata *wordMeta); 
+void BranchZ(KernelState *state, WordMetadata *wordMeta);
+void Colon(KernelState *state, WordMetadata *wordMeta);
+void Dot(KernelState* state, WordMetadata *wordMeta);
+void DotS(KernelState* state, WordMetadata *wordMeta);
+void SemiColon(KernelState *state, WordMetadata *wordMeta);
+void Subtract(KernelState* state, WordMetadata *wordMeta);
 
 //
 // Helper functions

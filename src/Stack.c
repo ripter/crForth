@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include "raylib.h"
 #include "./libs/klib/kvec.h"
 #include "Stack.h"
 

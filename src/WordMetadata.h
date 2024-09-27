@@ -2,19 +2,21 @@
 #define WORDMETADATA_H
 
 #include <stdbool.h>
-#include "./crForth.h"
+
+// Define the type for Word Execution Functions
+// typedef void (*xt_func_ptr)(KernelState *, WordMetadata *wordMeta);
+typedef void (*xt_func_ptr)(void *, void *);
 
 // Metadata for a word in the dictionary
-//  - func: The function pointer to run when the word is executed.
-//  - isImmediate: A flag to indicate if the word is immediate.
-//  - data: string of data used by the func. Used to hold "compiled" code.
 typedef struct {
-  xt_func_ptr func;
-  bool isImmediate;
-  char* data;
+  const char* name;   // Name of the word
+  xt_func_ptr func;   // Function pointer to run when the word is executed
+  bool isImmediate;   // Flag to indicate if the word is immediate
+  char* data;         // Data used by the function
 } WordMetadata;
 
-WordMetadata* InitWordMeta(xt_func_ptr func, bool isImmediate, const char *data);
+
+WordMetadata InitWordMetadata(const char *name, xt_func_ptr func, bool isImmediate, const char *data);
 void FreeWordMeta(WordMetadata *meta);
 
 #endif // WORDMETADATA_H

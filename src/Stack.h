@@ -2,11 +2,11 @@
 #define STACK_H
 
 #include <stdbool.h>
-#include "raylib.h"
 #include "./libs/klib/kvec.h"
 
-#include "crForth.h"
-
+// Define the type for the cell, the basic data type for the stack.
+typedef intptr_t cell_t;
+// Define the type for the stack.
 typedef kvec_t(cell_t) CellStack;
 
 
