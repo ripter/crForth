@@ -8,14 +8,13 @@
 
 // Runs the Forth Kernel using the given KernelState and input stream.
 void DoForth(KernelState *state, FILE *inputStream) {
-  char wordBuffer[MAX_WORD_LENGTH];
   char* word; // Current word being processed.
   WordMetadata* wordMeta; // Metadata for the current word.
   xt_func_ptr funcForWord = NULL; // Function pointer to the current word's executable code.
 
   // Main loop, read words from stdin and process them
-  while( GetNextWord(inputStream, wordBuffer, MAX_WORD_LENGTH) ) {
-    word = wordBuffer;
+  while( GetNextWord(inputStream, state->wordBuffer, MAX_WORD_LENGTH) ) {
+    word = state->wordBuffer; // shortcut, bcause the existing code uses this a lot.
     // printf("\nGot Word: %s\n", word);
     // for now, hard break on "bye"
     if (TextIsEqual(word, "bye")) {
