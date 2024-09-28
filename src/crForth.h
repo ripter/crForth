@@ -3,13 +3,17 @@
 
 #define APP_VERSION "0.0.1-dev"
 
-#define MAX_WORD_LENGTH 256 // This does NOT include space for the null terminator.
 
+#include <stdio.h>
 
 #include "Stack.h"
 #include "WordMetadata.h"
 #include "Dictionary.h"
 #include "KernelState.h"
 
+void DoForth(KernelState *state, FILE* inputStream);
+bool GetNextWord(FILE* input, char* buffer, size_t bufferSize);
+bool IsWhitespace(char c);
+bool IsNumber(const char* word);
 
 #endif // CRFORTH_H

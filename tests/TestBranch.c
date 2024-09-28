@@ -3,7 +3,7 @@
 
 #include "minunit.h"
 #include "Test.h"
-#include "../src/main.h"
+#include "../src/crForth.h"
 #include "../src/core/CoreWords.h"
 
 

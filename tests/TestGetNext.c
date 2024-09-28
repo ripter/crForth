@@ -5,7 +5,6 @@
 #include "minunit.h"
 #include "Test.h"
 #include "../src/crForth.h"
-#include "../src/main.h"
 
 
 #define OPEN_STREAM(input) \

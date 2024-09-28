@@ -1,9 +1,10 @@
 #ifndef KERNELSTATE_H
 #define KERNELSTATE_H
 
-#include "crForth.h"
 #include "Dictionary.h"
 #include "Stack.h"
+
+#define MAX_WORD_LENGTH 256 // This does NOT include space for the null terminator.
 
 // The KernelState struct holds the state of the Forth system.
 typedef struct {
@@ -16,6 +17,5 @@ typedef struct {
 
 void InitKernelState(KernelState *state);
 void FreeKernelState(KernelState *state);
-
 
 #endif // KERNELSTATE_H

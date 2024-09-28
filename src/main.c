@@ -2,10 +2,6 @@
 #include "raylib.h"
 
 #include "crForth.h"
-#include "main.h"
-#include "Dictionary.h"
-#include "Stack.h"
-#include "KernelState.h"
 #include "core/CoreWords.h"
 
 

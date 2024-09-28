@@ -1,7 +1,6 @@
 #include "raylib.h"
-#include "crForth.h"
-#include "main.h"
 
+#include "crForth.h"
 #include "./core/CoreWords.h"
 
 // Runs the Forth Kernel using the given KernelState and input stream.
@@ -25,6 +24,11 @@ void DoForth(KernelState *state, FILE *inputStream) {
       // Run the address, passing it the current word.
       // It'll return a word to execute, or NULL to finish processing this word.
       funcForWord(state, NULL);
+    }
+
+    // If the word is empty, skip it.
+    if (word[0] == '\0') {
+      continue;
     }
 
     // If the word is in the dictionary, execute it.

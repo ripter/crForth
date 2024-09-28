@@ -5,7 +5,6 @@
 #include "raylib.h"
 
 #include "crForth.h"
-#include "main.h"
 
 
 // Reads the next word from the input stream, storing it in the buffer.

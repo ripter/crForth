@@ -2,7 +2,6 @@
 #include <string.h>
 
 #include "../crForth.h"
-#include "../main.h"
 
 
 void DoForthString(KernelState *state, WordMetadata *wordMeta) {
