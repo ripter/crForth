@@ -20,6 +20,7 @@ void SemiColon(KernelState *state, WordMetadata *wordMeta);
 void Subtract(KernelState* state, WordMetadata *wordMeta);
 void Words(KernelState* state, WordMetadata* wordMeta);
 void See(KernelState* state, WordMetadata* wordMeta);
+void Immediate(KernelState* state, WordMetadata* wordMeta);
 
 //
 // Helper functions

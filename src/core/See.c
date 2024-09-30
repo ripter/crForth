@@ -13,13 +13,18 @@ void See(KernelState* state, WordMetadata* wordMeta) {
 
   WordMetadata* meta = GetItemFromDictionary(&state->dict, state->wordBuffer);
   if (meta == NULL) {
-    printf("Word not found in dictionary: %s\n", state->wordBuffer);
+    if (IsNumber(state->wordBuffer)) {
+      cell_t num = (cell_t)atoi(state->wordBuffer);
+      printf("Number: %ld\n", num);
+      return;
+    }
+    printf("Word not found in dictionary: '%s'\n", state->wordBuffer);
     return;
   }
   if (meta->data == NULL) {
     printf("Word '%s' is implemented in C.\n", meta->name);
     return;
   }
-  printf("\n: %s %s ;\n", meta->name, meta->data);
+  printf("\n: %s\n  %s\n;\n", meta->name, meta->data);
   state->wordBuffer[0] = '\0'; // Clear the word buffer.
 }
