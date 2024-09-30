@@ -2,7 +2,7 @@
 CC = clang
 
 # Compiler flags
-CFLAGS = -std=c99 -Wall -Wextra -pedantic
+CFLAGS = -std=c99 -Wall -Wextra -pedantic -g
 
 # Use pkg-config to get Raylib flags
 RAYLIB_CFLAGS = $(shell pkg-config --cflags raylib)

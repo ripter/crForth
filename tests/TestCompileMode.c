@@ -20,7 +20,7 @@ MU_TEST(can_run_forth_from_dictionary) {
   AddCoreWords(&state);
 
   // Add a forth script directly into the dictionary.
-  AddWordToDictionary(&state.dict, (WordMetadata){"test++", (xt_func_ptr)DoForthString, false, "1 +"});
+  AddWordToDictionary(&state.dict, InitWordMetadata("test++", (xt_func_ptr)DoForthString, false, "1 +"));
   OPEN_STREAM("4 test++");
   DoForth(&state, inputStream);
   CLOSE_STREAM();

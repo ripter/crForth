@@ -18,8 +18,7 @@ void FreeDictionary(Dictionary *dict) {
     for (k = kh_begin(dict->map); k != kh_end(dict->map); ++k) {
       if (kh_exist(dict->map, k)) {
         WordMetadata *metadata = &kh_value(dict->map, k);
-        MemFree(metadata->data);  // Free any dynamically allocated data in WordMetadata
-        MemFree(metadata);        // Free the WordMetadata struct itself
+        FreeWordMetadata(metadata);   // Free the WordMetadata
       }
     }
     kh_destroy(dict, dict->map); // Destroy the khash map
@@ -45,7 +44,7 @@ bool RemoveItemFromDictionary(Dictionary *dict, const char *key) {
   khint_t k = kh_get(dict, dict->map, key); // Find key
   if (k != kh_end(dict->map)) {
     WordMetadata *meta = &kh_value(dict->map, k);
-    FreeWordMeta(meta);         // Free the WordMetadata using the helper function
+    FreeWordMetadata(meta);         // Free the WordMetadata using the helper function
     kh_del(dict, dict->map, k); // Remove the key-value pair from the map
     return true;                // Success
   }
@@ -72,7 +71,7 @@ bool SetItemInDictionary(Dictionary *dict, const char *key, WordMetadata wordMet
   khint_t k = kh_get(dict, dict->map, key); // Find key
   if (k != kh_end(dict->map)) {
     WordMetadata *old_meta = &kh_value(dict->map, k);
-    FreeWordMeta(old_meta); // Free the old value
+    FreeWordMetadata(old_meta); // Free the old value
 
     kh_value(dict->map, k) = wordMeta; // Store the new value
     return true;                       // Success

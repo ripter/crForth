@@ -29,6 +29,7 @@ int main(void) {
   printf("Type 'bye' to exit.\n\n");
 
 
+  // Run StdIn as the input stream and Do Forth!
   DoForth(&state, stdin);
 
 
