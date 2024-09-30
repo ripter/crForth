@@ -9,11 +9,11 @@ typedef void (*xt_func_ptr)(void *, void *);
 
 // Metadata for a word in the dictionary
 typedef struct {
-  const char* name;     // Name of the word
+  char* name;           // Name of the word
   xt_func_ptr func;     // Function pointer to run when the word is executed
   bool isImmediate;     // Flag to indicate if the word is immediate
   char* data;           // Data used by the function
-  int dataBufferLength; // Length of the data buffer
+  size_t dataBufferLength; // Length of the data buffer
 } WordMetadata;
 
 

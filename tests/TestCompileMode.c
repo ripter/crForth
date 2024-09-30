@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include "raylib.h"
 
 #include "minunit.h"
 #include "Test.h"
@@ -20,7 +21,9 @@ MU_TEST(can_run_forth_from_dictionary) {
   AddCoreWords(&state);
 
   // Add a forth script directly into the dictionary.
-  AddWordToDictionary(&state.dict, InitWordMetadata("test++", (xt_func_ptr)DoForthString, false, "1 +"));
+  char *script = MemAlloc(100);
+  strcpy(script, "1 +");
+  AddWordToDictionary(&state.dict, InitWordMetadata("test++", (xt_func_ptr)DoForthString, false, script));
   OPEN_STREAM("4 test++");
   DoForth(&state, inputStream);
   CLOSE_STREAM();
@@ -30,6 +33,7 @@ MU_TEST(can_run_forth_from_dictionary) {
   // mu_assert_int_eq(result == 5, "test++ should add 1 to the top of the stack");
   mu_assert_int_eq(5, result);
 
+  // This will also free the script buffer.
   FreeKernelState(&state);
 }
 
@@ -56,7 +60,8 @@ MU_TEST(basic_plus_one_test) {
 bool TestCompileMode(void) {
 
   MU_RUN_TEST(can_run_forth_from_dictionary);
-  // MU_RUN_TEST(basic_plus_one_test);
+  MU_RUN_TEST(basic_plus_one_test);
 
+  MU_REPORT();
   return MU_EXIT_CODE;
 }
