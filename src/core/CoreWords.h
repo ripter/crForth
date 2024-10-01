@@ -24,6 +24,10 @@ void Immediate(KernelState* state, WordMetadata* wordMeta);
 void Latest(KernelState* state, WordMetadata* wordMeta);
 void Emit(KernelState* state, WordMetadata* wordMeta);
 void CFetch(KernelState* state, WordMetadata* wordMeta);
+void Create(KernelState *state, WordMetadata *wordMeta);
+void Nothing(KernelState *state, WordMetadata *wordMeta);
+void Does(KernelState *state, WordMetadata *wordMeta);
+void Dup(KernelState *state, WordMetadata *wordMeta);
 
 //
 // Helper functions
