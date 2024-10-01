@@ -57,15 +57,12 @@ void AppendStringToWordData(WordMetadata *meta, const char *data) {
   // Calculate the lengths
   size_t currentLength = strlen(meta->data);
   size_t dataLength = strlen(data);
-  size_t spaceNeeded =
-      (currentLength > 0) ? 1 : 0; // Space between words if needed
-  size_t newLength =
-      currentLength + spaceNeeded + dataLength + 1; // +1 for null terminator
+  size_t spaceNeeded = (currentLength > 0) ? 1 : 0; // Space between words if needed
+  size_t newLength = currentLength + spaceNeeded + dataLength + 1; // +1 for null terminator
 
   // Check if we need to expand the buffer
   if (newLength > meta->dataBufferLength) {
-    // Expand the buffer by increments of MAX_WORD_LENGTH until it's large
-    // enough
+    // Expand the buffer by increments of MAX_WORD_LENGTH until it's large enough.
     size_t newBufferSize = meta->dataBufferLength;
     while (newBufferSize < newLength) {
       newBufferSize += MAX_WORD_LENGTH;

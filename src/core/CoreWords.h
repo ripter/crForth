@@ -21,6 +21,8 @@ void Subtract(KernelState* state, WordMetadata *wordMeta);
 void Words(KernelState* state, WordMetadata* wordMeta);
 void See(KernelState* state, WordMetadata* wordMeta);
 void Immediate(KernelState* state, WordMetadata* wordMeta);
+void Latest(KernelState* state, WordMetadata* wordMeta);
+void Emit(KernelState* state, WordMetadata* wordMeta);
 
 //
 // Helper functions

@@ -18,4 +18,6 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, InitWordMetadata("words",     (xt_func_ptr)Words,         false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("see",       (xt_func_ptr)See,           false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("immediate", (xt_func_ptr)Immediate,     false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("latest",    (xt_func_ptr)Latest,        false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("emit",      (xt_func_ptr)Emit,          false,  NULL));
 }
