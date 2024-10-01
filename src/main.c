@@ -10,6 +10,9 @@
 //------------------------------------------------------------------------------------
 int main(void) { 
   KernelState state = {0};
+  state.inputStream = stdin;
+  state.outputStream = stdout;
+  state.errorStream = stderr;
 
   // Initialize the kernel state
   InitKernelState(&state);
@@ -31,7 +34,7 @@ int main(void) {
 
 
   // Run StdIn as the input stream and Do Forth!
-  DoForth(&state, stdin);
+  DoForth(&state);
 
 
   // Free the KernelState

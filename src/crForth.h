@@ -11,7 +11,7 @@
 #include "Dictionary.h"
 #include "KernelState.h"
 
-void DoForth(KernelState *state, FILE* inputStream);
+void DoForth(KernelState *state);
 bool GetNextWord(FILE* input, char* buffer, size_t bufferSize);
 bool IsWhitespace(char c);
 bool IsNumber(const char* word);

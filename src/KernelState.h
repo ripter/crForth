@@ -1,6 +1,7 @@
 #ifndef KERNELSTATE_H
 #define KERNELSTATE_H
 
+#include <stdio.h>
 #include "Dictionary.h"
 #include "Stack.h"
 
@@ -13,6 +14,9 @@ typedef struct {
   CellStack returnStack;            // The return stack.
   bool IsInCompileMode;             // Are we in compile mode?
   char wordBuffer[MAX_WORD_LENGTH]; // Buffer for the current word being processed.
+  FILE *inputStream;                // The input stream for the Forth system.
+  FILE *outputStream;               // The output stream for the Forth system.
+  FILE *errorStream;                // The error stream for the Forth system.
 } KernelState;
 
 void InitKernelState(KernelState *state);

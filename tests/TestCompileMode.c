@@ -25,7 +25,8 @@ MU_TEST(can_run_forth_from_dictionary) {
   strcpy(script, "1 +");
   AddWordToDictionary(&state.dict, InitWordMetadata("test++", (xt_func_ptr)DoForthString, false, script));
   OPEN_STREAM("4 test++");
-  DoForth(&state, inputStream);
+  state.inputStream = inputStream;
+  DoForth(&state);
   CLOSE_STREAM();
 
   // TOS should be 4 + 1
@@ -47,7 +48,8 @@ MU_TEST(basic_plus_one_test) {
   // Try it out with 18 ++.
   // The result should be 19.
   OPEN_STREAM(": ++ 1 + ;  18 ++");
-  DoForth(&state, inputStream);
+  state.inputStream = inputStream;
+  DoForth(&state);
   CLOSE_STREAM();
 
   cell_t result = PopFromCellStack(&state.dataStack);

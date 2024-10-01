@@ -21,7 +21,8 @@ MU_TEST(branch_test) {
 
   // branch should skip 3 words, resulting in nothing being added to the stack.
   OPEN_STREAM("19 branch 3 4 5 +");
-  DoForth(&state, inputStream);
+  state.inputStream = inputStream;
+  DoForth(&state);
   CLOSE_STREAM();
 
   // Check that the TOS is still our sentinel value.
@@ -36,7 +37,8 @@ MU_TEST(branch_test_on_empty_stack) {
 
   // branch should skip 3 words, resulting in nothing being added to the stack.
   OPEN_STREAM("branch 3 4 5 +");
-  DoForth(&state, inputStream);
+  state.inputStream = inputStream;
+  DoForth(&state);
   CLOSE_STREAM();
 
   // stack should still be empty.
@@ -50,7 +52,8 @@ MU_TEST(branch_jump_0) {
 
   // Branch should skip 0 words, resulting in 4 and 5 being added together on the stack.
   OPEN_STREAM("19 branch 0 4 5 +");
-  DoForth(&state, inputStream);
+  state.inputStream = inputStream;
+  DoForth(&state);
   CLOSE_STREAM();
 
   // Check that the TOS is still our sentinel value.
@@ -65,7 +68,8 @@ MU_TEST(branch_jump_1) {
 
   // Branch should skip 1 words, resulting 15 being added to the stack.
   OPEN_STREAM("10 branch 1 4 5 +");
-  DoForth(&state, inputStream);
+  state.inputStream = inputStream;
+  DoForth(&state);
   CLOSE_STREAM();
 
   // Check that the TOS is still our sentinel value.
@@ -82,7 +86,8 @@ MU_TEST(branchnz_basic_true) {
   // resulting in 4 and 5 being added together on the stack.
   // the test value should not be on the stack.
   OPEN_STREAM("1 branch? 3 4 5 +");
-  DoForth(&state, inputStream);
+  state.inputStream = inputStream;
+  DoForth(&state);
   CLOSE_STREAM();
 
   cell_t result = PopFromCellStack(&state.dataStack);
@@ -98,7 +103,8 @@ MU_TEST(branchnz_basic_false) {
   // 0 is false, so the branch should skip 3 words.
   // the test bool should have been consumed, leaving the stack empty.
   OPEN_STREAM("0 branch? 3 4 5 +");
-  DoForth(&state, inputStream);
+  state.inputStream = inputStream;
+  DoForth(&state);
   CLOSE_STREAM();
 
   mu_check(IsCellStackEmpty(&state.dataStack));

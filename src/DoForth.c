@@ -4,13 +4,13 @@
 #include "./core/CoreWords.h"
 
 // Runs the Forth Kernel using the given KernelState and input stream.
-void DoForth(KernelState *state, FILE *inputStream) {
+void DoForth(KernelState *state) {
   char* word; // Current word being processed.
   WordMetadata* wordMeta; // Metadata for the current word.
   xt_func_ptr funcForWord = NULL; // Function pointer to the current word's executable code.
 
   // Main loop, read words from stdin and process them
-  while( GetNextWord(inputStream, state->wordBuffer, MAX_WORD_LENGTH) ) {
+  while( GetNextWord(state->inputStream, state->wordBuffer, MAX_WORD_LENGTH) ) {
     word = state->wordBuffer; // shortcut, bcause the existing code uses this a lot.
     // for now, hard break on "bye"
     if (TextIsEqual(word, "bye")) {

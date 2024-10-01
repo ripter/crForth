@@ -7,9 +7,15 @@
 void DoForthString(KernelState *state, WordMetadata *wordMeta) {
   (void)state;
   char *input = wordMeta->data;
-  // Convert the string to a stream, then run the Forth Kernel.
+  // Convert the string to a stream, saving the original stream.
   FILE *inputStream = fmemopen(input, strlen(input), "r");
-  DoForth(state, inputStream);
+  FILE *orignalInputStream = state->inputStream;
+
+  // Run the Forth system with the new stream.
+  state->inputStream = inputStream;
+  DoForth(state);
+
+  // Close the stream and restore the original stream.
+  state->inputStream = orignalInputStream;
   fclose(inputStream);
 }
-
