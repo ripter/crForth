@@ -1,6 +1,6 @@
 #include "../crForth.h"
 
-// ( C: "<spaces>number --" )
+// ( "<spaces>number" -- )
 // Parse a number delimited by a space and skip the number of words specified by the parsed number.
 // Branch is an immediate word that controls the flow by skipping words.
 void Branch(KernelState *state, WordMetadata *wordMeta) {
@@ -17,7 +17,7 @@ void Branch(KernelState *state, WordMetadata *wordMeta) {
   }
 }
 
-// ( flag C: "<spaces>number" -- )
+// ( flag "<spaces>number" -- )
 // When the flag is false, the branch? word skips the number of words specified by the parsed number.
 // When the flag is true, the branch? word does nothing.
 void BranchZ(KernelState *state, WordMetadata *wordMeta) {

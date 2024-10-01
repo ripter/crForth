@@ -3,7 +3,7 @@
 #include "../crForth.h"
 #include "CoreWords.h"
 
-// ( "<spaces>name --" )
+// ( "<spaces>name" -- )
 // Create a new word in the dictionary with the given name.
 // Switch to compile mode.
 void Colon(KernelState *state, WordMetadata *wordMeta) {

@@ -4,8 +4,8 @@
 #include "../crForth.h"
 
 
+// Runs the data as a Forth program using the given KernelState.
 void DoForthString(KernelState *state, WordMetadata *wordMeta) {
-  (void)state;
   char *input = wordMeta->data;
   // Convert the string to a stream, saving the original stream.
   FILE *inputStream = fmemopen(input, strlen(input), "r");
