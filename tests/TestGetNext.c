@@ -6,21 +6,19 @@
 #include "Test.h"
 #include "../src/crForth.h"
 
+#define OPEN_STREAM(input)                                                     \
+  FILE *inputStream = fmemopen(input, strlen(input), "r");                     \
 
-#define OPEN_STREAM(input) \
-  FILE *inputStream = fmemopen(input, strlen(input), "r");
+#define CLOSE_STREAM()                                                         \
+  fclose(inputStream);                                                         \
 
-#define CLOSE_STREAM() \
-  fclose(inputStream); \
+#define SILENCE_STDERR()                                                       \
+  FILE *original_stderr = stderr;                                              \
+  stderr = fopen("/dev/null", "w");
 
-#define SILENCE_STDERR() \
-  FILE* original_stderr = stderr; \
-  stderr = fopen("/dev/null", "w"); 
-
-#define RESTORE_STDERR() \
-  fclose(stderr); \
-  stderr = original_stderr; 
-
+#define RESTORE_STDERR()                                                       \
+  fclose(stderr);                                                              \
+  stderr = original_stderr;
 
 char wordBuffer[MAX_WORD_LENGTH];
 

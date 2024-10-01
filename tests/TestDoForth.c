@@ -4,13 +4,13 @@
 #include "Test.h"
 #include "../src/crForth.h"
 
+#define OPEN_STREAM(input)                                                     \
+  FILE *inputStream = fmemopen(input, strlen(input), "r");                     \
+  state.inputStream = inputStream;
 
-#define OPEN_STREAM(input) \
-  FILE *inputStream = fmemopen(input, strlen(input), "r");
-
-#define CLOSE_STREAM() \
-  fclose(inputStream); \
-
+#define CLOSE_STREAM()                                                         \
+  fclose(inputStream);                                                         \
+  state.inputStream = NULL;
 
 
 MU_TEST(basic_64bit_number) {
@@ -18,7 +18,6 @@ MU_TEST(basic_64bit_number) {
   InitKernelState(&state);
 
   OPEN_STREAM("4998578416");
-  state.inputStream = inputStream;
   DoForth(&state);
   CLOSE_STREAM();
   cell_t result = PopFromCellStack(&state.dataStack);
@@ -34,7 +33,6 @@ MU_TEST(basic_64bit_number) {
 bool TestDoForth(void) {
 
   MU_RUN_TEST(basic_64bit_number);
-  
 
   MU_REPORT();
   return MU_EXIT_CODE;

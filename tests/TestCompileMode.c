@@ -7,12 +7,13 @@
 #include "../src/crForth.h"
 #include "../src/core/CoreWords.h"
 
+#define OPEN_STREAM(input)                                                     \
+  FILE *inputStream = fmemopen(input, strlen(input), "r");                     \
+  state.inputStream = inputStream;
 
-#define OPEN_STREAM(input) \
-  FILE *inputStream = fmemopen(input, strlen(input), "r");
-
-#define CLOSE_STREAM() \
-  fclose(inputStream); \
+#define CLOSE_STREAM()                                                         \
+  fclose(inputStream);                                                         \
+  state.inputStream = NULL;
 
 
 MU_TEST(can_run_forth_from_dictionary) {
@@ -25,7 +26,6 @@ MU_TEST(can_run_forth_from_dictionary) {
   strcpy(script, "1 +");
   AddWordToDictionary(&state.dict, InitWordMetadata("test++", (xt_func_ptr)DoForthString, false, script));
   OPEN_STREAM("4 test++");
-  state.inputStream = inputStream;
   DoForth(&state);
   CLOSE_STREAM();
 
@@ -48,7 +48,6 @@ MU_TEST(basic_plus_one_test) {
   // Try it out with 18 ++.
   // The result should be 19.
   OPEN_STREAM(": ++ 1 + ;  18 ++");
-  state.inputStream = inputStream;
   DoForth(&state);
   CLOSE_STREAM();
 
@@ -58,11 +57,26 @@ MU_TEST(basic_plus_one_test) {
   FreeKernelState(&state);
 }
 
+MU_TEST(test_create_does) {
+  KernelState state = {0};
+  InitKernelState(&state);
+  AddCoreWords(&state);
+
+  OPEN_STREAM("create my-test does> 2 3 4 + + ;\n my-test")
+  DoForth(&state);
+  CLOSE_STREAM();
+
+  cell_t result = PopFromCellStack(&state.dataStack);
+  mu_check(result == 9);
+
+  FreeKernelState(&state);
+}
 
 bool TestCompileMode(void) {
 
   MU_RUN_TEST(can_run_forth_from_dictionary);
   MU_RUN_TEST(basic_plus_one_test);
+  MU_RUN_TEST(test_create_does);
 
   MU_REPORT();
   return MU_EXIT_CODE;
