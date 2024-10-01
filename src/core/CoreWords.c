@@ -24,4 +24,5 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, InitWordMetadata("create",    (xt_func_ptr)Create,        false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("does>",     (xt_func_ptr)Does,          false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("dup",       (xt_func_ptr)Dup,           false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("drop",      (xt_func_ptr)Drop,          false,  NULL));
 }

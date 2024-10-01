@@ -28,6 +28,7 @@ void Create(KernelState *state, WordMetadata *wordMeta);
 void Nothing(KernelState *state, WordMetadata *wordMeta);
 void Does(KernelState *state, WordMetadata *wordMeta);
 void Dup(KernelState *state, WordMetadata *wordMeta);
+void Drop(KernelState *state, WordMetadata *wordMeta);
 
 //
 // Helper functions
