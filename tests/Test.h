@@ -3,3 +3,4 @@
 bool TestGetNext(void);
 bool TestBranch(void);
 bool TestCompileMode(void);
+bool TestDoForth(void);

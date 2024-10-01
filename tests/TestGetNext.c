@@ -125,6 +125,9 @@ MU_TEST(prog_simple_1) {
 }
 
 
+//
+// Run all the Tests
+//
 bool TestGetNext(void) {
 
   MU_RUN_TEST(empty_string);
