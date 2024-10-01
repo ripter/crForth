@@ -16,20 +16,7 @@ void DoForth(KernelState *state) {
     if (TextIsEqual(word, "bye")) {
       break;
     }
-
-    // Is there an address on the return (control) stack?
-    if (!IsCellStackEmpty(&state->returnStack)) {
-      funcForWord = (xt_func_ptr) PopFromCellStack(&state->returnStack);
-      // Run the address, passing it the current word.
-      // It'll return a word to execute, or NULL to finish processing this word.
-      funcForWord(state, NULL);
-    }
-
-    // If the word is empty, skip it.
-    if (word[0] == '\0') {
-      continue;
-    }
-
+    //
     // Compile Mode
     if (state->IsInCompileMode) {
       // If the word is in the dictionary AND it's immediate, execute it.
@@ -45,6 +32,7 @@ void DoForth(KernelState *state) {
       wordMeta = GetLastItemFromDictionary(&state->dict);
       AppendStringToWordData(wordMeta, word);
     }
+    //
     // Interpret Mode
     else {
       // If the word is in the dictionary, execute it.
