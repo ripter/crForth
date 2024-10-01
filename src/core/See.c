@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+#include "raylib.h"
 
 #include "../crForth.h"
 
@@ -28,5 +30,5 @@ void See(KernelState* state, WordMetadata* wordMeta) {
     return;
   }
   // Display the word's definition.
-  printf("\n: %s\n  %s\n;\n", meta->name, meta->data);
+  printf("\n: %s\n  %s\n; %s\n", TextToUpper(meta->name), meta->data, meta->isImmediate ? "IMMEDIATE" : "");
 }
