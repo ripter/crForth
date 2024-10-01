@@ -15,5 +15,6 @@ void DoForth(KernelState *state, FILE* inputStream);
 bool GetNextWord(FILE* input, char* buffer, size_t bufferSize);
 bool IsWhitespace(char c);
 bool IsNumber(const char* word);
+bool ConvertWordToNumber(const char* word, cell_t* numPtr);
 
 #endif // CRFORTH_H

@@ -6,6 +6,8 @@
 #include "../WordMetadata.h"
 
 
+// ( -- )
+// Prints the contents of the data stack and return stack.
 void DotS(KernelState* state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
   size_t stackSize = CellStackSize(&state->dataStack);
@@ -17,7 +19,6 @@ void DotS(KernelState* state, WordMetadata *wordMeta) {
     printf("%ld ", value); 
   }
   printf(" \n");
-
 
   printf("Return Stack: ");
   for (size_t i = 0; i < returnStackSize; i++) {

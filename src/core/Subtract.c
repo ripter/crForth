@@ -1,9 +1,8 @@
 #include <stdio.h>
+#include "../crForth.h"
 
-#include "../KernelState.h"
-#include "../Stack.h"
-#include "../WordMetadata.h"
-
+// ( a b -- c )
+// Subtracts two numbers from the stack and pushes the result back to the stack.
 void Subtract(KernelState* state, WordMetadata *wordMeta) {
   (void)wordMeta; // UNUSED
   cell_t a = PopFromCellStack(&state->dataStack);

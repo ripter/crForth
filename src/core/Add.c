@@ -1,9 +1,9 @@
 #include <stdio.h>
 
-#include "../KernelState.h"
-#include "../Stack.h"
-#include "../WordMetadata.h"
+#include "../crForth.h"
 
+// ( a b -- c )
+// Adds two numbers from the stack and pushes the result back to the stack.
 void Add(KernelState* state, WordMetadata* wordMeta) {
   (void)wordMeta; // UNUSED
   cell_t a = PopFromCellStack(&state->dataStack);

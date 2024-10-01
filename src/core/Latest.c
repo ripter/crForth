@@ -1,9 +1,10 @@
 #include "../crForth.h"
 
-// ( -- )
-// Sets the last word in the dictionary to be immediate.
+// ( -- c-addr u )
+// Pushes the latest word in the dictionary to the stack.
 void Latest(KernelState* state, WordMetadata* wordMeta) {
   (void)wordMeta; // UNUSED
   WordMetadata* lastItem = GetLastItemFromDictionary(&state->dict);
   PushToCellStack(&state->dataStack, (cell_t)lastItem->name);
+  PushToCellStack(&state->dataStack, (cell_t)strlen(lastItem->name));
 }

@@ -23,6 +23,7 @@ void See(KernelState* state, WordMetadata* wordMeta);
 void Immediate(KernelState* state, WordMetadata* wordMeta);
 void Latest(KernelState* state, WordMetadata* wordMeta);
 void Emit(KernelState* state, WordMetadata* wordMeta);
+void CFetch(KernelState* state, WordMetadata* wordMeta);
 
 //
 // Helper functions

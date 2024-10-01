@@ -55,8 +55,13 @@ void DoForth(KernelState *state, FILE *inputStream) {
       }
       // Else, attempt to convert the word to a number and push it to the stack.
       else if (IsNumber(word)) {
-        cell_t num = (cell_t)atoi(word);
-        PushToCellStack(&state->dataStack, num);
+        cell_t num;
+        if (ConvertWordToNumber(word, &num)) {
+          PushToCellStack(&state->dataStack, num);
+        } else {
+          // Handle the error: word is not a valid number
+          fprintf(stderr, "Error: Invalid number '%s'.\n", word);
+        }
       }
       // Else, unknown word.
       else {
