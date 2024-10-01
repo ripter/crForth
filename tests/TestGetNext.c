@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include "raylib.h"
 
 #include "minunit.h"
 #include "Test.h"
 #include "../src/crForth.h"
 
 #define OPEN_STREAM(input)                                                     \
-  FILE *inputStream = fmemopen(input, strlen(input), "r");                     \
+  FILE *inputStream = fmemopen(input, TextLength(input), "r");
 
 #define CLOSE_STREAM()                                                         \
   fclose(inputStream);                                                         \

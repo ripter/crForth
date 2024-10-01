@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include "raylib.h"
 
 #include "minunit.h"
 #include "Test.h"
@@ -7,7 +8,7 @@
 #include "../src/core/CoreWords.h"
 
 #define OPEN_STREAM(input)                                                     \
-  FILE *inputStream = fmemopen(input, strlen(input), "r");                     \
+  FILE *inputStream = fmemopen(input, TextLength(input), "r");                     \
   state.inputStream = inputStream;
 
 #define CLOSE_STREAM()                                                         \

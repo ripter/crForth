@@ -11,7 +11,7 @@
 WordMetadata InitWordMetadata(const char *name, xt_func_ptr func, bool isImmediate, char *data) {
   WordMetadata meta;
   // Allocate memory for the name and copy it
-  size_t nameLength = strlen(name) + 1; // +1 for the null terminator
+  size_t nameLength = TextLength(name) + 1; // +1 for the null terminator
   meta.name = (char *)MemAlloc(nameLength);
   if (meta.name == NULL) {
     // Handle allocation failure (optional)
@@ -21,7 +21,7 @@ WordMetadata InitWordMetadata(const char *name, xt_func_ptr func, bool isImmedia
   meta.func = func;
   meta.isImmediate = isImmediate;
   meta.data = data;
-  meta.dataBufferLength = data == NULL ? 0 : strlen(data);
+  meta.dataBufferLength = data == NULL ? 0 : TextLength(data);
   return meta;
 }
 
@@ -56,8 +56,8 @@ void AppendStringToWordData(WordMetadata *meta, const char *data) {
   }
 
   // Calculate the lengths
-  size_t currentLength = strlen(meta->data);
-  size_t dataLength = strlen(data);
+  size_t currentLength = TextLength(meta->data);
+  size_t dataLength = TextLength(data);
   size_t spaceNeeded = (currentLength > 0) ? 1 : 0; // Space between words if needed
   size_t newLength = currentLength + spaceNeeded + dataLength + 1; // +1 for null terminator
 

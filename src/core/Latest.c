@@ -1,3 +1,4 @@
+#include "raylib.h"
 #include "../crForth.h"
 
 // ( -- c-addr u )
@@ -6,5 +7,5 @@ void Latest(KernelState* state, WordMetadata* wordMeta) {
   (void)wordMeta; // UNUSED
   WordMetadata* lastItem = GetLastItemFromDictionary(&state->dict);
   PushToCellStack(&state->dataStack, (cell_t)lastItem->name);
-  PushToCellStack(&state->dataStack, (cell_t)strlen(lastItem->name));
+  PushToCellStack(&state->dataStack, (cell_t)TextLength(lastItem->name));
 }

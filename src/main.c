@@ -3,6 +3,7 @@
 
 #include "crForth.h"
 #include "core/CoreWords.h"
+#include "forth/CoreForth.h"
 
 
 //------------------------------------------------------------------------------------
@@ -17,8 +18,10 @@ int main(void) {
   // Initialize the kernel state
   InitKernelState(&state);
 
-  // Add the core words to the dictionary
+  // Add the core words defined in C to the dictionary.
   AddCoreWords(&state);
+  // Add the core words defined in Forth to the dictionary.
+  AddCoreForthWords(&state);
   
   // Loaded and Ready! Show the version and prompt the user.
   printf("           ______         _   _         \n"); 
