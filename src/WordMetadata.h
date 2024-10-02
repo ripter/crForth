@@ -4,7 +4,10 @@
 #include <stdbool.h>
 
 // Define the type for Word Execution Functions
-// typedef void (*xt_func_ptr)(KernelState *, WordMetadata *wordMeta);
+// Due to include order, we can't use KernelState here, so we use void* instead.
+// The WordMetadata is provided for convenience since the system already fetched it.
+// Real type looks like this:
+//  typedef void (*xt_func_ptr)(KernelState *, WordMetadata *wordMeta);
 typedef void (*xt_func_ptr)(void *, void *);
 
 // Metadata for a word in the dictionary

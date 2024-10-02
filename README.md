@@ -21,3 +21,6 @@ You can check if `pkg-config` knows about Raylib by running:
 pkg-config --cflags raylib
 ```
 
+### C Defined words vs Forth Defined words
+While I like the idea of having as much of the system written in Forth as possible, I like the idea of a fast enough system more. So if the C version is faster, the C version might be the better choice, depending on how much faster the C version is.
+

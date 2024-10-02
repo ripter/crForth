@@ -10,6 +10,9 @@ void AddCoreWords(KernelState *state);
 //
 // Core Words
 //
+// Idealy, this should be a small set of words that are required to build the rest of the system.
+// These should be the only words that can not be implemented in Forth itself.
+// Expect for the ones that are more efficient to implement in C.
 void Add(KernelState *state, WordMetadata *wordMeta);
 void Branch(KernelState *state, WordMetadata *wordMeta); 
 void BranchZ(KernelState *state, WordMetadata *wordMeta);
