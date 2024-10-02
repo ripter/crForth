@@ -36,6 +36,8 @@ void Drop(KernelState *state, WordMetadata *wordMeta);
 void Swap(KernelState* state, WordMetadata* wordMeta);
 void ToR(KernelState* state, WordMetadata* wordMeta);
 void RFrom(KernelState* state, WordMetadata* wordMeta);
+void DotSR(KernelState* state, WordMetadata *wordMeta);
+void DotSD(KernelState* state, WordMetadata *wordMeta);
 
 //
 // Helper functions

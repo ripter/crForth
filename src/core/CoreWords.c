@@ -12,7 +12,7 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, InitWordMetadata(".",         (xt_func_ptr)Dot,           false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("branch",    (xt_func_ptr)Branch,        false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("branch?",   (xt_func_ptr)BranchZ,       false,  NULL));
-  AddWordToDictionary(&state->dict, InitWordMetadata(".s",        (xt_func_ptr)DotS,          false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata(".s",        (xt_func_ptr)DotS,          true,   NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(":",         (xt_func_ptr)Colon,         false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(";",         (xt_func_ptr)SemiColon,     true,   NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("words",     (xt_func_ptr)Words,         false,  NULL));
@@ -28,4 +28,6 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, InitWordMetadata("swap",      (xt_func_ptr)Swap,          false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(">r",        (xt_func_ptr)ToR,           false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("r>",        (xt_func_ptr)RFrom,         false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata(".sr",       (xt_func_ptr)DotSR,         true,   NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata(".sd",       (xt_func_ptr)DotSD,         true,   NULL));
 }
