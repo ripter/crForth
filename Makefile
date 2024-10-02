@@ -33,14 +33,13 @@ $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
 # Compile main executable
-$(OUT): $(SRC)
+$(OUT): $(BUILD_DIR) $(SRC)
 	$(CC) $(CFLAGS) $(RAYLIB_CFLAGS) -o $(OUT) $(SRC) $(RAYLIB_LIBS)
 
-$(TEST_OUT): $(TEST_SRC) $(SRC)
+$(TEST_OUT): $(BUILD_DIR) $(TEST_SRC) $(SRC)
 	$(CC) $(CFLAGS) $(RAYLIB_CFLAGS) -o $(TEST_OUT) $(TEST_SRC) $(RAYLIB_LIBS)
 
 
 # Clean target to remove the binary
 clean:
-	rm -f $(OUT)
-	rm -f $(TEST_OUT)
+	rm -rf $(BUILD_DIR)

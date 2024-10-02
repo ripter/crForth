@@ -24,3 +24,13 @@ pkg-config --cflags raylib
 ### C Defined words vs Forth Defined words
 While I like the idea of having as much of the system written in Forth as possible, I like the idea of a fast enough system more. So if the C version is faster, the C version might be the better choice, depending on how much faster the C version is.
 
+
+## To Fix:
+* CoreForth is loading the CoreWords from a path relative to the path used to run crForth. It should be either included into the binary, or relative to the binary location, not the calling location.
+* need TYPE
+* does> returns the "address" of the word it ran
+* create name should create a variable by default, running it puts the "address" on the stack.
+* need ' tick
+* need EXECUTE
+* need? REFILL
+* need? SOURCE
