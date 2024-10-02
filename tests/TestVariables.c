@@ -1,0 +1,151 @@
+#include <string.h>
+#include "raylib.h"
+
+#include "minunit.h"
+#include "Test.h"
+#include "../src/crForth.h"
+#include "../src/core/CoreWords.h"
+
+#define OPEN_STREAM(input)                                                     \
+  FILE *inputStream = fmemopen(input, TextLength(input), "r");                 \
+  state.inputStream = inputStream;
+
+#define CLOSE_STREAM()                                                         \
+  fclose(inputStream);                                                         \
+  state.inputStream = NULL;
+
+MU_TEST(non_existent_word_lookup) {
+  KernelState state = {0};
+  InitKernelState(&state);
+  AddCoreWords(&state);
+
+  // Attempt to fetch a word that doesn't exist in the dictionary
+  WordMetadata *word = GetItemFromDictionary(&state.dict, "nonexistent");
+
+  // Ensure the word is not found (returns NULL)
+  mu_assert(word == NULL, "Non-existent word lookup should return NULL");
+
+  FreeKernelState(&state);
+}
+
+MU_TEST(create_add_dictionary_item) {
+  KernelState state = {0};
+  InitKernelState(&state);
+  AddCoreWords(&state);
+
+  OPEN_STREAM("create bizfuz");
+  DoForth(&state);
+  CLOSE_STREAM();
+
+  mu_assert(HasItemInDictionary(&state.dict, "bizfuz") == true, "Dictionary should have 'bizfuz'");
+
+  FreeKernelState(&state);
+}
+
+MU_TEST(create_creates_variable) {
+  KernelState state = {0};
+  InitKernelState(&state);
+  AddCoreWords(&state);
+
+  OPEN_STREAM("create foobar foobar");
+  DoForth(&state);
+  CLOSE_STREAM();
+
+  // The address to the data buffer should be on the stack.
+  cell_t result = PopFromCellStack(&state.dataStack);
+  // Find the memory address of the new word.
+  WordMetadata *newWord = GetItemFromDictionary(&state.dict, "foobar");
+
+  mu_assert_double_eq((cell_t)&newWord->data, (cell_t)result);
+  FreeKernelState(&state);
+}
+
+MU_TEST(create_empty_stack) {
+  KernelState state = {0};
+  InitKernelState(&state);
+  AddCoreWords(&state);
+
+  OPEN_STREAM("create testvar");
+  DoForth(&state);
+  CLOSE_STREAM();
+
+  // Ensure that the data stack is empty after creating a word
+  mu_assert(CellStackSize(&state.dataStack) == 0,
+            "Data stack should be empty after CREATE");
+
+  FreeKernelState(&state);
+}
+
+MU_TEST(create_multiple_words) {
+  KernelState state = {0};
+  InitKernelState(&state);
+  AddCoreWords(&state);
+
+  OPEN_STREAM("create word1 create word2 create word3");
+  DoForth(&state);
+  CLOSE_STREAM();
+
+  mu_assert(HasItemInDictionary(&state.dict, "word1") == true,
+            "Dictionary should have 'word1'");
+  mu_assert(HasItemInDictionary(&state.dict, "word2") == true,
+            "Dictionary should have 'word2'");
+  mu_assert(HasItemInDictionary(&state.dict, "word3") == true,
+            "Dictionary should have 'word3'");
+
+  FreeKernelState(&state);
+}
+
+MU_TEST(create_and_does) {
+  KernelState state = {0};
+  InitKernelState(&state);
+  AddCoreWords(&state);
+
+  // Create a new word that pushes 42 to the stack
+  // Then run that word to ensure it behaves as expected
+  OPEN_STREAM("create doesword does> 10 9 + ; doesword");
+  DoForth(&state);
+  CLOSE_STREAM();
+
+  // It should push the word "address" to the stack
+  // Then it should push the value 42 to the stack
+  cell_t result = PopFromCellStack(&state.dataStack);
+  cell_t addr = PopFromCellStack(&state.dataStack);
+  mu_assert_int_eq(result, 19 );
+  mu_assert_string_eq("doesword", (char *)addr );
+
+  FreeKernelState(&state);
+}
+
+MU_TEST(create_pushes_address_to_stack) {
+  KernelState state = {0};
+  InitKernelState(&state);
+  AddCoreWords(&state);
+
+  OPEN_STREAM("create foobar");
+  DoForth(&state);
+  CLOSE_STREAM();
+
+  // The "address" of the new word's data buffer should be on the return stack
+  // becuase this is a streaming kernel, the address is the word itself.
+  cell_t stackAddr = PopFromCellStack(&state.returnStack);
+  mu_assert_string_eq("foobar", (char *)stackAddr);
+
+  FreeKernelState(&state);
+}
+
+//
+// Run all the Tests
+//
+bool TestVariables(void) {
+
+  MU_RUN_TEST(non_existent_word_lookup);
+  MU_RUN_TEST(create_add_dictionary_item);
+  MU_RUN_TEST(create_creates_variable);
+  MU_RUN_TEST(create_empty_stack);
+  MU_RUN_TEST(create_multiple_words);
+  MU_RUN_TEST(create_and_does);
+  MU_RUN_TEST(create_pushes_address_to_stack);
+
+  MU_REPORT();
+  return MU_EXIT_CODE;
+}

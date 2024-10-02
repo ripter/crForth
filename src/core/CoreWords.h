@@ -38,10 +38,13 @@ void ToR(KernelState* state, WordMetadata* wordMeta);
 void RFrom(KernelState* state, WordMetadata* wordMeta);
 void DotSR(KernelState* state, WordMetadata *wordMeta);
 void DotSD(KernelState* state, WordMetadata *wordMeta);
+void Variable(KernelState* state, WordMetadata *wordMeta);
+
 
 //
 // Helper functions
 //
-char* DoForthString(KernelState *state, char *word);
+void DoForthString(KernelState *state, WordMetadata *wordMeta);
+void DoForthStringAndReturnAddress(KernelState *state, WordMetadata *wordMeta);
 
 #endif // COREWORDS_H

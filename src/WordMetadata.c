@@ -5,9 +5,9 @@
 #include "WordMetadata.h"
 
 // Initializes a WordMetadata structure
-// Name is copied to a new buffer, func is the function pointer to the word's code
+// Name is copied into the structure, so the caller can free the original string. The copy will be freed by FreeWordMetadata.
 // isImmediate is a flag to indicate if the word is immediate
-// data is an optional string buffer used by the word, can be NULL if not needed.
+// data is an optional string buffer used by the word, can be NULL if not needed. Will be freed by FreeWordMetadata.
 WordMetadata InitWordMetadata(const char *name, xt_func_ptr func, bool isImmediate, char *data) {
   WordMetadata meta;
   // Allocate memory for the name and copy it

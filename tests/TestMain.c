@@ -15,5 +15,7 @@ int main(void) {
   printf("\n*** CompileMode Tests ***\n");
   TestCompileMode();
 
+  printf("\n*** Variables Tests ***\n");
+  TestVariables();
   return 0;
 }

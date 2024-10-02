@@ -7,6 +7,6 @@
 void Does(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
   WordMetadata *lastItem = GetLastItemFromDictionary(&state->dict);
-  lastItem->func = (xt_func_ptr)DoForthString;
+  lastItem->func = (xt_func_ptr)DoForthStringAndReturnAddress;
   state->IsInCompileMode = true;
 }
