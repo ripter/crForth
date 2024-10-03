@@ -38,12 +38,14 @@ void ToR(KernelState* state, WordMetadata* wordMeta);
 void RFrom(KernelState* state, WordMetadata* wordMeta);
 void DotSR(KernelState* state, WordMetadata *wordMeta);
 void DotSD(KernelState* state, WordMetadata *wordMeta);
-void Variable(KernelState* state, WordMetadata *wordMeta);
 void GreaterThan(KernelState* state, WordMetadata* wordMeta);
 void LessThan(KernelState* state, WordMetadata* wordMeta);
 void NotEqual(KernelState* state, WordMetadata* wordMeta);
 void Equal(KernelState* state, WordMetadata* wordMeta);
 void Postpone(KernelState *state, WordMetadata *wordMeta);
+void Tick(KernelState *state, WordMetadata *wordMeta);
+void Execute(KernelState *state, WordMetadata *wordMeta);
+void Here(KernelState *state, WordMetadata *wordMeta);
 
 
 //
@@ -51,5 +53,6 @@ void Postpone(KernelState *state, WordMetadata *wordMeta);
 //
 void DoForthString(KernelState *state, WordMetadata *wordMeta);
 void DoForthStringAndReturnAddress(KernelState *state, WordMetadata *wordMeta);
+void Variable(KernelState* state, WordMetadata *wordMeta);
 
 #endif // COREWORDS_H

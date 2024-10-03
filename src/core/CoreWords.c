@@ -11,7 +11,7 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, InitWordMetadata("-",         (xt_func_ptr)Subtract,      false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(".",         (xt_func_ptr)Dot,           false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("branch",    (xt_func_ptr)Branch,        false,  NULL));
-  AddWordToDictionary(&state->dict, InitWordMetadata("branch?",   (xt_func_ptr)BranchZ,       false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("?branch",   (xt_func_ptr)BranchZ,       false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(".s",        (xt_func_ptr)DotS,          true,   NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(":",         (xt_func_ptr)Colon,         false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(";",         (xt_func_ptr)SemiColon,     true,   NULL));
@@ -35,4 +35,7 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, InitWordMetadata("<>",        (xt_func_ptr)NotEqual,      false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("=",         (xt_func_ptr)Equal,         false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("postpone",  (xt_func_ptr)Postpone,      true,   NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("'",         (xt_func_ptr)Tick,          false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("execute",   (xt_func_ptr)Execute,       false,  NULL));
+  // AddWordToDictionary(&state->dict, InitWordMetadata("here",      (xt_func_ptr)Here,          false,  NULL));
 }
