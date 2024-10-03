@@ -39,6 +39,11 @@ void RFrom(KernelState* state, WordMetadata* wordMeta);
 void DotSR(KernelState* state, WordMetadata *wordMeta);
 void DotSD(KernelState* state, WordMetadata *wordMeta);
 void Variable(KernelState* state, WordMetadata *wordMeta);
+void GreaterThan(KernelState* state, WordMetadata* wordMeta);
+void LessThan(KernelState* state, WordMetadata* wordMeta);
+void NotEqual(KernelState* state, WordMetadata* wordMeta);
+void Equal(KernelState* state, WordMetadata* wordMeta);
+void Postpone(KernelState *state, WordMetadata *wordMeta);
 
 
 //

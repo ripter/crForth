@@ -3,9 +3,13 @@
 
 #define APP_VERSION "0.0.1-dev"
 
+// Forth true/false values
+#define FTRUE -1
+#define FFALSE 0
+#define BOOL_TO_FORTH(b) ((b) ? FTRUE : FFALSE)
+
 
 #include <stdio.h>
-
 #include "Stack.h"
 #include "WordMetadata.h"
 #include "Dictionary.h"

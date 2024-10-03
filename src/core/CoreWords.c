@@ -30,4 +30,9 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, InitWordMetadata("r>",        (xt_func_ptr)RFrom,         false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(".sr",       (xt_func_ptr)DotSR,         true,   NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(".sd",       (xt_func_ptr)DotSD,         true,   NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("<",         (xt_func_ptr)LessThan,      false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata(">",         (xt_func_ptr)GreaterThan,   false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("<>",        (xt_func_ptr)NotEqual,      false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("=",         (xt_func_ptr)Equal,         false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("postpone",  (xt_func_ptr)Postpone,      true,   NULL));
 }

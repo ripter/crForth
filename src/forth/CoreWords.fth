@@ -1,4 +1,5 @@
-
+: false 0 ;
+: true -1 ;
 : 1+ 1 + ;
 
 : R@ R> dup >R ;
@@ -14,6 +15,12 @@
 ; IMMEDIATE
 
 
+: COUNT-UP-2
+  dup . 1+ 
+  dup 5 > branch? 2 
+    9 . 
+    10 
+; 
 
 : count-up 
   1            
