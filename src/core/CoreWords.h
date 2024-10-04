@@ -46,6 +46,8 @@ void Postpone(KernelState *state, WordMetadata *wordMeta);
 void Tick(KernelState *state, WordMetadata *wordMeta);
 void Execute(KernelState *state, WordMetadata *wordMeta);
 void Here(KernelState *state, WordMetadata *wordMeta);
+void Backslash(KernelState *state, WordMetadata *wordMeta);
+void Paren(KernelState *state, WordMetadata *wordMeta);
 
 
 //
