@@ -148,6 +148,17 @@ MU_TEST(tick_and_execute) {
   FREE_TEST_STATE();
 }
 
+MU_TEST(latest_and_execute) {
+  INIT_TEST_STATE();
+  OPEN_STREAM(": foobar 10 9 + ; latest execute");
+  DoForth(&state);
+  CLOSE_STREAM();
+
+  cell_t result = PopFromCellStack(&state.dataStack);
+  mu_assert_double_eq(19, result);
+  FREE_TEST_STATE();
+}
+
 
 
 //
@@ -163,6 +174,7 @@ bool TestBranch(void) {
 
   MU_RUN_TEST(tick);
   MU_RUN_TEST(tick_and_execute);
+  MU_RUN_TEST(latest_and_execute);
 
   MU_REPORT();
   return MU_EXIT_CODE;

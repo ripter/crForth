@@ -5,15 +5,15 @@
 
 
 : BEGIN
-  latest  
+  here >r >r 
 ; IMMEDIATE
 
 : WHILE
-  ?branch 1
+  ?branch 3
 ; IMMEDIATE
 
 : REPEAT
-  .
+  r> r> execute
 ; IMMEDIATE
 
 

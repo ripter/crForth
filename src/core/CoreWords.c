@@ -37,5 +37,5 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, InitWordMetadata("postpone",  (xt_func_ptr)Postpone,      true,   NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("'",         (xt_func_ptr)Tick,          false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("execute",   (xt_func_ptr)Execute,       false,  NULL));
-  // AddWordToDictionary(&state->dict, InitWordMetadata("here",      (xt_func_ptr)Here,          false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("here",      (xt_func_ptr)Here,          false,  NULL));
 }

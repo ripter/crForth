@@ -11,6 +11,11 @@ void InitKernelState(KernelState *state) {
   InitCellStack(&state->dataStack);
   InitCellStack(&state->returnStack);
   state->IsInCompileMode = false;
+  state->inputStream = NULL;
+  state->outputStream = NULL;
+  state->errorStream = NULL;
+  state->wordBuffer[0] = '\0';
+  state->branchBuffer[0] = '\0';
 }
 
 
@@ -27,4 +32,6 @@ void FreeKernelState(KernelState *state) {
   state->inputStream = NULL;
   state->outputStream = NULL;
   state->errorStream = NULL;
+  state->wordBuffer[0] = '\0';
+  state->branchBuffer[0] = '\0';
 }
