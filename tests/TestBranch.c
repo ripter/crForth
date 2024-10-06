@@ -160,6 +160,47 @@ MU_TEST(latest_and_execute) {
 }
 
 
+MU_TEST(branchr_test) {
+  INIT_TEST_STATE();
+
+  // define two words, foo and bar, then jump to foo via branchr.
+  OPEN_STREAM(": foo 10 ; : bar 9 ; foo >r branchr");
+  DoForth(&state);
+  CLOSE_STREAM();
+
+  // Ensure that 10 is left on the stack as branchr executed the word at the return stack address.
+  cell_t result = PopFromCellStack(&state.dataStack);
+  mu_check(result == 10);
+  FREE_TEST_STATE();
+}
+
+MU_TEST(branchr_test_empty_return_stack) {
+  INIT_TEST_STATE();
+
+  // branchr without anything on the return stack should result in an error or no operation.
+  OPEN_STREAM("branchr");
+  DoForth(&state);
+  CLOSE_STREAM();
+
+  // Ensure that the stack remains empty as nothing should be executed.
+  mu_check(IsCellStackEmpty(&state.dataStack));
+  FREE_TEST_STATE();
+}
+
+MU_TEST(branchr_with_calculation) {
+  INIT_TEST_STATE();
+
+  // Simulate adding two numbers by jumping to the address via the return stack.
+  OPEN_STREAM(": addnums 4 5 + ; addnums >r branchr");
+
+  DoForth(&state);
+  CLOSE_STREAM();
+
+  // Ensure that 9 is the result of the addition.
+  cell_t result = PopFromCellStack(&state.dataStack);
+  mu_check(result == 9);
+  FREE_TEST_STATE();
+}
 
 //
 // Run all branch tests
@@ -175,6 +216,10 @@ bool TestBranch(void) {
   MU_RUN_TEST(tick);
   MU_RUN_TEST(tick_and_execute);
   MU_RUN_TEST(latest_and_execute);
+
+  MU_RUN_TEST(branchr_test);
+  MU_RUN_TEST(branchr_test_empty_return_stack);
+  MU_RUN_TEST(branchr_with_calculation);
 
   MU_REPORT();
   return MU_EXIT_CODE;
