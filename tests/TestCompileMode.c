@@ -7,19 +7,9 @@
 #include "../src/crForth.h"
 #include "../src/core/CoreWords.h"
 
-#define OPEN_STREAM(input)                                                     \
-  FILE *inputStream = fmemopen(input, TextLength(input), "r");                     \
-  state.inputStream = inputStream;
-
-#define CLOSE_STREAM()                                                         \
-  fclose(inputStream);                                                         \
-  state.inputStream = NULL;
-
 
 MU_TEST(can_run_forth_from_dictionary) {
-  KernelState state = {0};
-  InitKernelState(&state);
-  AddCoreWords(&state);
+  INIT_TEST_STATE();
 
   // Add a forth script directly into the dictionary.
   char *script = MemAlloc(100);
@@ -34,15 +24,11 @@ MU_TEST(can_run_forth_from_dictionary) {
   // mu_assert_int_eq(result == 5, "test++ should add 1 to the top of the stack");
   mu_assert_int_eq(5, result);
 
-  // This will also free the script buffer.
-  FreeKernelState(&state);
+  FREE_TEST_STATE();
 }
 
-
 MU_TEST(basic_plus_one_test) {
-  KernelState state = {0};
-  InitKernelState(&state);
-  AddCoreWords(&state);
+  INIT_TEST_STATE();
 
   // Create a new word ++ that adds 1 to the top of the stack.
   // Try it out with 18 ++.
@@ -54,13 +40,11 @@ MU_TEST(basic_plus_one_test) {
   cell_t result = PopFromCellStack(&state.dataStack);
   mu_check(result == 19);
 
-  FreeKernelState(&state);
+  FREE_TEST_STATE();
 }
 
 MU_TEST(test_create_does) {
-  KernelState state = {0};
-  InitKernelState(&state);
-  AddCoreWords(&state);
+  INIT_TEST_STATE();
 
   OPEN_STREAM("create my-test does> 2 3 4 + + ;\n my-test")
   DoForth(&state);
@@ -69,14 +53,47 @@ MU_TEST(test_create_does) {
   cell_t result = PopFromCellStack(&state.dataStack);
   mu_check(result == 9);
 
-  FreeKernelState(&state);
+  FREE_TEST_STATE();
 }
 
+
+MU_TEST(tick_interpret_mode) {
+  INIT_TEST_STATE();
+  OPEN_STREAM(": foobar 10 9 ; ' foobar execute +");
+  DoForth(&state);
+  CLOSE_STREAM();
+
+  cell_t result = PopFromCellStack(&state.dataStack);
+  mu_check(result == 19);
+  FREE_TEST_STATE();
+}
+
+MU_TEST(tick_compile_mode) {
+  INIT_TEST_STATE();
+
+  OPEN_STREAM(" \
+  : foobar 10 9 ; \
+  : test-compile ' execute ;  \
+  test-compile foobar +");
+  DoForth(&state);
+  CLOSE_STREAM();
+
+  cell_t result = PopFromCellStack(&state.dataStack);
+  mu_check(result == 9);
+  FREE_TEST_STATE();
+}
+
+
+
+//
+// Run all compile mode tests
 bool TestCompileMode(void) {
 
   MU_RUN_TEST(can_run_forth_from_dictionary);
   MU_RUN_TEST(basic_plus_one_test);
   MU_RUN_TEST(test_create_does);
+  MU_RUN_TEST(tick_interpret_mode);
+  MU_RUN_TEST(tick_compile_mode);
 
   MU_REPORT();
   return MU_EXIT_CODE;

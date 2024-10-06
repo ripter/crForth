@@ -5,14 +5,6 @@
 #include "Test.h"
 #include "../src/crForth.h"
 
-#define OPEN_STREAM(input)                                                     \
-  FILE *inputStream = fmemopen(input, TextLength(input), "r");                 \
-  state.inputStream = inputStream;
-
-#define CLOSE_STREAM()                                                         \
-  fclose(inputStream);                                                         \
-  state.inputStream = NULL;
-
 
 MU_TEST(basic_64bit_number) {
   KernelState state = {0};

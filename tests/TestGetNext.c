@@ -7,9 +7,15 @@
 #include "Test.h"
 #include "../src/crForth.h"
 
+#ifdef OPEN_STREAM
+  #undef OPEN_STREAM
+#endif
 #define OPEN_STREAM(input)                                                     \
   FILE *inputStream = fmemopen(input, TextLength(input), "r");
 
+#ifdef CLOSE_STREAM
+  #undef CLOSE_STREAM
+#endif
 #define CLOSE_STREAM()                                                         \
   fclose(inputStream);                                                         \
 

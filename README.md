@@ -40,7 +40,8 @@ These functions work with data pointer defined in the word metadata.
 * LOOPS!
 * CoreForth is loading the CoreWords from a path relative to the path used to run crForth. It should be either included into the binary, or relative to the binary location, not the calling location.
 * need TYPE
-* need ' tick
+* Finish ' tick
+  * when run inside a compiled definition, it should return the XT of the word after the definition. (Test tick_compile_mode checks for this.)
 * need EXECUTE
 * need? REFILL
 * need? SOURCE
