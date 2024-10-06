@@ -35,3 +35,12 @@ void Equal(KernelState* state, WordMetadata* wordMeta) {
   cell_t a = PopFromCellStack(&state->dataStack);
   PushToCellStack(&state->dataStack, a == b ? FTRUE : FFALSE);
 }
+
+// ( x -- flag )
+// flag is true if and only if x is equal to zero.
+// https://forth-standard.org/standard/core/ZeroEqual
+void ZeroEquals(KernelState* state, WordMetadata* wordMeta) {
+  (void)wordMeta; // UNUSED
+  cell_t a = PopFromCellStack(&state->dataStack);
+  PushToCellStack(&state->dataStack, a == 0 ? FTRUE : FFALSE);
+}

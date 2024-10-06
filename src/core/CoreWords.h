@@ -48,6 +48,13 @@ void Execute(KernelState *state, WordMetadata *wordMeta);
 void Here(KernelState *state, WordMetadata *wordMeta);
 void Backslash(KernelState *state, WordMetadata *wordMeta);
 void Paren(KernelState *state, WordMetadata *wordMeta);
+void Invert(KernelState *state, WordMetadata *wordMeta);
+void BitOr(KernelState *state, WordMetadata *wordMeta);
+void BitAnd(KernelState *state, WordMetadata *wordMeta);
+void BitXor(KernelState *state, WordMetadata *wordMeta);
+void BitShiftLeft(KernelState *state, WordMetadata *wordMeta);
+void BitShiftRight(KernelState *state, WordMetadata *wordMeta);
+void ZeroEquals(KernelState* state, WordMetadata* wordMeta);
 
 
 //

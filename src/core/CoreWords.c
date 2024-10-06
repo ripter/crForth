@@ -38,6 +38,13 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, InitWordMetadata("'",         (xt_func_ptr)Tick,          false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("execute",   (xt_func_ptr)Execute,       false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("here",      (xt_func_ptr)Here,          false,  NULL));
-  AddWordToDictionary(&state->dict, InitWordMetadata("\\",        (xt_func_ptr)Backslash,     false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("\\",        (xt_func_ptr)Backslash,     true,   NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("(",         (xt_func_ptr)Paren,         false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("invert",    (xt_func_ptr)Invert,        false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("or",        (xt_func_ptr)BitOr,         false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("and",       (xt_func_ptr)BitAnd,        false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("xor",       (xt_func_ptr)BitXor,        false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("lshift",    (xt_func_ptr)BitShiftLeft,  false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("rshift",        (xt_func_ptr)BitShiftRight, false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("0=",        (xt_func_ptr)ZeroEquals,    false,  NULL));
 }
