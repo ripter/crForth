@@ -6,9 +6,9 @@
 void CFetch(KernelState* state, WordMetadata* wordMeta) {
     (void)wordMeta; // UNUSED
     // Pop the address from the stack
-    cell_t c_addr = PopFromCellStack(&state->dataStack);
+    Cell c_addr = PopFromCellStack(&state->dataStack);
     // Fetch the character at the address
-    char ch = *(char*)c_addr;
+    char ch = *(char*)c_addr.value;
     // Push the character onto the stack
-    PushToCellStack(&state->dataStack, (cell_t)ch);
+    PushToCellStack(&state->dataStack, (Cell){ch, CELL_TYPE_WORD});
 }

@@ -13,8 +13,8 @@ MU_TEST(basic_64bit_number) {
   OPEN_STREAM("4998578416");
   DoForth(&state);
   CLOSE_STREAM();
-  cell_t result = PopFromCellStack(&state.dataStack);
-  mu_assert_double_eq(4998578416, result);
+  Cell result = PopFromCellStack(&state.dataStack);
+  mu_assert_double_eq(4998578416, result.value);
 
   FreeKernelState(&state);
 }

@@ -6,8 +6,8 @@
 // https://forth-standard.org/standard/core/SWAP
 void Swap(KernelState* state, WordMetadata* wordMeta) {
   (void)wordMeta; // UNUSED
-  cell_t a = PopFromCellStack(&state->dataStack);
-  cell_t b = PopFromCellStack(&state->dataStack);
-  PushToCellStack(&state->dataStack, a);
-  PushToCellStack(&state->dataStack, b);
+  Cell a = PopFromCellStack(&state->dataStack);
+  Cell b = PopFromCellStack(&state->dataStack);
+  PushToCellStack(&state->dataStack, (Cell){a.value, CELL_TYPE_NUMBER});
+  PushToCellStack(&state->dataStack, (Cell){b.value, CELL_TYPE_NUMBER});
 }

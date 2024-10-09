@@ -6,6 +6,6 @@
 // https://forth-standard.org/standard/core/toR
 void ToR(KernelState* state, WordMetadata* wordMeta) {
   (void)wordMeta; // UNUSED
-  cell_t a = PopFromCellStack(&state->dataStack);
-  PushToCellStack(&state->returnStack, a);
+  Cell a = PopFromCellStack(&state->dataStack);
+  PushToCellStack(&state->returnStack, (Cell){a.value, CELL_TYPE_NUMBER});
 }

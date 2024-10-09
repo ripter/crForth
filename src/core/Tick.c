@@ -14,8 +14,8 @@ void Tick(KernelState *state, WordMetadata *wordMeta) {
   // Look up the word in the dictionary
   WordMetadata* foundWordMeta = GetItemFromDictionary(&state->dict, wordBuffer);
   if (foundWordMeta != NULL) {
-    PushToCellStack(&state->dataStack, (cell_t)foundWordMeta->name);
-    PushToCellStack(&state->dataStack, (cell_t)TextLength(foundWordMeta->name));
+    PushToCellStack(&state->dataStack, (Cell){(cell_t)foundWordMeta->name, CELL_TYPE_WORD});
+    PushToCellStack(&state->dataStack, (Cell){TextLength(foundWordMeta->name), CELL_TYPE_NUMBER});
   } else {
     fprintf(state->errorStream, "Error: Word not found: %s\n", wordBuffer);
   }

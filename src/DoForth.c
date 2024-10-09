@@ -43,7 +43,7 @@ void DoForth(KernelState *state) {
       else if (IsNumber(state->wordBuffer)) {
         cell_t num;
         if (ConvertWordToNumber(state->wordBuffer, &num)) {
-          PushToCellStack(&state->dataStack, num);
+          PushToCellStack(&state->dataStack, (Cell){num, CELL_TYPE_NUMBER});
         } else {
           // Handle the error: word is not a valid number
           fprintf(stderr, "Error: Invalid number '%s'.\n", state->wordBuffer);

@@ -15,8 +15,8 @@ MU_TEST(skip_basic_test) {
   DoForth(&state);
   CLOSE_STREAM();
   // Check that the TOS is still our sentinel value.
-  cell_t result = PopFromCellStack(&state.dataStack);
-  mu_assert_double_eq(19, result);
+  Cell result = PopFromCellStack(&state.dataStack);
+  mu_assert_double_eq(19, result.value);
   FREE_TEST_STATE();
 }
 
@@ -48,8 +48,8 @@ MU_TEST(skip_0_no_skip) {
   DoForth(&state);
   CLOSE_STREAM();
   // Stack should have the result of 4 + 5.
-  cell_t result = PopFromCellStack(&state.dataStack);
-  mu_assert_double_eq(9, result);
+  Cell result = PopFromCellStack(&state.dataStack);
+  mu_assert_double_eq(9, result.value);
   FREE_TEST_STATE();
 }
 
@@ -61,8 +61,8 @@ MU_TEST(skip_0_no_skip_single_word) {
   DoForth(&state);
   CLOSE_STREAM();
   // The stack should contain 10.
-  cell_t result = PopFromCellStack(&state.dataStack);
-  mu_assert_double_eq(10, result);
+  Cell result = PopFromCellStack(&state.dataStack);
+  mu_assert_double_eq(10, result.value);
   FREE_TEST_STATE();
 }
 
@@ -73,8 +73,8 @@ MU_TEST(skip_0_with_negative_skip) {
   DoForth(&state);
   CLOSE_STREAM();
   // The stack should remain unchanged, and the result of 9 + 10 should still be present.
-  cell_t result = PopFromCellStack(&state.dataStack);
-  mu_check(result == 19);
+  Cell result = PopFromCellStack(&state.dataStack);
+  mu_assert_double_eq(19, result.value);
   FREE_TEST_STATE();
 }
 
@@ -84,16 +84,16 @@ MU_TEST(branch_jump_1) {
   // We want to test branching to the + word.
   // Get the word from the dictionary so we can push it's "address" to the return stack.
   WordMetadata *branchWord = GetItemFromDictionary(&state.dict, "+");
-  PushToCellStack(&state.returnStack, (cell_t)1);                // length
-  PushToCellStack(&state.returnStack, (cell_t)branchWord->name); // address
+  PushToCellStack(&state.returnStack, (Cell){1, CELL_TYPE_NUMBER});                // length
+  PushToCellStack(&state.returnStack, (Cell){(cell_t)branchWord->name, CELL_TYPE_WORD}); // address
   // add numbers to the data stack and try the branch.
   // Because the address on the returnStack is "+", the branch should execute the + word.
   OPEN_STREAM("10 9 branch");
   DoForth(&state);
   CLOSE_STREAM();
   // Did it run the branch word?
-  cell_t result = PopFromCellStack(&state.dataStack);
-  mu_assert_double_eq(19, result);
+  Cell result = PopFromCellStack(&state.dataStack);
+  mu_assert_double_eq(19, result.value);
   FREE_TEST_STATE();
 }
 
@@ -124,8 +124,8 @@ MU_TEST(branchnz_basic_true) {
   // DoForth(&state);
   CLOSE_STREAM();
 
-  cell_t result = PopFromCellStack(&state.dataStack);
-  mu_assert_double_eq(9, result);
+  Cell result = PopFromCellStack(&state.dataStack);
+  mu_assert_double_eq(9, result.value);
   mu_check(IsCellStackEmpty(&state.dataStack));
   FREE_TEST_STATE();
 }
@@ -152,10 +152,10 @@ MU_TEST(tick) {
   // Get the dictionary entry so we can verify the address is the same.
   WordMetadata* wordMeta = GetItemFromDictionary(&state.dict, "+");
   (void)PopFromCellStack(&state.dataStack); // length
-  cell_t word = PopFromCellStack(&state.dataStack);
+  Cell word = PopFromCellStack(&state.dataStack);
 
   // Tick should push the address of the word to the stack.
-  mu_assert_double_eq((cell_t)wordMeta->name, word);
+  mu_assert_double_eq((cell_t)wordMeta->name, word.value);
   FREE_TEST_STATE();
 }
 
@@ -173,8 +173,8 @@ MU_TEST(tick_and_execute) {
   DoForth(&state);
   CLOSE_STREAM();
 
-  cell_t result = PopFromCellStack(&state.dataStack);
-  mu_assert_double_eq(19, result);
+  Cell result = PopFromCellStack(&state.dataStack);
+  mu_assert_double_eq(19, result.value);
   FREE_TEST_STATE();
 }
 
@@ -184,8 +184,8 @@ MU_TEST(latest_and_execute) {
   DoForth(&state);
   CLOSE_STREAM();
 
-  cell_t result = PopFromCellStack(&state.dataStack);
-  mu_assert_double_eq(19, result);
+  Cell result = PopFromCellStack(&state.dataStack);
+  mu_assert_double_eq(19, result.value);
   FREE_TEST_STATE();
 }
 
@@ -199,8 +199,8 @@ MU_TEST(branchr_test) {
   CLOSE_STREAM();
 
   // Ensure that 10 is left on the stack as branchr executed the word at the return stack address.
-  cell_t result = PopFromCellStack(&state.dataStack);
-  mu_check(result == 10);
+  Cell result = PopFromCellStack(&state.dataStack);
+  mu_assert_double_eq(10, result.value);
   FREE_TEST_STATE();
 }
 
@@ -227,8 +227,8 @@ MU_TEST(branchr_with_calculation) {
   CLOSE_STREAM();
 
   // Ensure that 9 is the result of the addition.
-  cell_t result = PopFromCellStack(&state.dataStack);
-  mu_check(result == 9);
+  Cell result = PopFromCellStack(&state.dataStack);
+  mu_assert_double_eq(9, result.value);
   FREE_TEST_STATE();
 }
 

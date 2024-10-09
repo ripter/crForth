@@ -30,7 +30,7 @@ void ExecuteForthString(KernelState *state, const char *branchWord, const char *
 
   // Push the word "address" to the stack if needed.
   if (returnAddress) {
-    PushToCellStack(&state->dataStack, (cell_t)branchWord);
+    PushToCellStack(&state->dataStack, (Cell){(cell_t)branchWord, CELL_TYPE_WORD});
   }
 
   // Convert the string to a stream, saving the original stream.

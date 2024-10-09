@@ -6,10 +6,10 @@
 void Execute(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta;                                           // Unused parameter
   (void)PopFromCellStack(&state->dataStack);                // u
-  char *word = (char *)PopFromCellStack(&state->dataStack); // c-addr
+  Cell word = PopFromCellStack(&state->dataStack); // c-addr
 
   // Get the word from the dictionary
-  WordMetadata *foundWordMeta = GetItemFromDictionary(&state->dict, word);
+  WordMetadata *foundWordMeta = GetItemFromDictionary(&state->dict, (const char *)word.value);
   if (foundWordMeta != NULL) {
     foundWordMeta->func(state, foundWordMeta);
   } else {

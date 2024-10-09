@@ -16,10 +16,15 @@
 void Skip(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
   char wordBuffer[MAX_WORD_LENGTH];
-  cell_t num = PopFromCellStack(&state->dataStack);
+  Cell num = PopFromCellStack(&state->dataStack);
+
+  if (num.type != CELL_TYPE_NUMBER) {
+    fprintf(state->errorStream, "Error: Skip requires a number on the stack.\n");
+    return;
+  }
 
   // Skip the number of words specified by the parsed number.
-  for (cell_t i = 0; i < num; i++) {
+  for (cell_t i = 0; i < num.value; i++) {
     GetNextWord(state->inputStream, wordBuffer, MAX_WORD_LENGTH);
   }
 }
@@ -28,12 +33,12 @@ void Skip(KernelState *state, WordMetadata *wordMeta) {
 // Skips n2 words in the input stream if n1 is 0.
 void SkipOnZero(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
-  cell_t num2 = PopFromCellStack(&state->dataStack);
-  cell_t num1 = PopFromCellStack(&state->dataStack);
+  Cell num2 = PopFromCellStack(&state->dataStack);
+  Cell num1 = PopFromCellStack(&state->dataStack);
 
   // Skip the number of words specified by the parsed number.
-  if (num1 == 0) {
-    for (cell_t i = 0; i < num2; i++) {
+  if (num1.value == 0) {
+    for (cell_t i = 0; i < num2.value; i++) {
       char wordBuffer[MAX_WORD_LENGTH];
       GetNextWord(state->inputStream, wordBuffer, MAX_WORD_LENGTH);
     }
@@ -50,16 +55,16 @@ void Branch(KernelState *state, WordMetadata *wordMeta) {
     fprintf(state->errorStream, "Error: branch requires an address on the return stack. But found an Empty return stack instead.\n");
     return;
   }
-  char* word = (char *)PopFromCellStack(&state->returnStack);
-  cell_t length = PopFromCellStack(&state->returnStack);
+  Cell word = PopFromCellStack(&state->returnStack);
+  Cell length = PopFromCellStack(&state->returnStack);
   // printf("Branching to: %s\n", word);
-  printf("length: %d\taddress: %ld", length, (cell_t)word);
-  if (!IsNullTerminatedString(word, length+1)) {
+  printf("length: %d\taddress: %ld", length.value, (cell_t)word.value);
+  if (!IsNullTerminatedString((const char *)word.value, length.value+1)) {
     fprintf(state->errorStream, "Error: Return Stack did not contain an address.\n");
     return;
   }
 
-  DoForthString(state, word, word);
+  DoForthString(state, (const char *)word.value, (const char *)word.value);
 }
 
 
@@ -77,15 +82,15 @@ void BranchNZ(KernelState *state, WordMetadata *wordMeta) {
     fprintf(state->errorStream, "Error: ?branch requires an address on the return stack.\n");
     return;
   }
-  bool testValue = (bool)PopFromCellStack(&state->dataStack);
-  char* word = (char *)PopFromCellStack(&state->returnStack);
-  cell_t length = PopFromCellStack(&state->returnStack);
-  if (!IsNullTerminatedString(word, length)) {
+  Cell testValue = PopFromCellStack(&state->dataStack);
+  Cell word = PopFromCellStack(&state->returnStack);
+  Cell length = PopFromCellStack(&state->returnStack);
+  if (!IsNullTerminatedString((const char *)word.value, length.value)) {
     fprintf(state->errorStream, "Error: Return Stack did not contain an address.\n");
     return;
   }
 
-  if (testValue) {
-    DoForthString(state, word, word);
+  if (testValue.value) {
+    DoForthString(state, (const char *)word.value, (const char *)word.value);
   }
 }
