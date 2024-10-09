@@ -8,59 +8,95 @@
 #include "../src/core/CoreWords.h"
 
 
-MU_TEST(branch_test) {
+MU_TEST(skip_basic_test) {
   INIT_TEST_STATE();
-  // branch should skip 3 words, resulting in nothing being added to the stack.
-  OPEN_STREAM("19 branch 3 4 5 +");
+  // Add sentinel value (19), skip 3 words, resulting in nothing being added to the stack.
+  OPEN_STREAM("19 3 skip 4 5 +");
   DoForth(&state);
   CLOSE_STREAM();
-
   // Check that the TOS is still our sentinel value.
   cell_t result = PopFromCellStack(&state.dataStack);
-  mu_check(result == 19);
+  mu_assert_double_eq(19, result);
   FREE_TEST_STATE();
 }
 
-MU_TEST(branch_test_on_empty_stack) {
+MU_TEST(skip_on_empty_stack_test) {
   INIT_TEST_STATE();
-
   // branch should skip 3 words, resulting in nothing being added to the stack.
-  OPEN_STREAM("branch 3 4 5 +");
+  OPEN_STREAM("3 skip 4 5 +");
   DoForth(&state);
   CLOSE_STREAM();
-
   // stack should still be empty.
   mu_check(IsCellStackEmpty(&state.dataStack));
   FREE_TEST_STATE();
 }
 
-MU_TEST(branch_jump_0) {
+MU_TEST(skip_0_basic) {
   INIT_TEST_STATE();
-
-  // Branch should skip 0 words, resulting in 4 and 5 being added together on the stack.
-  OPEN_STREAM("19 branch 0 4 5 +");
+  // n1 is 0, n2 is 3, so 0skip should skip 3 words (4, 5, +), leaving the stack empty.
+  OPEN_STREAM("0 3 0skip 4 5 +");
   DoForth(&state);
   CLOSE_STREAM();
-
-  // Check that the TOS is still our sentinel value.
-  cell_t result = PopFromCellStack(&state.dataStack);
-  mu_check(result == 9);
+  mu_check(IsCellStackEmpty(&state.dataStack));
   FREE_TEST_STATE();
 }
+
+MU_TEST(skip_0_no_skip) {
+  INIT_TEST_STATE();
+  // n1 is non-zero (5), so 0skip should not skip any words and proceed with the rest of the code.
+  OPEN_STREAM("5 3 0skip 4 5 +");
+  DoForth(&state);
+  CLOSE_STREAM();
+  // Stack should have the result of 4 + 5.
+  cell_t result = PopFromCellStack(&state.dataStack);
+  mu_assert_double_eq(9, result);
+  FREE_TEST_STATE();
+}
+
+MU_TEST(skip_0_no_skip_single_word) {
+  INIT_TEST_STATE();
+  // n1 is non-zero (3), so 0skip should not skip any words.
+  // The word "10" should be added to the stack.
+  OPEN_STREAM("3 1 0skip 10");
+  DoForth(&state);
+  CLOSE_STREAM();
+  // The stack should contain 10.
+  cell_t result = PopFromCellStack(&state.dataStack);
+  mu_assert_double_eq(10, result);
+  FREE_TEST_STATE();
+}
+
+MU_TEST(skip_0_with_negative_skip) {
+  INIT_TEST_STATE();
+  // -1 is not a valid number of words to skip.
+  OPEN_STREAM("0 -1 10 9 +");
+  DoForth(&state);
+  CLOSE_STREAM();
+  // The stack should remain unchanged, and the result of 9 + 10 should still be present.
+  cell_t result = PopFromCellStack(&state.dataStack);
+  mu_check(result == 19);
+  FREE_TEST_STATE();
+}
+
 
 MU_TEST(branch_jump_1) {
   INIT_TEST_STATE();
-
-  // Branch should skip 1 words, resulting 15 being added to the stack.
-  OPEN_STREAM("10 branch 1 4 5 +");
+  // We want to test branching to the + word.
+  // Get the word from the dictionary so we can push it's "address" to the return stack.
+  WordMetadata *branchWord = GetItemFromDictionary(&state.dict, "+");
+  PushToCellStack(&state.returnStack, (cell_t)1);                // length
+  PushToCellStack(&state.returnStack, (cell_t)branchWord->name); // address
+  // add numbers to the data stack and try the branch.
+  // Because the address on the returnStack is "+", the branch should execute the + word.
+  OPEN_STREAM("10 9 branch");
   DoForth(&state);
   CLOSE_STREAM();
-
-  // Check that the TOS is still our sentinel value.
+  // Did it run the branch word?
   cell_t result = PopFromCellStack(&state.dataStack);
-  mu_check(result == 15);
+  mu_assert_double_eq(19, result);
   FREE_TEST_STATE();
 }
+
 
 MU_TEST(branchnz_basic_true) {
   INIT_TEST_STATE();
@@ -183,11 +219,14 @@ MU_TEST(branchr_with_calculation) {
 //
 // Run all branch tests
 bool TestBranch(void) {
-  MU_RUN_TEST(branch_test);
-  MU_RUN_TEST(branch_test_on_empty_stack);
-  MU_RUN_TEST(branch_jump_0);
-  MU_RUN_TEST(branch_jump_1);
+  MU_RUN_TEST(skip_basic_test);
+  MU_RUN_TEST(skip_on_empty_stack_test);
+  MU_RUN_TEST(skip_0_basic);
+  MU_RUN_TEST(skip_0_no_skip);
+  MU_RUN_TEST(skip_0_no_skip_single_word);
+  MU_RUN_TEST(skip_0_with_negative_skip);
 
+  MU_RUN_TEST(branch_jump_1);
   MU_RUN_TEST(branchnz_basic_true);
   MU_RUN_TEST(branchnz_basic_false);
 

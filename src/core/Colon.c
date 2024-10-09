@@ -14,7 +14,7 @@ void Colon(KernelState *state, WordMetadata *wordMeta) {
   // Create a text buffter to hold the word definition.
   char* wordDef = (char *)MemAlloc(MAX_WORD_LENGTH);
   // Create a new WordMeta for the newly created word.
-  WordMetadata newWordMeta = InitWordMetadata(newName, (xt_func_ptr)DoForthString, false, wordDef);
+  WordMetadata newWordMeta = InitWordMetadata(newName, (xt_func_ptr)DoForthDataString, false, wordDef);
   // Add the new word to the dictionary.
   AddWordToDictionary(&state->dict, newWordMeta);
 

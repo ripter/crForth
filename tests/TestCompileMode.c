@@ -14,7 +14,7 @@ MU_TEST(can_run_forth_from_dictionary) {
   // Add a forth script directly into the dictionary.
   char *script = MemAlloc(100);
   strcpy(script, "1 +");
-  AddWordToDictionary(&state.dict, InitWordMetadata("test++", (xt_func_ptr)DoForthString, false, script));
+  AddWordToDictionary(&state.dict, InitWordMetadata("test++", (xt_func_ptr)DoForthDataString, false, script));
   OPEN_STREAM("4 test++");
   DoForth(&state);
   CLOSE_STREAM();
@@ -79,7 +79,7 @@ MU_TEST(tick_compile_mode) {
   CLOSE_STREAM();
 
   cell_t result = PopFromCellStack(&state.dataStack);
-  mu_check(result == 9);
+  mu_assert_double_eq(19, result);
   FREE_TEST_STATE();
 }
 

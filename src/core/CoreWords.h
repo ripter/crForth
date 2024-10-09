@@ -15,6 +15,8 @@ void AddCoreWords(KernelState *state);
 // Expect for the ones that are more efficient to implement in C.
 // Side note: this list is not alphabetized, its the order they were implemented. I find the history of things interesting.
 void Add(KernelState *state, WordMetadata *wordMeta);
+void Skip(KernelState *state, WordMetadata *wordMeta);
+void SkipOnZero(KernelState *state, WordMetadata *wordMeta);
 void Branch(KernelState *state, WordMetadata *wordMeta); 
 void BranchZ(KernelState *state, WordMetadata *wordMeta);
 void Colon(KernelState *state, WordMetadata *wordMeta);
@@ -60,7 +62,8 @@ void ZeroEquals(KernelState* state, WordMetadata* wordMeta);
 //
 // Helper functions
 //
-void DoForthString(KernelState *state, WordMetadata *wordMeta);
+void DoForthString(KernelState *state, const char* branchName, const char* forthString);
+void DoForthDataString(KernelState *state, WordMetadata *wordMeta);
 void DoForthStringAndReturnAddress(KernelState *state, WordMetadata *wordMeta);
 void Variable(KernelState* state, WordMetadata *wordMeta);
 

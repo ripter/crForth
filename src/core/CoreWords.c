@@ -10,8 +10,10 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, InitWordMetadata("+",         (xt_func_ptr)Add,           false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("-",         (xt_func_ptr)Subtract,      false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(".",         (xt_func_ptr)Dot,           false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("skip",      (xt_func_ptr)Skip,          false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("0skip",     (xt_func_ptr)SkipOnZero,    false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("branch",    (xt_func_ptr)Branch,        false,  NULL));
-  AddWordToDictionary(&state->dict, InitWordMetadata("?branch",   (xt_func_ptr)BranchZ,       false,  NULL));
+  // AddWordToDictionary(&state->dict, InitWordMetadata("?branch",   (xt_func_ptr)BranchZ,       false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(".s",        (xt_func_ptr)DotS,          true,   NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(":",         (xt_func_ptr)Colon,         false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(";",         (xt_func_ptr)SemiColon,     true,   NULL));
@@ -45,6 +47,7 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, InitWordMetadata("and",       (xt_func_ptr)BitAnd,        false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("xor",       (xt_func_ptr)BitXor,        false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("lshift",    (xt_func_ptr)BitShiftLeft,  false,  NULL));
-  AddWordToDictionary(&state->dict, InitWordMetadata("rshift",        (xt_func_ptr)BitShiftRight, false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("rshift",    (xt_func_ptr)BitShiftRight, false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("0=",        (xt_func_ptr)ZeroEquals,    false,  NULL));
+
 }
