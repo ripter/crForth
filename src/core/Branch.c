@@ -46,26 +46,46 @@ void SkipOnZero(KernelState *state, WordMetadata *wordMeta) {
 // The address and length are in reverse order so they don't require a swap when moving from/to the data stack.
 void Branch(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
+  if (IsCellStackEmpty(&state->returnStack)) {
+    fprintf(state->errorStream, "Error: branch requires an address on the return stack. But found an Empty return stack instead.\n");
+    return;
+  }
   char* word = (char *)PopFromCellStack(&state->returnStack);
   cell_t length = PopFromCellStack(&state->returnStack);
+  // printf("Branching to: %s\n", word);
+  printf("length: %d\taddress: %ld", length, (cell_t)word);
+  if (!IsNullTerminatedString(word, length+1)) {
+    fprintf(state->errorStream, "Error: Return Stack did not contain an address.\n");
+    return;
+  }
 
   DoForthString(state, word, word);
 }
 
-// ( flag "<spaces>number" -- )
-// When the flag is false, the branch? word skips the number of words specified by the parsed number.
-// When the flag is true, the branch? word does nothing.
-void BranchZ(KernelState *state, WordMetadata *wordMeta) {
-  // char wordBuffer[MAX_WORD_LENGTH];
-  bool testValue = (bool)PopFromCellStack(&state->dataStack);
 
-  // False means we *DO* skip the words after the branch.
-  if (!testValue) {
-    Branch(state, wordMeta);
+
+// ( n1 -- ) ( R: u c-addr -- )
+// Branches to the address on the return stack if n1 is not zero.
+// The address and length are in reverse order so they don't require a swap when moving from/to the data stack.
+void BranchNZ(KernelState *state, WordMetadata *wordMeta) {
+  (void)wordMeta; // Unused parameter
+  if (IsCellStackEmpty(&state->dataStack)) {
+    fprintf(state->errorStream, "Error: ?branch requires a test value on the stack.\n");
+    return;
   }
-  else {
-    // Consume the next word, which is the number of words to skip.
-    char wordBuffer[MAX_WORD_LENGTH];
-    GetNextWord(state->inputStream, wordBuffer, MAX_WORD_LENGTH);
+  if (IsCellStackEmpty(&state->returnStack)) {
+    fprintf(state->errorStream, "Error: ?branch requires an address on the return stack.\n");
+    return;
+  }
+  bool testValue = (bool)PopFromCellStack(&state->dataStack);
+  char* word = (char *)PopFromCellStack(&state->returnStack);
+  cell_t length = PopFromCellStack(&state->returnStack);
+  if (!IsNullTerminatedString(word, length)) {
+    fprintf(state->errorStream, "Error: Return Stack did not contain an address.\n");
+    return;
+  }
+
+  if (testValue) {
+    DoForthString(state, word, word);
   }
 }

@@ -12,7 +12,8 @@
 
 #define OPEN_STREAM(input)                                                     \
   FILE *inputStream = fmemopen(input, TextLength(input), "r");                 \
-  state.inputStream = inputStream;
+  state.inputStream = inputStream;                                             \
+  state.errorStream = tmpfile(); // Initialize error stream
 
 #define CLOSE_STREAM()                                                         \
   fclose(inputStream);                                                         \
@@ -22,6 +23,15 @@
   fclose(inputStream);                                                         \
   inputStream = fmemopen(input, TextLength(input), "r");                       \
   state.inputStream = inputStream;
+
+#define VERIFY_ERROR(expected_error)                                           \
+  fseek(state.errorStream, 0, SEEK_SET);                                       \
+  char error_output[256];                                                      \
+  if (fgets(error_output, sizeof(error_output), state.errorStream) == NULL) {  \
+    mu_fail("No error output captured.");                                      \
+  }                                                                            \
+  mu_assert_string_eq(expected_error, error_output);
+
 
 
 bool TestGetNext(void);

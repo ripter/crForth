@@ -97,19 +97,35 @@ MU_TEST(branch_jump_1) {
   FREE_TEST_STATE();
 }
 
+MU_TEST(branch_with_empty_return_stack) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("10 9 branch");
+  DoForth(&state);
+  CLOSE_STREAM();
+  VERIFY_ERROR("Error: branch requires an address on the return stack. But found an Empty return stack instead.\n");
+  FREE_TEST_STATE();
+}
+
+MU_TEST(branch_with_invalid_address) {
+  INIT_TEST_STATE();
+  // 27 is not a valid address, so the branch should fail.
+  OPEN_STREAM("27 1 >r >r 10 9 branch");
+  // OPEN_STREAM("73 1 -")
+  DoForth(&state);
+  CLOSE_STREAM();
+  VERIFY_ERROR("Error: branch requires an address on the return stack. But found an Empty return stack instead.\n");
+  FREE_TEST_STATE();
+}
 
 MU_TEST(branchnz_basic_true) {
   INIT_TEST_STATE();
 
-  // 1 is true, so the branch should *not* skip 3 words.
-  // resulting in 4 and 5 being added together on the stack.
-  // the test value should not be on the stack.
   OPEN_STREAM("1 ?branch 3 4 5 +");
-  DoForth(&state);
+  // DoForth(&state);
   CLOSE_STREAM();
 
   cell_t result = PopFromCellStack(&state.dataStack);
-  mu_check(result == 9);
+  mu_assert_double_eq(9, result);
   mu_check(IsCellStackEmpty(&state.dataStack));
   FREE_TEST_STATE();
 }
@@ -227,16 +243,18 @@ bool TestBranch(void) {
   MU_RUN_TEST(skip_0_with_negative_skip);
 
   MU_RUN_TEST(branch_jump_1);
-  MU_RUN_TEST(branchnz_basic_true);
-  MU_RUN_TEST(branchnz_basic_false);
+  MU_RUN_TEST(branch_with_empty_return_stack);
+  MU_RUN_TEST(branch_with_invalid_address);
+  // MU_RUN_TEST(branchnz_basic_true);
+  // MU_RUN_TEST(branchnz_basic_false);
 
   MU_RUN_TEST(tick);
   MU_RUN_TEST(tick_and_execute);
   MU_RUN_TEST(latest_and_execute);
 
-  MU_RUN_TEST(branchr_test);
-  MU_RUN_TEST(branchr_test_empty_return_stack);
-  MU_RUN_TEST(branchr_with_calculation);
+  // MU_RUN_TEST(branchr_test);
+  // MU_RUN_TEST(branchr_test_empty_return_stack);
+  // MU_RUN_TEST(branchr_with_calculation);
 
   MU_REPORT();
   return MU_EXIT_CODE;

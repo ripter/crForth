@@ -13,7 +13,7 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, InitWordMetadata("skip",      (xt_func_ptr)Skip,          false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("0skip",     (xt_func_ptr)SkipOnZero,    false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("branch",    (xt_func_ptr)Branch,        false,  NULL));
-  // AddWordToDictionary(&state->dict, InitWordMetadata("?branch",   (xt_func_ptr)BranchZ,       false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("?branch",   (xt_func_ptr)BranchNZ,       false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(".s",        (xt_func_ptr)DotS,          true,   NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(":",         (xt_func_ptr)Colon,         false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(";",         (xt_func_ptr)SemiColon,     true,   NULL));

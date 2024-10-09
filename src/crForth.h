@@ -14,6 +14,7 @@
 #include "WordMetadata.h"
 #include "Dictionary.h"
 #include "KernelState.h"
+#include "utils.h"
 
 void DoForth(KernelState *state);
 bool GetNextWord(FILE* input, char* buffer, size_t bufferSize);

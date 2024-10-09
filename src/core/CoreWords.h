@@ -18,7 +18,7 @@ void Add(KernelState *state, WordMetadata *wordMeta);
 void Skip(KernelState *state, WordMetadata *wordMeta);
 void SkipOnZero(KernelState *state, WordMetadata *wordMeta);
 void Branch(KernelState *state, WordMetadata *wordMeta); 
-void BranchZ(KernelState *state, WordMetadata *wordMeta);
+void BranchNZ(KernelState *state, WordMetadata *wordMeta);
 void Colon(KernelState *state, WordMetadata *wordMeta);
 void Dot(KernelState* state, WordMetadata *wordMeta);
 void DotS(KernelState* state, WordMetadata *wordMeta);
