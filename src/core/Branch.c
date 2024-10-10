@@ -57,12 +57,10 @@ void Branch(KernelState *state, WordMetadata *wordMeta) {
   }
   Cell word = CellStackPop(&state->returnStack);
   Cell length = CellStackPop(&state->returnStack);
-  if (word.type != CELL_TYPE_ADDRESS || length.type != CELL_TYPE_NUMBER) {
+  if (word.type != CELL_TYPE_WORD || length.type != CELL_TYPE_NUMBER) {
     fprintf(state->errorStream, ERR_INVALID_WORD_ON_RETURN_STACK);
     return;
   }
-  printf("Branching to: %s\n", (char *)word.value);
-  printf("length: %ld\taddress: %ld", length.value, (cell_t)word.value);
   if (!IsNullTerminatedString((const char *)word.value, length.value+1)) {
     fprintf(state->errorStream, ERR_WORD_NOT_FOUND, (char *)word.value);
     return;
