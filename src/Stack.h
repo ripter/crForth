@@ -25,10 +25,6 @@ typedef struct {
 // Define the type for the stack.
 typedef kvec_t(Cell) CellStack;
 
-// Cell
-// void InitCell(cell_t value, CellType type, Cell *cell);
-// void FreeCell(Cell *cell);
-
 // Cell Stack
 void InitCellStack(CellStack *stack);
 void FreeCellStack(CellStack *stack);

@@ -15,6 +15,7 @@
 #include "Dictionary.h"
 #include "KernelState.h"
 #include "utils.h"
+#include "ErrorCodes.h"
 
 void DoForth(KernelState *state);
 bool GetNextWord(FILE* input, char* buffer, size_t bufferSize);

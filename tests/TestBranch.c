@@ -102,7 +102,7 @@ MU_TEST(branch_with_empty_return_stack) {
   OPEN_STREAM("10 9 branch");
   DoForth(&state);
   CLOSE_STREAM();
-  VERIFY_ERROR("Error: branch requires an address on the return stack. But found an Empty return stack instead.\n");
+  VERIFY_ERROR(ERR_EMPTY_STACK);
   FREE_TEST_STATE();
 }
 
@@ -113,7 +113,7 @@ MU_TEST(branch_with_invalid_address) {
   // OPEN_STREAM("73 1 -")
   DoForth(&state);
   CLOSE_STREAM();
-  VERIFY_ERROR("Error: branch requires an address on the return stack. But found an Empty return stack instead.\n");
+  VERIFY_ERROR(ERR_INVALID_WORD_ON_RETURN_STACK);
   FREE_TEST_STATE();
 }
 

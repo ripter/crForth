@@ -13,6 +13,6 @@ void Execute(KernelState *state, WordMetadata *wordMeta) {
   if (foundWordMeta != NULL) {
     foundWordMeta->func(state, foundWordMeta);
   } else {
-    fprintf(state->errorStream, "Error: Word not found: %s\n", word);
+    fprintf(state->errorStream, "Error: Word not found: %s\n", (char *)word.value);
   }
 }

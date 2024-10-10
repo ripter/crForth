@@ -52,15 +52,19 @@ void SkipOnZero(KernelState *state, WordMetadata *wordMeta) {
 void Branch(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
   if (IsCellStackEmpty(&state->returnStack)) {
-    fprintf(state->errorStream, "Error: branch requires an address on the return stack. But found an Empty return stack instead.\n");
+    fprintf(state->errorStream, ERR_EMPTY_STACK);
     return;
   }
   Cell word = PopFromCellStack(&state->returnStack);
   Cell length = PopFromCellStack(&state->returnStack);
-  // printf("Branching to: %s\n", word);
-  printf("length: %d\taddress: %ld", length.value, (cell_t)word.value);
+  if (word.type != CELL_TYPE_ADDRESS || length.type != CELL_TYPE_NUMBER) {
+    fprintf(state->errorStream, ERR_INVALID_WORD_ON_RETURN_STACK);
+    return;
+  }
+  printf("Branching to: %s\n", word);
+  printf("length: %ld\taddress: %ld", length.value, (cell_t)word.value);
   if (!IsNullTerminatedString((const char *)word.value, length.value+1)) {
-    fprintf(state->errorStream, "Error: Return Stack did not contain an address.\n");
+    fprintf(state->errorStream, ERR_WORD_NOT_FOUND, (char *)word.value);
     return;
   }
 
