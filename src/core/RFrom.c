@@ -6,6 +6,6 @@
 // https://forth-standard.org/standard/core/Rfrom
 void RFrom(KernelState* state, WordMetadata* wordMeta) {
   (void)wordMeta; // UNUSED
-  Cell a = PopFromCellStack(&state->returnStack);
-  PushToCellStack(&state->dataStack, (Cell){a.value, a.type});
+  Cell a = CellStackPop(&state->returnStack);
+  CellStackPush(&state->dataStack, (Cell){a.value, a.type});
 }

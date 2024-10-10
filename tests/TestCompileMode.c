@@ -20,7 +20,7 @@ MU_TEST(can_run_forth_from_dictionary) {
   CLOSE_STREAM();
 
   // TOS should be 4 + 1
-  Cell result = PopFromCellStack(&state.dataStack);
+  Cell result = CellStackPop(&state.dataStack);
   // mu_assert_int_eq(result == 5, "test++ should add 1 to the top of the stack");
   mu_assert_int_eq(5, result.value);
 
@@ -36,7 +36,7 @@ MU_TEST(basic_plus_one_test) {
   DoForth(&state);
   CLOSE_STREAM();
 
-  Cell result = PopFromCellStack(&state.dataStack);
+  Cell result = CellStackPop(&state.dataStack);
   mu_assert_double_eq(19, result.value);
   FREE_TEST_STATE();
 }
@@ -48,7 +48,7 @@ MU_TEST(test_create_does) {
   DoForth(&state);
   CLOSE_STREAM();
 
-  Cell result = PopFromCellStack(&state.dataStack);
+  Cell result = CellStackPop(&state.dataStack);
   mu_assert_double_eq(9, result.value);
   FREE_TEST_STATE();
 }
@@ -60,7 +60,7 @@ MU_TEST(tick_interpret_mode) {
   DoForth(&state);
   CLOSE_STREAM();
 
-  Cell result = PopFromCellStack(&state.dataStack);
+  Cell result = CellStackPop(&state.dataStack);
   mu_assert_double_eq(19, result.value);
   FREE_TEST_STATE();
 }
@@ -75,7 +75,7 @@ MU_TEST(tick_compile_mode) {
   DoForth(&state);
   CLOSE_STREAM();
 
-  Cell result = PopFromCellStack(&state.dataStack);
+  Cell result = CellStackPop(&state.dataStack);
   mu_assert_double_eq(19, result.value);
   FREE_TEST_STATE();
 }

@@ -18,5 +18,5 @@ void Create(KernelState *state, WordMetadata *wordMeta) {
   AddWordToDictionary(&state->dict, newWordMeta);
   // Push the "address" of the new word onto the stack.
   char *name = newWordMeta.name;
-  PushToCellStack(&state->returnStack, (Cell){(cell_t)name, CELL_TYPE_WORD});
+  CellStackPush(&state->returnStack, (Cell){(cell_t)name, CELL_TYPE_WORD});
 }

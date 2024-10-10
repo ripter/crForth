@@ -28,10 +28,11 @@ typedef kvec_t(Cell) CellStack;
 // Cell Stack
 void InitCellStack(CellStack *stack);
 void FreeCellStack(CellStack *stack);
-void PushToCellStack(CellStack *stack, Cell value);
-Cell PopFromCellStack(CellStack *stack);
+void CellStackPush(CellStack *stack, Cell value);
+Cell CellStackPop(CellStack *stack);
 bool IsCellStackEmpty(CellStack *stack);
 size_t CellStackSize(CellStack *stack);
 Cell ViewCellStack(CellStack *stack, size_t index);
+
 
 #endif // STACK_H

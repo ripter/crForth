@@ -45,7 +45,7 @@ MU_TEST(create_creates_variable) {
   CLOSE_STREAM();
 
   // The address to the data buffer should be on the stack.
-  Cell result = PopFromCellStack(&state.dataStack);
+  Cell result = CellStackPop(&state.dataStack);
   // Find the memory address of the new word.
   WordMetadata *newWord = GetItemFromDictionary(&state.dict, "foobar");
 
@@ -101,8 +101,8 @@ MU_TEST(create_and_does) {
 
   // It should push the word "address" to the stack
   // Then it should push the value 42 to the stack
-  Cell result = PopFromCellStack(&state.dataStack);
-  Cell addr = PopFromCellStack(&state.dataStack);
+  Cell result = CellStackPop(&state.dataStack);
+  Cell addr = CellStackPop(&state.dataStack);
   mu_assert_int_eq(result.value, 19 );
   mu_assert_string_eq("doesword", (char *)addr.value );
 
@@ -120,7 +120,7 @@ MU_TEST(create_pushes_address_to_stack) {
 
   // The "address" of the new word's data buffer should be on the return stack
   // becuase this is a streaming kernel, the address is the word itself.
-  Cell stackAddr = PopFromCellStack(&state.returnStack);
+  Cell stackAddr = CellStackPop(&state.returnStack);
   mu_assert_string_eq("foobar", (char *)stackAddr.value);
 
   FreeKernelState(&state);

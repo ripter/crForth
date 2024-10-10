@@ -16,7 +16,7 @@
 void Skip(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
   char wordBuffer[MAX_WORD_LENGTH];
-  Cell num = PopFromCellStack(&state->dataStack);
+  Cell num = CellStackPop(&state->dataStack);
 
   if (num.type != CELL_TYPE_NUMBER) {
     fprintf(state->errorStream, "Error: Skip requires a number on the stack.\n");
@@ -33,8 +33,8 @@ void Skip(KernelState *state, WordMetadata *wordMeta) {
 // Skips n2 words in the input stream if n1 is 0.
 void SkipOnZero(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
-  Cell num2 = PopFromCellStack(&state->dataStack);
-  Cell num1 = PopFromCellStack(&state->dataStack);
+  Cell num2 = CellStackPop(&state->dataStack);
+  Cell num1 = CellStackPop(&state->dataStack);
 
   // Skip the number of words specified by the parsed number.
   if (num1.value == 0) {
@@ -55,13 +55,13 @@ void Branch(KernelState *state, WordMetadata *wordMeta) {
     fprintf(state->errorStream, ERR_EMPTY_STACK);
     return;
   }
-  Cell word = PopFromCellStack(&state->returnStack);
-  Cell length = PopFromCellStack(&state->returnStack);
+  Cell word = CellStackPop(&state->returnStack);
+  Cell length = CellStackPop(&state->returnStack);
   if (word.type != CELL_TYPE_ADDRESS || length.type != CELL_TYPE_NUMBER) {
     fprintf(state->errorStream, ERR_INVALID_WORD_ON_RETURN_STACK);
     return;
   }
-  printf("Branching to: %s\n", word);
+  printf("Branching to: %s\n", (char *)word.value);
   printf("length: %ld\taddress: %ld", length.value, (cell_t)word.value);
   if (!IsNullTerminatedString((const char *)word.value, length.value+1)) {
     fprintf(state->errorStream, ERR_WORD_NOT_FOUND, (char *)word.value);
@@ -86,9 +86,9 @@ void BranchNZ(KernelState *state, WordMetadata *wordMeta) {
     fprintf(state->errorStream, "Error: ?branch requires an address on the return stack.\n");
     return;
   }
-  Cell testValue = PopFromCellStack(&state->dataStack);
-  Cell word = PopFromCellStack(&state->returnStack);
-  Cell length = PopFromCellStack(&state->returnStack);
+  Cell testValue = CellStackPop(&state->dataStack);
+  Cell word = CellStackPop(&state->returnStack);
+  Cell length = CellStackPop(&state->returnStack);
   if (!IsNullTerminatedString((const char *)word.value, length.value)) {
     fprintf(state->errorStream, "Error: Return Stack did not contain an address.\n");
     return;

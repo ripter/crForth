@@ -6,6 +6,6 @@
 void Latest(KernelState* state, WordMetadata* wordMeta) {
   (void)wordMeta; // UNUSED
   WordMetadata* lastItem = GetLastItemFromDictionary(&state->dict);
-  PushToCellStack(&state->dataStack, (Cell){(cell_t)lastItem->name, CELL_TYPE_WORD});
-  PushToCellStack(&state->dataStack, (Cell){TextLength(lastItem->name), CELL_TYPE_NUMBER});
+  CellStackPush(&state->dataStack, (Cell){(cell_t)lastItem->name, CELL_TYPE_WORD});
+  CellStackPush(&state->dataStack, (Cell){TextLength(lastItem->name), CELL_TYPE_NUMBER});
 }

@@ -5,8 +5,8 @@
 // https://forth-standard.org/standard/core/INVERT
 void Invert(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
-  Cell a = PopFromCellStack(&state->dataStack);
-  PushToCellStack(&state->dataStack, (Cell){~a.value, a.type});
+  Cell a = CellStackPop(&state->dataStack);
+  CellStackPush(&state->dataStack, (Cell){~a.value, a.type});
 }
 
 // ( x1 x2 -- x3 ) 
@@ -14,9 +14,9 @@ void Invert(KernelState *state, WordMetadata *wordMeta) {
 // https://forth-standard.org/standard/core/OR
 void BitOr(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
-  Cell a = PopFromCellStack(&state->dataStack);
-  Cell b = PopFromCellStack(&state->dataStack);
-  PushToCellStack(&state->dataStack, (Cell){a.value | b.value, a.type});
+  Cell a = CellStackPop(&state->dataStack);
+  Cell b = CellStackPop(&state->dataStack);
+  CellStackPush(&state->dataStack, (Cell){a.value | b.value, a.type});
 }
 
 // ( x1 x2 -- x3 )
@@ -24,9 +24,9 @@ void BitOr(KernelState *state, WordMetadata *wordMeta) {
 // https://forth-standard.org/standard/core/AND
 void BitAnd(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
-  Cell a = PopFromCellStack(&state->dataStack);
-  Cell b = PopFromCellStack(&state->dataStack);
-  PushToCellStack(&state->dataStack, (Cell){a.value & b.value, a.type});
+  Cell a = CellStackPop(&state->dataStack);
+  Cell b = CellStackPop(&state->dataStack);
+  CellStackPush(&state->dataStack, (Cell){a.value & b.value, a.type});
 }
 
 // ( x1 x2 -- x3 )
@@ -34,9 +34,9 @@ void BitAnd(KernelState *state, WordMetadata *wordMeta) {
 // https://forth-standard.org/standard/core/XOR
 void BitXor(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
-  Cell a = PopFromCellStack(&state->dataStack);
-  Cell b = PopFromCellStack(&state->dataStack);
-  PushToCellStack(&state->dataStack, (Cell){a.value ^ b.value, a.type});
+  Cell a = CellStackPop(&state->dataStack);
+  Cell b = CellStackPop(&state->dataStack);
+  CellStackPush(&state->dataStack, (Cell){a.value ^ b.value, a.type});
 }
 
 
@@ -47,9 +47,9 @@ void BitXor(KernelState *state, WordMetadata *wordMeta) {
 // https://forth-standard.org/standard/core/LSHIFT
 void BitShiftLeft(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
-  Cell a = PopFromCellStack(&state->dataStack);
-  Cell b = PopFromCellStack(&state->dataStack);
-  PushToCellStack(&state->dataStack, (Cell){a.value << b.value, a.type});
+  Cell a = CellStackPop(&state->dataStack);
+  Cell b = CellStackPop(&state->dataStack);
+  CellStackPush(&state->dataStack, (Cell){a.value << b.value, a.type});
 }
 
 
@@ -60,8 +60,8 @@ void BitShiftLeft(KernelState *state, WordMetadata *wordMeta) {
 // https://forth-standard.org/standard/core/RSHIFT
 void BitShiftRight(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
-  Cell a = PopFromCellStack(&state->dataStack);
-  Cell b = PopFromCellStack(&state->dataStack);
-  PushToCellStack(&state->dataStack, (Cell){a.value >> b.value, a.type});
+  Cell a = CellStackPop(&state->dataStack);
+  Cell b = CellStackPop(&state->dataStack);
+  CellStackPush(&state->dataStack, (Cell){a.value >> b.value, a.type});
 }
 

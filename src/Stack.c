@@ -4,15 +4,6 @@
 #include "Stack.h"
 
 
-// void InitCell(cell_t value, CellType type, Cell *cell) {
-//   cell->value = value;
-//   cell->type = type;
-// }
-
-// void FreeCell(Cell *cell) {
-
-// }
-
 
 void InitCellStack(CellStack *stack) {
   kv_init(*stack);
@@ -22,11 +13,11 @@ void FreeCellStack(CellStack *stack) {
   kv_destroy(*stack);
 }
 
-void PushToCellStack(CellStack *stack, Cell value) {
+void CellStackPush(CellStack *stack, Cell value) {
   kv_push(Cell, *stack, value);
 }
 
-Cell PopFromCellStack(CellStack *stack) {
+Cell CellStackPop(CellStack *stack) {
   if (kv_size(*stack) > 0) {
     return kv_A(*stack, --kv_size(*stack));
   } else {

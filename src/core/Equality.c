@@ -6,9 +6,9 @@
 // https://forth-standard.org/standard/core/more
 void GreaterThan(KernelState* state, WordMetadata* wordMeta) {
   (void)wordMeta; // UNUSED
-  Cell b = PopFromCellStack(&state->dataStack);
-  Cell a = PopFromCellStack(&state->dataStack);
-  PushToCellStack(&state->dataStack, (Cell){a.value > b.value ? FTRUE : FFALSE, CELL_TYPE_BOOL});
+  Cell b = CellStackPop(&state->dataStack);
+  Cell a = CellStackPop(&state->dataStack);
+  CellStackPush(&state->dataStack, (Cell){a.value > b.value ? FTRUE : FFALSE, CELL_TYPE_BOOL});
 }
 
 
@@ -17,23 +17,23 @@ void GreaterThan(KernelState* state, WordMetadata* wordMeta) {
 // https://forth-standard.org/standard/core/less
 void LessThan(KernelState* state, WordMetadata* wordMeta) {
   (void)wordMeta; // UNUSED
-  Cell b = PopFromCellStack(&state->dataStack);
-  Cell a = PopFromCellStack(&state->dataStack);
-  PushToCellStack(&state->dataStack, (Cell){a.value < b.value ? FTRUE : FFALSE, CELL_TYPE_BOOL});
+  Cell b = CellStackPop(&state->dataStack);
+  Cell a = CellStackPop(&state->dataStack);
+  CellStackPush(&state->dataStack, (Cell){a.value < b.value ? FTRUE : FFALSE, CELL_TYPE_BOOL});
 }
 
 void NotEqual(KernelState* state, WordMetadata* wordMeta) {
   (void)wordMeta; // UNUSED
-  Cell b = PopFromCellStack(&state->dataStack);
-  Cell a = PopFromCellStack(&state->dataStack);
-  PushToCellStack(&state->dataStack, (Cell){a.value != b.value ? FTRUE : FFALSE, CELL_TYPE_BOOL});
+  Cell b = CellStackPop(&state->dataStack);
+  Cell a = CellStackPop(&state->dataStack);
+  CellStackPush(&state->dataStack, (Cell){a.value != b.value ? FTRUE : FFALSE, CELL_TYPE_BOOL});
 }
 
 void Equal(KernelState* state, WordMetadata* wordMeta) {
   (void)wordMeta; // UNUSED
-  Cell b = PopFromCellStack(&state->dataStack);
-  Cell a = PopFromCellStack(&state->dataStack);
-  PushToCellStack(&state->dataStack, (Cell){a.value == b.value ? FTRUE : FFALSE, CELL_TYPE_BOOL});
+  Cell b = CellStackPop(&state->dataStack);
+  Cell a = CellStackPop(&state->dataStack);
+  CellStackPush(&state->dataStack, (Cell){a.value == b.value ? FTRUE : FFALSE, CELL_TYPE_BOOL});
 }
 
 // ( x -- flag )
@@ -41,6 +41,6 @@ void Equal(KernelState* state, WordMetadata* wordMeta) {
 // https://forth-standard.org/standard/core/ZeroEqual
 void ZeroEquals(KernelState* state, WordMetadata* wordMeta) {
   (void)wordMeta; // UNUSED
-  Cell a = PopFromCellStack(&state->dataStack);
-  PushToCellStack(&state->dataStack, (Cell){a.value == 0 ? FTRUE : FFALSE, CELL_TYPE_BOOL});
+  Cell a = CellStackPop(&state->dataStack);
+  CellStackPush(&state->dataStack, (Cell){a.value == 0 ? FTRUE : FFALSE, CELL_TYPE_BOOL});
 }
