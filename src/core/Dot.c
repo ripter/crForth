@@ -2,9 +2,9 @@
 #include "../crForth.h"
 
 // ( a -- )
-// Print the top of the stack.
+// Prints the top of stack to outputStream
 void Dot(KernelState* state, WordMetadata *wordMeta) {
   (void)wordMeta; // UNUSED
   Cell a = CellStackPop(&state->dataStack);
-  printf("%ld \n", a.value);
+  fprintf(state->outputStream, "%ld ", a.value);
 }

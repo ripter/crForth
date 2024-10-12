@@ -119,27 +119,34 @@ MU_TEST(branch_with_invalid_address) {
 
 MU_TEST(branchnz_basic_true) {
   INIT_TEST_STATE();
-
-  OPEN_STREAM("1 ?branch 3 4 5 +");
-  // DoForth(&state);
+  OPEN_STREAM("' + >r >r 10 9 -1 ?branch");
+  DoForth(&state);
   CLOSE_STREAM();
-
   Cell result = CellStackPop(&state.dataStack);
-  mu_assert_double_eq(9, result.value);
+  mu_assert_double_eq(19, result.value);
   mu_check(IsCellStackEmpty(&state.dataStack));
   FREE_TEST_STATE();
 }
 
 MU_TEST(branchnz_basic_false) {
   INIT_TEST_STATE();
-
-  // 0 is false, so the branch should skip 3 words.
-  // the test bool should have been consumed, leaving the stack empty.
-  OPEN_STREAM("0 ?branch 3 4 5 +");
+  OPEN_STREAM("' + >r >r 10 9 0 ?branch");
   DoForth(&state);
   CLOSE_STREAM();
+  mu_check(CellStackSize(&state.dataStack) == 2);
+  mu_assert_double_eq(9, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(10, CellStackPop(&state.dataStack).value);
+  FREE_TEST_STATE();
+}
 
-  mu_check(IsCellStackEmpty(&state.dataStack));
+MU_TEST(branch_no_length_error) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("' + >r drop 10 9 0 ?branch");
+  DoForth(&state);
+  CLOSE_STREAM();
+  mu_check(CellStackSize(&state.dataStack) == 2);
+  mu_assert_double_eq(9, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(10, CellStackPop(&state.dataStack).value);
   FREE_TEST_STATE();
 }
 
@@ -190,11 +197,11 @@ MU_TEST(latest_and_execute) {
 }
 
 
-MU_TEST(branchr_test) {
+MU_TEST(branch_jump_test) {
   INIT_TEST_STATE();
 
   // define two words, foo and bar, then jump to foo via branchr.
-  OPEN_STREAM(": foo 10 ; : bar 9 ; foo >r branchr");
+  OPEN_STREAM(": foo 10 ; : bar 9 ; ' foo >r >r branch");
   DoForth(&state);
   CLOSE_STREAM();
 
@@ -204,33 +211,7 @@ MU_TEST(branchr_test) {
   FREE_TEST_STATE();
 }
 
-MU_TEST(branchr_test_empty_return_stack) {
-  INIT_TEST_STATE();
 
-  // branchr without anything on the return stack should result in an error or no operation.
-  OPEN_STREAM("branchr");
-  DoForth(&state);
-  CLOSE_STREAM();
-
-  // Ensure that the stack remains empty as nothing should be executed.
-  mu_check(IsCellStackEmpty(&state.dataStack));
-  FREE_TEST_STATE();
-}
-
-MU_TEST(branchr_with_calculation) {
-  INIT_TEST_STATE();
-
-  // Simulate adding two numbers by jumping to the address via the return stack.
-  OPEN_STREAM(": addnums 4 5 + ; addnums >r branchr");
-
-  DoForth(&state);
-  CLOSE_STREAM();
-
-  // Ensure that 9 is the result of the addition.
-  Cell result = CellStackPop(&state.dataStack);
-  mu_assert_double_eq(9, result.value);
-  FREE_TEST_STATE();
-}
 
 //
 // Run all branch tests
@@ -245,16 +226,14 @@ bool TestBranch(void) {
   MU_RUN_TEST(branch_jump_1);
   MU_RUN_TEST(branch_with_empty_return_stack);
   MU_RUN_TEST(branch_with_invalid_address);
-  // MU_RUN_TEST(branchnz_basic_true);
-  // MU_RUN_TEST(branchnz_basic_false);
+  MU_RUN_TEST(branchnz_basic_true);
+  MU_RUN_TEST(branchnz_basic_false);
+  MU_RUN_TEST(branch_no_length_error);
+  MU_RUN_TEST(branch_jump_test);
 
   MU_RUN_TEST(tick);
   MU_RUN_TEST(tick_and_execute);
   MU_RUN_TEST(latest_and_execute);
-
-  // MU_RUN_TEST(branchr_test);
-  // MU_RUN_TEST(branchr_test_empty_return_stack);
-  // MU_RUN_TEST(branchr_with_calculation);
 
   MU_REPORT();
   return MU_EXIT_CODE;

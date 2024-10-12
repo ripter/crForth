@@ -71,28 +71,21 @@ void Branch(KernelState *state, WordMetadata *wordMeta) {
 
 
 
-// ( n1 -- ) ( R: u c-addr -- )
-// Branches to the address on the return stack if n1 is not zero.
+// ( flag -- ) ( R: u c-addr -- )
+// Branches to the address on the return stack if flag is true.
 // The address and length are in reverse order so they don't require a swap when moving from/to the data stack.
+// Example: ' + >r >r 10 9 -1 ?branch
 void BranchNZ(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
-  if (IsCellStackEmpty(&state->dataStack)) {
-    fprintf(state->errorStream, "Error: ?branch requires a test value on the stack.\n");
-    return;
-  }
-  if (IsCellStackEmpty(&state->returnStack)) {
-    fprintf(state->errorStream, "Error: ?branch requires an address on the return stack.\n");
-    return;
-  }
-  Cell testValue = CellStackPop(&state->dataStack);
+  Cell flag = CellStackPop(&state->dataStack);
   Cell word = CellStackPop(&state->returnStack);
   Cell length = CellStackPop(&state->returnStack);
-  if (!IsNullTerminatedString((const char *)word.value, length.value)) {
-    fprintf(state->errorStream, "Error: Return Stack did not contain an address.\n");
+  if (word.type != CELL_TYPE_WORD || length.type != CELL_TYPE_NUMBER) {
+    fprintf(state->errorStream, ERR_INVALID_WORD_ON_RETURN_STACK);
     return;
   }
 
-  if (testValue.value) {
+  if (flag.value) {
     DoForthString(state, (const char *)word.value, (const char *)word.value);
   }
 }
