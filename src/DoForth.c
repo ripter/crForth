@@ -10,6 +10,7 @@ void DoForth(KernelState *state) {
 
   // Main loop, read words from stdin and process them
   while( GetNextWord(state->inputStream, state->wordBuffer, MAX_WORD_LENGTH) ) {
+    // printf("DoForth: Word: %s\n", state->wordBuffer);
     // for now, hard break on "bye"
     if (TextIsEqual(state->wordBuffer, "bye")) {
       break;

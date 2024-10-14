@@ -57,6 +57,9 @@ void BitXor(KernelState *state, WordMetadata *wordMeta);
 void BitShiftLeft(KernelState *state, WordMetadata *wordMeta);
 void BitShiftRight(KernelState *state, WordMetadata *wordMeta);
 void ZeroEquals(KernelState* state, WordMetadata* wordMeta);
+void IF(KernelState *state, WordMetadata *wordMeta);
+void ELSE(KernelState *state, WordMetadata *wordMeta);
+void THEN(KernelState *state, WordMetadata *wordMeta);
 
 
 //

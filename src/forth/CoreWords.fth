@@ -6,18 +6,6 @@
 : 2R> r> r> ;
 
 
-: IF
-  branch 0
-; IMMEDIATE
-
-: ELSE
-  branch 0
-; IMMEDIATE
-
-: THEN
-  branch 0
-; IMMEDIATE
-
 
 : BEGIN
   here 2>r

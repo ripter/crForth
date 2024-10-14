@@ -49,5 +49,7 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, InitWordMetadata("lshift",    (xt_func_ptr)BitShiftLeft,  false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("rshift",    (xt_func_ptr)BitShiftRight, false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("0=",        (xt_func_ptr)ZeroEquals,    false,  NULL));
-
+  AddWordToDictionary(&state->dict, InitWordMetadata("if",        (xt_func_ptr)IF,            false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("else",      (xt_func_ptr)ELSE,          false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("then",      (xt_func_ptr)THEN,          false,  NULL));
 }

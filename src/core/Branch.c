@@ -51,10 +51,8 @@ void SkipOnZero(KernelState *state, WordMetadata *wordMeta) {
 // The address and length are in reverse order so they don't require a swap when moving from/to the data stack.
 void Branch(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
-  if (IsCellStackEmpty(&state->returnStack)) {
-    fprintf(state->errorStream, ERR_EMPTY_STACK);
-    return;
-  }
+  BAIL_IF_EMPTY_RETURN_STACK();
+
   Cell word = CellStackPop(&state->returnStack);
   Cell length = CellStackPop(&state->returnStack);
   if (word.type != CELL_TYPE_WORD || length.type != CELL_TYPE_NUMBER) {

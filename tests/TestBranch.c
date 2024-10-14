@@ -78,6 +78,15 @@ MU_TEST(skip_0_with_negative_skip) {
   FREE_TEST_STATE();
 }
 
+MU_TEST_SUITE(skip_tests) {
+  MU_RUN_TEST(skip_basic_test);
+  MU_RUN_TEST(skip_on_empty_stack_test);
+  MU_RUN_TEST(skip_0_basic);
+  MU_RUN_TEST(skip_0_no_skip);
+  MU_RUN_TEST(skip_0_no_skip_single_word);
+  MU_RUN_TEST(skip_0_with_negative_skip);
+}
+
 
 MU_TEST(branch_jump_1) {
   INIT_TEST_STATE();
@@ -110,7 +119,6 @@ MU_TEST(branch_with_invalid_address) {
   INIT_TEST_STATE();
   // 27 is not a valid address, so the branch should fail.
   OPEN_STREAM("27 1 >r >r 10 9 branch");
-  // OPEN_STREAM("73 1 -")
   DoForth(&state);
   CLOSE_STREAM();
   VERIFY_ERROR(ERR_INVALID_WORD_ON_RETURN_STACK);
@@ -205,23 +213,65 @@ MU_TEST(branch_jump_test) {
   DoForth(&state);
   CLOSE_STREAM();
 
-  // Ensure that 10 is left on the stack as branchr executed the word at the return stack address.
+  // Ensure that 10 is left on the stack as branch executed the word at the return stack address.
   Cell result = CellStackPop(&state.dataStack);
   mu_assert_double_eq(10, result.value);
   FREE_TEST_STATE();
 }
 
+//
+// ********** IF ELSE THEN **********
+MU_TEST(if_then_true) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("1 IF 10 9 + THEN");
+  DoForth(&state);
+  CLOSE_STREAM();
+  mu_check(CellStackSize(&state.dataStack) == 1);
+  mu_assert_double_eq(19, CellStackPop(&state.dataStack).value);
+  FREE_TEST_STATE();
+}
+
+MU_TEST(if_then_false) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("0 IF 10 9 + THEN");
+  DoForth(&state);
+  CLOSE_STREAM();
+  mu_check(IsCellStackEmpty(&state.dataStack));
+  FREE_TEST_STATE();
+}
+
+MU_TEST(if_else_then_true) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("1 IF 10 9 + ELSE 5 4 + THEN");
+  DoForth(&state);
+  CLOSE_STREAM();
+  mu_check(CellStackSize(&state.dataStack) == 1);
+  mu_assert_double_eq(19, CellStackPop(&state.dataStack).value);
+  FREE_TEST_STATE();
+}
+
+MU_TEST(if_else_then_false) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("0 IF 10 9 + ELSE 5 4 + THEN");
+  DoForth(&state);
+  CLOSE_STREAM();
+  mu_check(CellStackSize(&state.dataStack) == 1);
+  mu_assert_double_eq(9, CellStackPop(&state.dataStack).value);
+  FREE_TEST_STATE();
+}
+
+MU_TEST_SUITE(if_else_then_tests) {
+  MU_RUN_TEST(if_then_true);
+  MU_RUN_TEST(if_then_false);
+  MU_RUN_TEST(if_else_then_true);
+  MU_RUN_TEST(if_else_then_false);
+}
 
 
 //
 // Run all branch tests
 bool TestBranch(void) {
-  MU_RUN_TEST(skip_basic_test);
-  MU_RUN_TEST(skip_on_empty_stack_test);
-  MU_RUN_TEST(skip_0_basic);
-  MU_RUN_TEST(skip_0_no_skip);
-  MU_RUN_TEST(skip_0_no_skip_single_word);
-  MU_RUN_TEST(skip_0_with_negative_skip);
+  MU_RUN_SUITE(skip_tests);
 
   MU_RUN_TEST(branch_jump_1);
   MU_RUN_TEST(branch_with_empty_return_stack);
@@ -234,6 +284,8 @@ bool TestBranch(void) {
   MU_RUN_TEST(tick);
   MU_RUN_TEST(tick_and_execute);
   MU_RUN_TEST(latest_and_execute);
+
+  MU_RUN_SUITE(if_else_then_tests);
 
   MU_REPORT();
   return MU_EXIT_CODE;
