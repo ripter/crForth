@@ -5,7 +5,7 @@
 
 // Runs the Forth Kernel using the given KernelState and input stream.
 void DoForth(KernelState *state) {
-  WordMetadata* wordMeta; // Metadata for the current word.
+  ForthWord* wordMeta; // Metadata for the current word.
   xt_func_ptr funcForWord = NULL; // Function pointer to the current word's executable code.
 
   // Main loop, read words from stdin and process them
@@ -23,7 +23,7 @@ void DoForth(KernelState *state) {
         wordMeta = GetItemFromDictionary(&state->dict, state->wordBuffer);
         if (wordMeta->isImmediate) {
           funcForWord = wordMeta->func;
-          funcForWord(state, wordMeta);
+          funcForWord(state);
           continue;
         }
       } 
@@ -38,7 +38,7 @@ void DoForth(KernelState *state) {
       if (HasItemInDictionary(&state->dict, state->wordBuffer) == true) {
         wordMeta = GetItemFromDictionary(&state->dict, state->wordBuffer);
         funcForWord = wordMeta->func;
-        funcForWord(state, wordMeta);
+        funcForWord(state);
       }
       // Else, attempt to convert the word to a number and push it to the stack.
       else if (IsNumber(state->wordBuffer)) {

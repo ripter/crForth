@@ -6,8 +6,7 @@
 // ( -- )
 // Prints the contents of the data stack.
 // https://forth-standard.org/standard/tools/DotS
-void DotSD(KernelState* state, WordMetadata *wordMeta) {
-  (void)wordMeta; // Unused parameter
+void DotSD(KernelState* state) {
   size_t stackSize = CellStackSize(&state->dataStack);
 
   printf("Data Stack: ");

@@ -13,8 +13,7 @@
 
 // ( n -- )
 // Skip the next n words in the input stream.
-void Skip(KernelState *state, WordMetadata *wordMeta) {
-  (void)wordMeta; // Unused parameter
+void Skip(KernelState *state) {
   char wordBuffer[MAX_WORD_LENGTH];
   Cell num = CellStackPop(&state->dataStack);
 
@@ -31,8 +30,7 @@ void Skip(KernelState *state, WordMetadata *wordMeta) {
 
 // ( n1 n2 -- )
 // Skips n2 words in the input stream if n1 is 0.
-void SkipOnZero(KernelState *state, WordMetadata *wordMeta) {
-  (void)wordMeta; // Unused parameter
+void SkipOnZero(KernelState *state) {
   Cell num2 = CellStackPop(&state->dataStack);
   Cell num1 = CellStackPop(&state->dataStack);
 
@@ -49,8 +47,7 @@ void SkipOnZero(KernelState *state, WordMetadata *wordMeta) {
 // ( R: u c-addr -- )
 // Branches to the address on the return stack.
 // The address and length are in reverse order so they don't require a swap when moving from/to the data stack.
-void Branch(KernelState *state, WordMetadata *wordMeta) {
-  (void)wordMeta; // Unused parameter
+void Branch(KernelState *state) {
   BAIL_IF_EMPTY_RETURN_STACK();
 
   Cell word = CellStackPop(&state->returnStack);
@@ -73,8 +70,7 @@ void Branch(KernelState *state, WordMetadata *wordMeta) {
 // Branches to the address on the return stack if flag is true.
 // The address and length are in reverse order so they don't require a swap when moving from/to the data stack.
 // Example: ' + >r >r 10 9 -1 ?branch
-void BranchNZ(KernelState *state, WordMetadata *wordMeta) {
-  (void)wordMeta; // Unused parameter
+void BranchNZ(KernelState *state) {
   // Pop the flag off the data stack.
   BAIL_IF_EMPTY_DATA_STACK();
   Cell flag = CellStackPop(&state->dataStack);
@@ -90,7 +86,7 @@ void BranchNZ(KernelState *state, WordMetadata *wordMeta) {
 
   // If the flag is true, branch to the address on the return stack.
   if (flag.value) {
-    WordMetadata *meta = GetItemFromDictionary(&state->dict, (const char *)word.value);
+    ForthWord *meta = GetItemFromDictionary(&state->dict, (const char *)word.value);
     meta->func(state, meta);
   }
 }

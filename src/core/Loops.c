@@ -7,8 +7,7 @@
 // Set up loop control parameters with index and limit. 
 // Anything already on the return stack becomes unavailable until the loop-control parameters are discarded. 
 // https://forth-standard.org/standard/core/DO
-void DO(KernelState *state, WordMetadata *wordMeta) {
-  (void)wordMeta; // Unused parameter
+void DO(KernelState *state) {
   Cell index = CellStackPop(&state->dataStack);
   Cell limit = CellStackPop(&state->dataStack);
   // printf("DO:\tlimit: %ld\tindex: %ld\n", limit.value, index.value);
@@ -17,7 +16,7 @@ void DO(KernelState *state, WordMetadata *wordMeta) {
   CellStackPush(&state->returnStack, index);
 
   // We need a new word to compile the loop body into.
-  WordMetadata loopBody = InitWordMetadata("loop-i-body", (xt_func_ptr)DoForthDataString, false, NULL);
+  ForthWord loopBody = InitWordMetadata("loop-i-body", (xt_func_ptr)DoForthDataString, false, NULL);
   AddWordToDictionary(&state->dict, loopBody);
   // Start Compiling, this will cause the next words to be "compiled" into the word at the Top of the Dictionary.
   state->IsInCompileMode = true;
@@ -26,8 +25,7 @@ void DO(KernelState *state, WordMetadata *wordMeta) {
 // ( -- n )
 // n is a copy of the current (innermost) loop index.
 // https://forth-standard.org/standard/core/I
-void I(KernelState *state, WordMetadata *wordMeta) {
-  (void)wordMeta; // Unused parameter
+void I(KernelState *state) {
   Cell index = CellStackPop(&state->returnStack);
   CellStackPush(&state->dataStack, index);
   CellStackPush(&state->returnStack, index);
@@ -36,8 +34,7 @@ void I(KernelState *state, WordMetadata *wordMeta) {
 
 
 // https://forth-standard.org/standard/core/LOOP
-void LOOP(KernelState *state, WordMetadata *wordMeta) {
-  (void)wordMeta; // Unused parameter
+void LOOP(KernelState *state) {
   // Stop compiling
   state->IsInCompileMode = false;
 
@@ -57,7 +54,7 @@ void LOOP(KernelState *state, WordMetadata *wordMeta) {
   CellStackPush(&state->returnStack, limit);
   CellStackPush(&state->returnStack, index);
   // Run the loop body again.
-  WordMetadata *loopBody = GetItemFromDictionary(&state->dict, "loop-i-body");
+  ForthWord *loopBody = GetItemFromDictionary(&state->dict, "loop-i-body");
   loopBody->func(state, loopBody);
 
   // Increment the index and push it back onto the return stack.
@@ -68,5 +65,5 @@ void LOOP(KernelState *state, WordMetadata *wordMeta) {
 
   // printf("LOOP: Repeat\n");
   // Run Loop again.
-  LOOP(state, wordMeta);
+  LOOP(state);
 }

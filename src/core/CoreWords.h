@@ -2,7 +2,7 @@
 #define COREWORDS_H
 
 #include "../KernelState.h"
-#include "../WordMetadata.h"
+#include "../ForthWord.h"
 
 // Adds all of the core words to the dictionary.
 void AddCoreWords(KernelState *state);
@@ -14,63 +14,63 @@ void AddCoreWords(KernelState *state);
 // These should be the only words that can not be implemented in Forth itself.
 // Expect for the ones that are more efficient to implement in C.
 // Side note: this list is not alphabetized, its the order they were implemented. I find the history of things interesting.
-void Add(KernelState *state, WordMetadata *wordMeta);
-void Skip(KernelState *state, WordMetadata *wordMeta);
-void SkipOnZero(KernelState *state, WordMetadata *wordMeta);
-void Branch(KernelState *state, WordMetadata *wordMeta); 
-void BranchNZ(KernelState *state, WordMetadata *wordMeta);
-void Colon(KernelState *state, WordMetadata *wordMeta);
-void Dot(KernelState* state, WordMetadata *wordMeta);
-void DotS(KernelState* state, WordMetadata *wordMeta);
-void SemiColon(KernelState *state, WordMetadata *wordMeta);
-void Subtract(KernelState* state, WordMetadata *wordMeta);
-void Words(KernelState* state, WordMetadata* wordMeta);
-void See(KernelState* state, WordMetadata* wordMeta);
-void Immediate(KernelState* state, WordMetadata* wordMeta);
-void Latest(KernelState* state, WordMetadata* wordMeta);
-void Emit(KernelState* state, WordMetadata* wordMeta);
-void CFetch(KernelState* state, WordMetadata* wordMeta);
-void Create(KernelState *state, WordMetadata *wordMeta);
-void Nothing(KernelState *state, WordMetadata *wordMeta);
-void Does(KernelState *state, WordMetadata *wordMeta);
-void Dup(KernelState *state, WordMetadata *wordMeta);
-void Drop(KernelState *state, WordMetadata *wordMeta);
-void Swap(KernelState* state, WordMetadata* wordMeta);
-void ToR(KernelState* state, WordMetadata* wordMeta);
-void RFrom(KernelState* state, WordMetadata* wordMeta);
-void DotSR(KernelState* state, WordMetadata *wordMeta);
-void DotSD(KernelState* state, WordMetadata *wordMeta);
-void GreaterThan(KernelState* state, WordMetadata* wordMeta);
-void LessThan(KernelState* state, WordMetadata* wordMeta);
-void NotEqual(KernelState* state, WordMetadata* wordMeta);
-void Equal(KernelState* state, WordMetadata* wordMeta);
-void Postpone(KernelState *state, WordMetadata *wordMeta);
-void Tick(KernelState *state, WordMetadata *wordMeta);
-void Execute(KernelState *state, WordMetadata *wordMeta);
-void Here(KernelState *state, WordMetadata *wordMeta);
-void Backslash(KernelState *state, WordMetadata *wordMeta);
-void Paren(KernelState *state, WordMetadata *wordMeta);
-void Invert(KernelState *state, WordMetadata *wordMeta);
-void BitOr(KernelState *state, WordMetadata *wordMeta);
-void BitAnd(KernelState *state, WordMetadata *wordMeta);
-void BitXor(KernelState *state, WordMetadata *wordMeta);
-void BitShiftLeft(KernelState *state, WordMetadata *wordMeta);
-void BitShiftRight(KernelState *state, WordMetadata *wordMeta);
-void ZeroEquals(KernelState* state, WordMetadata* wordMeta);
-void IF(KernelState *state, WordMetadata *wordMeta);
-void ELSE(KernelState *state, WordMetadata *wordMeta);
-void THEN(KernelState *state, WordMetadata *wordMeta);
-void DO(KernelState *state, WordMetadata *wordMeta);
-void I(KernelState *state, WordMetadata *wordMeta);
-void LOOP(KernelState *state, WordMetadata *wordMeta);
+void Add(KernelState *state);
+void Skip(KernelState *state);
+void SkipOnZero(KernelState *state);
+void Branch(KernelState *state); 
+void BranchNZ(KernelState *state);
+void Colon(KernelState *state);
+void Dot(KernelState* state);
+void DotS(KernelState* state);
+void SemiColon(KernelState *state);
+void Subtract(KernelState* state);
+void Words(KernelState* state);
+void See(KernelState* state);
+void Immediate(KernelState* state);
+void Latest(KernelState* state);
+void Emit(KernelState* state);
+void CFetch(KernelState* state);
+void Create(KernelState *state);
+void Nothing(KernelState *state);
+void Does(KernelState *state);
+void Dup(KernelState *state);
+void Drop(KernelState *state);
+void Swap(KernelState* state);
+void ToR(KernelState* state);
+void RFrom(KernelState* state);
+void DotSR(KernelState* state);
+void DotSD(KernelState* state);
+void GreaterThan(KernelState* state);
+void LessThan(KernelState* state);
+void NotEqual(KernelState* state);
+void Equal(KernelState* state);
+void Postpone(KernelState *state);
+void Tick(KernelState *state);
+void Execute(KernelState *state);
+void Here(KernelState *state);
+void Backslash(KernelState *state);
+void Paren(KernelState *state);
+void Invert(KernelState *state);
+void BitOr(KernelState *state);
+void BitAnd(KernelState *state);
+void BitXor(KernelState *state);
+void BitShiftLeft(KernelState *state);
+void BitShiftRight(KernelState *state);
+void ZeroEquals(KernelState* state);
+void IF(KernelState *state);
+void ELSE(KernelState *state);
+void THEN(KernelState *state);
+void DO(KernelState *state);
+void I(KernelState *state);
+void LOOP(KernelState *state);
 
 
 //
 // Helper functions
 //
 void DoForthString(KernelState *state, const char* branchName, const char* forthString);
-void DoForthDataString(KernelState *state, WordMetadata *wordMeta);
-void DoForthStringAndReturnAddress(KernelState *state, WordMetadata *wordMeta);
-void Variable(KernelState* state, WordMetadata *wordMeta);
+void DoForthDataString(KernelState *state, ForthWord *wordMeta);
+void DoForthStringAndReturnAddress(KernelState *state, ForthWord *wordMeta);
+void Variable(KernelState* state, ForthWord *wordMeta);
 
 #endif // COREWORDS_H

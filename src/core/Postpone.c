@@ -5,8 +5,7 @@
 // name is not checked for existence in the dictionary.
 // This enables adding any word, even immediate words, to the compile string.
 // https://forth-standard.org/standard/core/POSTPONE
-void Postpone(KernelState *state, WordMetadata *wordMeta) {
-  (void)wordMeta; // UNUSED
+void Postpone(KernelState *state) {
   // Consume the next word, which is "name".
   char wordBuffer[MAX_WORD_LENGTH];
   GetNextWord(state->inputStream, wordBuffer, MAX_WORD_LENGTH);

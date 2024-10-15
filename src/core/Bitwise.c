@@ -3,8 +3,7 @@
 // ( x1 -- x2 ) 
 // Invert all bits of x1, giving its logical inverse x2. 
 // https://forth-standard.org/standard/core/INVERT
-void Invert(KernelState *state, WordMetadata *wordMeta) {
-  (void)wordMeta; // Unused parameter
+void Invert(KernelState *state) {
   Cell a = CellStackPop(&state->dataStack);
   CellStackPush(&state->dataStack, (Cell){~a.value, a.type});
 }
@@ -12,8 +11,7 @@ void Invert(KernelState *state, WordMetadata *wordMeta) {
 // ( x1 x2 -- x3 ) 
 // x3 is the bitwise inclusive OR of x1 and x2.
 // https://forth-standard.org/standard/core/OR
-void BitOr(KernelState *state, WordMetadata *wordMeta) {
-  (void)wordMeta; // Unused parameter
+void BitOr(KernelState *state) {
   Cell a = CellStackPop(&state->dataStack);
   Cell b = CellStackPop(&state->dataStack);
   CellStackPush(&state->dataStack, (Cell){a.value | b.value, a.type});
@@ -22,8 +20,7 @@ void BitOr(KernelState *state, WordMetadata *wordMeta) {
 // ( x1 x2 -- x3 )
 // x3 is the bit-by-bit logical "and" of x1 with x2. 
 // https://forth-standard.org/standard/core/AND
-void BitAnd(KernelState *state, WordMetadata *wordMeta) {
-  (void)wordMeta; // Unused parameter
+void BitAnd(KernelState *state) {
   Cell a = CellStackPop(&state->dataStack);
   Cell b = CellStackPop(&state->dataStack);
   CellStackPush(&state->dataStack, (Cell){a.value & b.value, a.type});
@@ -32,8 +29,7 @@ void BitAnd(KernelState *state, WordMetadata *wordMeta) {
 // ( x1 x2 -- x3 )
 // x3 is the bit-by-bit exclusive-or of x1 with x2.
 // https://forth-standard.org/standard/core/XOR
-void BitXor(KernelState *state, WordMetadata *wordMeta) {
-  (void)wordMeta; // Unused parameter
+void BitXor(KernelState *state) {
   Cell a = CellStackPop(&state->dataStack);
   Cell b = CellStackPop(&state->dataStack);
   CellStackPush(&state->dataStack, (Cell){a.value ^ b.value, a.type});
@@ -45,8 +41,7 @@ void BitXor(KernelState *state, WordMetadata *wordMeta) {
 // Put zeroes into the least significant bits vacated by the shift. 
 // An ambiguous condition exists if u is greater than or equal to the number of bits in a cell. 
 // https://forth-standard.org/standard/core/LSHIFT
-void BitShiftLeft(KernelState *state, WordMetadata *wordMeta) {
-  (void)wordMeta; // Unused parameter
+void BitShiftLeft(KernelState *state) {
   Cell a = CellStackPop(&state->dataStack);
   Cell b = CellStackPop(&state->dataStack);
   CellStackPush(&state->dataStack, (Cell){a.value << b.value, a.type});
@@ -58,10 +53,8 @@ void BitShiftLeft(KernelState *state, WordMetadata *wordMeta) {
 // Put zeroes into the most significant bits vacated by the shift. 
 // An ambiguous condition exists if u is greater than or equal to the number of bits in a cell. 
 // https://forth-standard.org/standard/core/RSHIFT
-void BitShiftRight(KernelState *state, WordMetadata *wordMeta) {
-  (void)wordMeta; // Unused parameter
+void BitShiftRight(KernelState *state) {
   Cell a = CellStackPop(&state->dataStack);
   Cell b = CellStackPop(&state->dataStack);
   CellStackPush(&state->dataStack, (Cell){a.value >> b.value, a.type});
 }
-

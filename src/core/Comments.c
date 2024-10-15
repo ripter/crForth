@@ -3,9 +3,7 @@
 // ( "ccc<eol>" -- ) 
 // Skip the rest of the line.
 // https://forth-standard.org/standard/core/bs
-void Backslash(KernelState *state, WordMetadata *wordMeta) {
-  (void)wordMeta; // Unused parameter
-
+void Backslash(KernelState *state) {
   // Consume characters until the end of the line or \0.
   char c;
   while ((c = fgetc(state->inputStream))) {
@@ -21,9 +19,7 @@ void Backslash(KernelState *state, WordMetadata *wordMeta) {
 // ( "ccc<paren>" -- ) 
 // Skip ccc delimited by ) (right parenthesis).
 // https://forth-standard.org/standard/core/p
-void Paren(KernelState *state, WordMetadata *wordMeta) {
-  (void)wordMeta; // Unused parameter
-
+void Paren(KernelState *state) {
   // Consume characters until ) or \0.
   char c;
   while ((c = fgetc(state->inputStream))) {
@@ -34,4 +30,3 @@ void Paren(KernelState *state, WordMetadata *wordMeta) {
     if (c == ')') { break; } // End of comment reached
   }
 }
-

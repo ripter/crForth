@@ -1,5 +1,5 @@
-#ifndef WORDMETADATA_H
-#define WORDMETADATA_H
+#ifndef FORTHWORD_H
+#define FORTHWORD_H
 
 #include <stdbool.h>
 
@@ -8,7 +8,7 @@
 // The WordMetadata is provided for convenience since the system already fetched it.
 // Real type looks like this:
 //  typedef void (*xt_func_ptr)(KernelState *, WordMetadata *wordMeta);
-typedef void (*xt_func_ptr)(void *, void *);
+typedef void (*xt_func_ptr)(void *);
 
 // Metadata for a word in the dictionary
 typedef struct {
@@ -17,12 +17,12 @@ typedef struct {
   bool isImmediate;     // Flag to indicate if the word is immediate
   char* data;           // Data used by the function
   size_t dataBufferLength; // Length of the data buffer
-} WordMetadata;
+} ForthWord;
 
 
-WordMetadata InitWordMetadata(const char *name, xt_func_ptr func, bool isImmediate, char *data);
-void FreeWordMetadata(WordMetadata *meta);
+ForthWord InitWordMetadata(const char *name, xt_func_ptr func, bool isImmediate, char *data);
+void FreeWordMetadata(ForthWord *meta);
 
-void AppendStringToWordData(WordMetadata *meta, const char *data);
+void AppendStringToWordData(ForthWord *meta, const char *data);
 
-#endif // WORDMETADATA_H
+#endif // FORTHWORD_H

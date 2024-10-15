@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include "Stack.h"
-#include "WordMetadata.h"
+#include "ForthWord.h"
 #include "Dictionary.h"
 #include "KernelState.h"
 #include "utils.h"

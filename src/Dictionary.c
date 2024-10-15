@@ -17,16 +17,16 @@ void FreeDictionary(Dictionary *dict) {
     khint_t k;
     for (k = kh_begin(dict->map); k != kh_end(dict->map); ++k) {
       if (kh_exist(dict->map, k)) {
-        WordMetadata *metadata = &kh_value(dict->map, k);
-        FreeWordMetadata(metadata);   // Free the WordMetadata
+        ForthWord *metadata = &kh_value(dict->map, k);
+        FreeWordMetadata(metadata);   // Free the ForthWord
       }
     }
     kh_destroy(dict, dict->map); // Destroy the khash map
   }
 }
 
-// Add a new key-WordMetadata pair to the dictionary
-bool AddWordToDictionary(Dictionary *dict, WordMetadata wordMeta) {
+// Add a new key-ForthWord pair to the dictionary
+bool AddWordToDictionary(Dictionary *dict, ForthWord wordMeta) {
   int ret;
   khint_t k = kh_put(dict, dict->map, wordMeta.name, &ret); // Insert key
   if (ret == -1) {
@@ -43,8 +43,8 @@ bool AddWordToDictionary(Dictionary *dict, WordMetadata wordMeta) {
 bool RemoveItemFromDictionary(Dictionary *dict, const char *key) {
   khint_t k = kh_get(dict, dict->map, key); // Find key
   if (k != kh_end(dict->map)) {
-    WordMetadata *meta = &kh_value(dict->map, k);
-    FreeWordMetadata(meta);         // Free the WordMetadata using the helper function
+    ForthWord *meta = &kh_value(dict->map, k);
+    FreeWordMetadata(meta);         // Free the ForthWord using the helper function
     kh_del(dict, dict->map, k); // Remove the key-value pair from the map
     return true;                // Success
   }
@@ -58,7 +58,7 @@ bool HasItemInDictionary(Dictionary *dict, const char *key) {
 }
 
 // Get a function pointer associated with a key
-WordMetadata* GetItemFromDictionary(Dictionary *dict, const char *key) {
+ForthWord* GetItemFromDictionary(Dictionary *dict, const char *key) {
   khint_t k = kh_get(dict, dict->map, key); // Find key
   if (k != kh_end(dict->map)) {
     return &kh_value(dict->map, k); // Return the meta
@@ -67,10 +67,10 @@ WordMetadata* GetItemFromDictionary(Dictionary *dict, const char *key) {
 }
 
 // Set a new WordMetadata for an existing key
-bool SetItemInDictionary(Dictionary *dict, const char *key, WordMetadata wordMeta) {
+bool SetItemInDictionary(Dictionary *dict, const char *key, ForthWord wordMeta) {
   khint_t k = kh_get(dict, dict->map, key); // Find key
   if (k != kh_end(dict->map)) {
-    WordMetadata *old_meta = &kh_value(dict->map, k);
+    ForthWord *old_meta = &kh_value(dict->map, k);
     FreeWordMetadata(old_meta); // Free the old value
 
     kh_value(dict->map, k) = wordMeta; // Store the new value
@@ -90,7 +90,7 @@ void GetKeysInDictionary(Dictionary *dict) {
   }
 }
 
-WordMetadata* GetLastItemFromDictionary(Dictionary *dict) {
+ForthWord* GetLastItemFromDictionary(Dictionary *dict) {
   if (dict->lastKey != NULL) {
     return GetItemFromDictionary(dict, dict->lastKey);
   }

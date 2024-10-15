@@ -2,14 +2,13 @@
 #include "raylib.h"
 
 #include "crForth.h"
-#include "WordMetadata.h"
 
-// Initializes a WordMetadata structure
+// Initializes a ForthWord structure
 // Name is copied into the structure, so the caller can free the original string. The copy will be freed by FreeWordMetadata.
 // isImmediate is a flag to indicate if the word is immediate
 // data is an optional string buffer used by the word, can be NULL if not needed. Will be freed by FreeWordMetadata.
-WordMetadata InitWordMetadata(const char *name, xt_func_ptr func, bool isImmediate, char *data) {
-  WordMetadata meta;
+ForthWord InitWordMetadata(const char *name, xt_func_ptr func, bool isImmediate, char *data) {
+  ForthWord meta;
   // Allocate memory for the name and copy it
   size_t nameLength = TextLength(name) + 1; // +1 for the null terminator
   meta.name = (char *)MemAlloc(nameLength);
@@ -25,8 +24,8 @@ WordMetadata InitWordMetadata(const char *name, xt_func_ptr func, bool isImmedia
   return meta;
 }
 
-// Free a WordMetadata structure
-void FreeWordMetadata(WordMetadata *meta) {
+// Free a ForthWord structure
+void FreeWordMetadata(ForthWord *meta) {
   if (meta == NULL) {
     return;
   }
@@ -44,7 +43,7 @@ void FreeWordMetadata(WordMetadata *meta) {
 // The data buffer is allocated/expanded as needed to fit the new data.
 // meta: The WordMetadata structure to append the data to.
 // data: The string to append to the data buffer.
-void AppendStringToWordData(WordMetadata *meta, const char *data) {
+void AppendStringToWordData(ForthWord *meta, const char *data) {
   if (meta->data == NULL) {
     // Allocate initial buffer with size MAX_WORD_LENGTH
     meta->dataBufferLength = MAX_WORD_LENGTH;

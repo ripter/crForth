@@ -5,8 +5,7 @@
 
 // ( -- )
 // Prints the contents of the return stack.
-void DotSR(KernelState* state, WordMetadata *wordMeta) {
-  (void)wordMeta; // Unused parameter
+void DotSR(KernelState* state) {
   size_t returnStackSize = CellStackSize(&state->returnStack);
 
   printf("Return Stack: ");

@@ -3,8 +3,7 @@
 
 // ( a -- )
 // Prints the top of stack to outputStream
-void Dot(KernelState* state, WordMetadata *wordMeta) {
-  (void)wordMeta; // UNUSED
+void Dot(KernelState* state) {
   Cell a = CellStackPop(&state->dataStack);
   fprintf(state->outputStream, "%ld ", a.value);
 }

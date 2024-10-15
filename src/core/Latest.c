@@ -3,9 +3,8 @@
 
 // ( -- c-addr u )
 // Pushes the latest word in the dictionary to the stack.
-void Latest(KernelState* state, WordMetadata* wordMeta) {
-  (void)wordMeta; // UNUSED
-  WordMetadata* lastItem = GetLastItemFromDictionary(&state->dict);
+void Latest(KernelState* state) {
+  ForthWord* lastItem = GetLastItemFromDictionary(&state->dict);
   CellStackPush(&state->dataStack, (Cell){(cell_t)lastItem->name, CELL_TYPE_WORD});
   CellStackPush(&state->dataStack, (Cell){TextLength(lastItem->name), CELL_TYPE_NUMBER});
 }
