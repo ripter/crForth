@@ -2,7 +2,7 @@
 #include "../crForth.h"
 #include "CoreWords.h"
 
-// ( flag -- ) 
+// ( flag -- )  ( R: -- flag )
 // If flag is false, skip until THEN or ELSE. 
 // https://forth-standard.org/standard/core/IF
 void IF(KernelState *state, WordMetadata *wordMeta) {
@@ -28,28 +28,29 @@ void IF(KernelState *state, WordMetadata *wordMeta) {
   }
 }
 
+// ( R: flag -- )
+// If the flag is true, skip until THEN.
+// https://forth-standard.org/standard/core/ELSE
 void ELSE(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
   char word[MAX_WORD_LENGTH];
   Cell flag = CellStackPop(&state->returnStack);
   CellStackPush(&state->returnStack, flag);
-  // printf("ELSE: flag: %ld\n", flag.value);
   if (flag.value != FFALSE) {
-    // printf("ELSE: flag is true, skipping until THEN\n");
     // Skip until THEN
     while (GetNextWord(state->inputStream, word, MAX_WORD_LENGTH)) {
-      // printf("ELSE: skipping word: %s\n", word);
       if (TextIsEqual(word, "then")) {
         wordMeta = GetItemFromDictionary(&state->dict, word);
         wordMeta->func(state, wordMeta);
-        // Run the else/then word and break out of the loop.
-        // DoForthString(state, word, word); 
         break;
       }
     }
   }
 }
 
+// ( R: flag -- )
+// Completes the IF/ELSE words.
+// https://forth-standard.org/standard/core/THEN
 void THEN(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
   (void)state; // Unused parameter

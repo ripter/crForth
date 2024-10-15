@@ -164,6 +164,20 @@ MU_TEST(branch_no_length_error) {
   FREE_TEST_STATE();
 }
 
+MU_TEST(branch_jump_test) {
+  INIT_TEST_STATE();
+
+  // define two words, foo and bar, then jump to foo via branchr.
+  OPEN_STREAM(": foo 10 ; : bar 9 ; ' foo >r >r branch");
+  DoForth(&state);
+  CLOSE_STREAM();
+
+  // Ensure that 10 is left on the stack as branch executed the word at the return stack address.
+  Cell result = CellStackPop(&state.dataStack);
+  mu_assert_double_eq(10, result.value);
+  FREE_TEST_STATE();
+}
+
 MU_TEST(tick) {
   INIT_TEST_STATE();
   OPEN_STREAM("' +");
@@ -210,19 +224,6 @@ MU_TEST(latest_and_execute) {
   FREE_TEST_STATE();
 }
 
-MU_TEST(branch_jump_test) {
-  INIT_TEST_STATE();
-
-  // define two words, foo and bar, then jump to foo via branchr.
-  OPEN_STREAM(": foo 10 ; : bar 9 ; ' foo >r >r branch");
-  DoForth(&state);
-  CLOSE_STREAM();
-
-  // Ensure that 10 is left on the stack as branch executed the word at the return stack address.
-  Cell result = CellStackPop(&state.dataStack);
-  mu_assert_double_eq(10, result.value);
-  FREE_TEST_STATE();
-}
 
 MU_TEST_SUITE(branch_tests) {
   MU_RUN_TEST(branch_jump_1);
@@ -287,12 +288,39 @@ MU_TEST_SUITE(if_else_then_tests) {
 }
 
 
+
+//
+// ********** Loops **********
+MU_TEST(for_loop_basic) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("5 0 DO I LOOP");
+  DoForth(&state);
+  CLOSE_STREAM();
+  mu_check(CellStackSize(&state.dataStack) == 5);
+  mu_assert_double_eq(4, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(3, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(2, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(1, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(0, CellStackPop(&state.dataStack).value);
+  FREE_TEST_STATE();
+}
+
+
+MU_TEST_SUITE(loop_tests) {
+  MU_RUN_TEST(for_loop_basic);
+}
+
+
+
+
+
 //
 // Run all branch tests
 bool TestBranch(void) {
   MU_RUN_SUITE(skip_tests);
   MU_RUN_SUITE(branch_tests);
   MU_RUN_SUITE(if_else_then_tests);
+  MU_RUN_SUITE(loop_tests);
 
   MU_REPORT();
   return MU_EXIT_CODE;
