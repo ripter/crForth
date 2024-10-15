@@ -23,7 +23,7 @@
 : count-up ( n -- )
   dup . 1+  \ print and increment
   dup 5 <   \ compare with 5
-  ?branch 1 count-up \ if less than 5, jump to count-up
+  1 ?branch count-up \ if less than 5, jump to count-up
 ; 
 
 : count-up-2 ( n -- )

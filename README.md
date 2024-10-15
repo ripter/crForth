@@ -45,9 +45,6 @@ These functions work with data pointer defined in the word metadata.
 * need EXECUTE
 * need? REFILL
 * need? SOURCE
-* Add a way so that 'address' are shows as the words they are instead of the actual address. Since this is a streaming kernel, we refrence the word instead of the address.
-  * this might be fixable when implimenting forth's strings instead of using c's null terminated strings. Maybe a flag or something that tells the dot tools to print it as a string instead of a raw memory address.
-* Refactor DoForthStringAndReturnAddress and DoForthString, do we really need two of them?
 * 
 
 

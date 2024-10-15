@@ -12,7 +12,7 @@ void DotSD(KernelState* state, WordMetadata *wordMeta) {
 
   printf("Data Stack: ");
   for (size_t i = 0; i < stackSize; i++) {
-    Cell value = ViewCellStack(&state->dataStack, i);
+    Cell value = CellStackPeek(&state->dataStack, i);
     printf("%ld ", value.value); 
   }
   printf(" \n");

@@ -7,7 +7,8 @@
 #include "../src/crForth.h"
 #include "../src/core/CoreWords.h"
 
-
+//
+// ********** Skip Tests **********
 MU_TEST(skip_basic_test) {
   INIT_TEST_STATE();
   // Add sentinel value (19), skip 3 words, resulting in nothing being added to the stack.
@@ -88,6 +89,8 @@ MU_TEST_SUITE(skip_tests) {
 }
 
 
+//
+// ********** Branch Tests **********
 MU_TEST(branch_jump_1) {
   INIT_TEST_STATE();
   // We want to test branching to the + word.
@@ -152,7 +155,10 @@ MU_TEST(branch_no_length_error) {
   OPEN_STREAM("' + >r drop 10 9 0 ?branch");
   DoForth(&state);
   CLOSE_STREAM();
-  mu_check(CellStackSize(&state.dataStack) == 2);
+  // Verify that the error was thrown.
+  VERIFY_ERROR(ERR_INVALID_WORD_ON_RETURN_STACK);
+  // Verify that the stack is unchanged.
+  mu_assert_double_eq(2, CellStackSize(&state.dataStack));
   mu_assert_double_eq(9, CellStackPop(&state.dataStack).value);
   mu_assert_double_eq(10, CellStackPop(&state.dataStack).value);
   FREE_TEST_STATE();
@@ -204,7 +210,6 @@ MU_TEST(latest_and_execute) {
   FREE_TEST_STATE();
 }
 
-
 MU_TEST(branch_jump_test) {
   INIT_TEST_STATE();
 
@@ -218,6 +223,20 @@ MU_TEST(branch_jump_test) {
   mu_assert_double_eq(10, result.value);
   FREE_TEST_STATE();
 }
+
+MU_TEST_SUITE(branch_tests) {
+  MU_RUN_TEST(branch_jump_1);
+  MU_RUN_TEST(branch_with_empty_return_stack);
+  MU_RUN_TEST(branch_with_invalid_address);
+  MU_RUN_TEST(branchnz_basic_true);
+  MU_RUN_TEST(branchnz_basic_false);
+  MU_RUN_TEST(branch_no_length_error);
+  MU_RUN_TEST(tick);
+  MU_RUN_TEST(tick_and_execute);
+  MU_RUN_TEST(latest_and_execute);
+  MU_RUN_TEST(branch_jump_test);
+}
+
 
 //
 // ********** IF ELSE THEN **********
@@ -272,19 +291,7 @@ MU_TEST_SUITE(if_else_then_tests) {
 // Run all branch tests
 bool TestBranch(void) {
   MU_RUN_SUITE(skip_tests);
-
-  MU_RUN_TEST(branch_jump_1);
-  MU_RUN_TEST(branch_with_empty_return_stack);
-  MU_RUN_TEST(branch_with_invalid_address);
-  MU_RUN_TEST(branchnz_basic_true);
-  MU_RUN_TEST(branchnz_basic_false);
-  MU_RUN_TEST(branch_no_length_error);
-  MU_RUN_TEST(branch_jump_test);
-
-  MU_RUN_TEST(tick);
-  MU_RUN_TEST(tick_and_execute);
-  MU_RUN_TEST(latest_and_execute);
-
+  MU_RUN_SUITE(branch_tests);
   MU_RUN_SUITE(if_else_then_tests);
 
   MU_REPORT();

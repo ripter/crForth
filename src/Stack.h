@@ -32,7 +32,7 @@ void CellStackPush(CellStack *stack, Cell value);
 Cell CellStackPop(CellStack *stack);
 bool IsCellStackEmpty(CellStack *stack);
 size_t CellStackSize(CellStack *stack);
-Cell ViewCellStack(CellStack *stack, size_t index);
+Cell CellStackPeek(CellStack *stack, size_t index);
 
 
 #endif // STACK_H

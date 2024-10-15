@@ -75,7 +75,12 @@ void Branch(KernelState *state, WordMetadata *wordMeta) {
 // Example: ' + >r >r 10 9 -1 ?branch
 void BranchNZ(KernelState *state, WordMetadata *wordMeta) {
   (void)wordMeta; // Unused parameter
+  // Pop the flag off the data stack.
+  BAIL_IF_EMPTY_DATA_STACK();
   Cell flag = CellStackPop(&state->dataStack);
+
+  // Pop the address and length off the return stack.
+  BAIL_IF_RETURN_STACK_LESS_THAN(2);
   Cell word = CellStackPop(&state->returnStack);
   Cell length = CellStackPop(&state->returnStack);
   if (word.type != CELL_TYPE_WORD || length.type != CELL_TYPE_NUMBER) {
@@ -83,7 +88,9 @@ void BranchNZ(KernelState *state, WordMetadata *wordMeta) {
     return;
   }
 
+  // If the flag is true, branch to the address on the return stack.
   if (flag.value) {
-    DoForthString(state, (const char *)word.value, (const char *)word.value);
+    WordMetadata *meta = GetItemFromDictionary(&state->dict, (const char *)word.value);
+    meta->func(state, meta);
   }
 }

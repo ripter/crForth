@@ -11,7 +11,7 @@ void DotSR(KernelState* state, WordMetadata *wordMeta) {
 
   printf("Return Stack: ");
   for (size_t i = 0; i < returnStackSize; i++) {
-    Cell value = ViewCellStack(&state->returnStack, i);
+    Cell value = CellStackPeek(&state->returnStack, i);
     printf("%ld ", value.value); 
   }
   printf(" \n");

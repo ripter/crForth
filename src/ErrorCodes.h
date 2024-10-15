@@ -11,13 +11,17 @@
     return;                                                                    \
   }                                                                            \
 
+#define BAIL_IF_RETURN_STACK_LESS_THAN(n)                                      \
+  if (CellStackSize(&state->returnStack) < n) {                                 \
+    fprintf(state->errorStream, ERR_INVALID_WORD_ON_RETURN_STACK);             \
+    return;                                                                    \
+  }                                                                            \
+
 #define BAIL_IF_EMPTY_DATA_STACK()                                             \
   if (IsCellStackEmpty(&state->dataStack)) {                                   \
     fprintf(state->errorStream, ERR_EMPTY_STACK);                              \
     return;                                                                    \
   }                                                                            \
-
-
 
 
 

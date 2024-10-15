@@ -34,7 +34,7 @@ size_t CellStackSize(CellStack *stack) {
   return kv_size(*stack);
 }
 
-Cell ViewCellStack(CellStack *stack, size_t index) {
+Cell CellStackPeek(CellStack *stack, size_t index) {
   if (index < kv_size(*stack)) {
     return kv_A(*stack, index);
   } else {

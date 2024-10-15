@@ -13,7 +13,7 @@ void DotS(KernelState* state, WordMetadata *wordMeta) {
 
   printf("Data Stack: ");
   for (size_t i = 0; i < stackSize; i++) {
-    Cell cell = ViewCellStack(&state->dataStack, i);
+    Cell cell = CellStackPeek(&state->dataStack, i);
     if (cell.type == CELL_TYPE_WORD) {
       printf("%s ", (char *)cell.value);
       // skip the length
@@ -26,7 +26,7 @@ void DotS(KernelState* state, WordMetadata *wordMeta) {
 
   printf("Return Stack: ");
   for (size_t i = 0; i < returnStackSize; i++) {
-    Cell cell = ViewCellStack(&state->returnStack, i);
+    Cell cell = CellStackPeek(&state->returnStack, i);
     if (cell.type == CELL_TYPE_WORD) {
       printf("%s ", (char *)cell.value);
     } else {
