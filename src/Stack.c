@@ -21,8 +21,8 @@ Cell CellStackPop(CellStack *stack) {
   if (kv_size(*stack) > 0) {
     return kv_A(*stack, --kv_size(*stack));
   } else {
-    TraceLog(LOG_WARNING, "Stack underflow");
-    return (Cell){0}; /* Return zero-initialized value */
+    TraceLog(LOG_WARNING, "CellStackPop: Stack underflow");
+    return (Cell){0, CELL_TYPE_NUMBER}; /* Return zero-initialized value */
   }
 }
 

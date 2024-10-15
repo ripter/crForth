@@ -60,6 +60,9 @@ void ZeroEquals(KernelState* state, WordMetadata* wordMeta);
 void IF(KernelState *state, WordMetadata *wordMeta);
 void ELSE(KernelState *state, WordMetadata *wordMeta);
 void THEN(KernelState *state, WordMetadata *wordMeta);
+void DO(KernelState *state, WordMetadata *wordMeta);
+void I(KernelState *state, WordMetadata *wordMeta);
+void LOOP(KernelState *state, WordMetadata *wordMeta);
 
 
 //

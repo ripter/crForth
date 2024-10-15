@@ -81,6 +81,53 @@ MU_TEST(tick_compile_mode) {
 }
 
 
+//
+// ********** HERE **********
+// Does the word HERE return a valid address?
+MU_TEST(here_inside_word_returns_valid_address) {
+  INIT_TEST_STATE();
+  OPEN_STREAM(": foobar here ; foobar");
+  DoForth(&state);
+  CLOSE_STREAM();
+
+  mu_check(CellStackSize(&state.dataStack) == 1);
+  Cell result = CellStackPop(&state.dataStack);
+  mu_check(result.type == CELL_TYPE_ADDRESS);
+  mu_check(result.value != 0);  // Ensure HERE returns a valid address
+  FREE_TEST_STATE();
+}
+MU_TEST(test_here_word) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("here");
+  DoForth(&state);
+  CLOSE_STREAM();
+
+  mu_check(CellStackSize(&state.dataStack) == 1);
+  Cell result = CellStackPop(&state.dataStack);
+  mu_check(result.type == CELL_TYPE_ADDRESS);
+  mu_check(result.value != 0);  // Ensure HERE returns a valid address
+  FREE_TEST_STATE();
+}
+// Test for HERE word after ALLOT
+MU_TEST(test_here_after_allot) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("here 10 allot here swap -");
+  DoForth(&state);
+  CLOSE_STREAM();
+
+  mu_check(CellStackSize(&state.dataStack) == 1);
+  Cell result = CellStackPop(&state.dataStack);
+  mu_assert_double_eq(10, result.value);  // Difference should be 10 after allotting
+  FREE_TEST_STATE();
+}
+
+MU_TEST_SUITE(here_tests) {
+  MU_RUN_TEST(here_inside_word_returns_valid_address);
+  MU_RUN_TEST(test_here_word);
+  MU_RUN_TEST(test_here_after_allot);
+}
+
+
 
 //
 // Run all compile mode tests
@@ -91,6 +138,9 @@ bool TestCompileMode(void) {
   MU_RUN_TEST(test_create_does);
   MU_RUN_TEST(tick_interpret_mode);
   MU_RUN_TEST(tick_compile_mode);
+
+  // TODO: make sure we know how HERE is supposed to work.
+  // MU_RUN_SUITE(here_tests);
 
   MU_REPORT();
   return MU_EXIT_CODE;

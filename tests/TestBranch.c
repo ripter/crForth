@@ -296,7 +296,58 @@ MU_TEST(for_loop_basic) {
   OPEN_STREAM("5 0 DO I LOOP");
   DoForth(&state);
   CLOSE_STREAM();
-  mu_check(CellStackSize(&state.dataStack) == 5);
+  mu_assert_double_eq(5, CellStackSize(&state.dataStack));
+  mu_assert_double_eq(4, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(3, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(2, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(1, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(0, CellStackPop(&state.dataStack).value);
+  FREE_TEST_STATE();
+}
+MU_TEST(for_loop_reverse) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("0 5 DO I LOOP");
+  DoForth(&state);
+  CLOSE_STREAM();
+  mu_assert_double_eq(0, CellStackSize(&state.dataStack)); // Should not push anything to the stack
+  FREE_TEST_STATE();
+}
+MU_TEST(for_loop_single_iteration) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("1 0 DO I LOOP");
+  DoForth(&state);
+  CLOSE_STREAM();
+  mu_assert_double_eq(1, CellStackSize(&state.dataStack));
+  mu_assert_double_eq(0, CellStackPop(&state.dataStack).value);
+  FREE_TEST_STATE();
+}
+MU_TEST(for_loop_empty) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("0 0 DO I LOOP");
+  DoForth(&state);
+  CLOSE_STREAM();
+  mu_assert_double_eq(0, CellStackSize(&state.dataStack)); // Should not push anything to the stack
+  FREE_TEST_STATE();
+}
+MU_TEST(for_loop_negative_indices) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("-5 0 DO I LOOP");
+  DoForth(&state);
+  CLOSE_STREAM();
+  mu_assert_double_eq(5, CellStackSize(&state.dataStack));
+  mu_assert_double_eq(-1, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(-2, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(-3, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(-4, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(-5, CellStackPop(&state.dataStack).value);
+  FREE_TEST_STATE();
+}
+MU_TEST(for_loop_modify_index) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("5 0 DO I 2 + LOOP");
+  DoForth(&state);
+  CLOSE_STREAM();
+  mu_assert_double_eq(5, CellStackSize(&state.dataStack));
   mu_assert_double_eq(4, CellStackPop(&state.dataStack).value);
   mu_assert_double_eq(3, CellStackPop(&state.dataStack).value);
   mu_assert_double_eq(2, CellStackPop(&state.dataStack).value);
@@ -306,8 +357,44 @@ MU_TEST(for_loop_basic) {
 }
 
 
+MU_TEST(for_loop_nested) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("2 0 DO 3 0 DO I J LOOP LOOP");
+  DoForth(&state);
+  CLOSE_STREAM();
+  mu_assert_double_eq(6, CellStackSize(&state.dataStack));
+  mu_assert_double_eq(2, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(1, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(0, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(2, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(1, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(0, CellStackPop(&state.dataStack).value);
+  FREE_TEST_STATE();
+}
+MU_TEST(for_loop_leave) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("5 0 DO I 3 = IF LEAVE THEN I LOOP");
+  DoForth(&state);
+  CLOSE_STREAM();
+  mu_assert_double_eq(4, CellStackSize(&state.dataStack));
+  mu_assert_double_eq(2, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(1, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(0, CellStackPop(&state.dataStack).value);
+  FREE_TEST_STATE();
+}
+
+
+
+
 MU_TEST_SUITE(loop_tests) {
   MU_RUN_TEST(for_loop_basic);
+  MU_RUN_TEST(for_loop_reverse);
+  MU_RUN_TEST(for_loop_single_iteration);
+  MU_RUN_TEST(for_loop_empty);
+  MU_RUN_TEST(for_loop_negative_indices);
+  MU_RUN_TEST(for_loop_modify_index);
+  MU_RUN_TEST(for_loop_nested);
+  MU_RUN_TEST(for_loop_leave);
 }
 
 

@@ -6,6 +6,7 @@
 
 // Adds the Core Words to the dictionary.
 // Words *MUST* be lowercase to be found.
+// Side note: this list is not alphabetized, its the order they were implemented. I find the history of things interesting.
 void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, InitWordMetadata("+",         (xt_func_ptr)Add,           false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("-",         (xt_func_ptr)Subtract,      false,  NULL));
@@ -13,7 +14,7 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, InitWordMetadata("skip",      (xt_func_ptr)Skip,          false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("0skip",     (xt_func_ptr)SkipOnZero,    false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("branch",    (xt_func_ptr)Branch,        false,  NULL));
-  AddWordToDictionary(&state->dict, InitWordMetadata("?branch",   (xt_func_ptr)BranchNZ,       false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("?branch",   (xt_func_ptr)BranchNZ,      false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(".s",        (xt_func_ptr)DotS,          true,   NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(":",         (xt_func_ptr)Colon,         false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata(";",         (xt_func_ptr)SemiColon,     true,   NULL));
@@ -52,4 +53,7 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, InitWordMetadata("if",        (xt_func_ptr)IF,            false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("else",      (xt_func_ptr)ELSE,          false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("then",      (xt_func_ptr)THEN,          false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("do",        (xt_func_ptr)DO,            true,   NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("i",         (xt_func_ptr)I,             false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("loop",      (xt_func_ptr)LOOP,          true,   NULL));
 }

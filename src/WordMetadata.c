@@ -42,6 +42,8 @@ void FreeWordMetadata(WordMetadata *meta) {
 
 // Append a string to the data buffer of a WordMetadata structure
 // The data buffer is allocated/expanded as needed to fit the new data.
+// meta: The WordMetadata structure to append the data to.
+// data: The string to append to the data buffer.
 void AppendStringToWordData(WordMetadata *meta, const char *data) {
   if (meta->data == NULL) {
     // Allocate initial buffer with size MAX_WORD_LENGTH
