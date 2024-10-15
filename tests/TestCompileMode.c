@@ -140,7 +140,7 @@ bool TestCompileMode(void) {
   MU_RUN_TEST(tick_compile_mode);
 
   // TODO: make sure we know how HERE is supposed to work.
-  // MU_RUN_SUITE(here_tests);
+  MU_RUN_SUITE(here_tests);
 
   MU_REPORT();
   return MU_EXIT_CODE;

@@ -13,7 +13,7 @@ MU_TEST(non_existent_word_lookup) {
   AddCoreWords(&state);
 
   // Attempt to fetch a word that doesn't exist in the dictionary
-  WordMetadata *word = GetItemFromDictionary(&state.dict, "nonexistent");
+  ForthWord *word = GetItemFromDictionary(&state.dict, "nonexistent");
 
   // Ensure the word is not found (returns NULL)
   mu_assert(word == NULL, "Non-existent word lookup should return NULL");
@@ -47,7 +47,7 @@ MU_TEST(create_creates_variable) {
   // The address to the data buffer should be on the stack.
   Cell result = CellStackPop(&state.dataStack);
   // Find the memory address of the new word.
-  WordMetadata *newWord = GetItemFromDictionary(&state.dict, "foobar");
+  ForthWord *newWord = GetItemFromDictionary(&state.dict, "foobar");
 
   mu_assert_double_eq((cell_t)&newWord->data, result.value);
   FreeKernelState(&state);

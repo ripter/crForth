@@ -13,12 +13,12 @@ void DoForthString(KernelState *state, const char* branchName, const char* forth
 }
 
 // Runs the data as a Forth program using the given KernelState.
-void DoForthDataString(KernelState *state, WordMetadata *wordMeta) {
+void DoForthDataString(KernelState *state, ForthWord *wordMeta) {
   ExecuteForthString(state, wordMeta->name, wordMeta->data, false);
 }
 
 // Runs the data as a Forth program using the given KernelState.
-void DoForthStringAndReturnAddress(KernelState *state, WordMetadata *wordMeta) {
+void DoForthStringAndReturnAddress(KernelState *state, ForthWord *wordMeta) {
   ExecuteForthString(state, wordMeta->name, wordMeta->data, true);
 }
 

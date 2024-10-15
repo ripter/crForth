@@ -95,7 +95,7 @@ MU_TEST(branch_jump_1) {
   INIT_TEST_STATE();
   // We want to test branching to the + word.
   // Get the word from the dictionary so we can push it's "address" to the return stack.
-  WordMetadata *branchWord = GetItemFromDictionary(&state.dict, "+");
+  ForthWord *branchWord = GetItemFromDictionary(&state.dict, "+");
   CellStackPush(&state.returnStack, (Cell){1, CELL_TYPE_NUMBER});                // length
   CellStackPush(&state.returnStack, (Cell){(cell_t)branchWord->name, CELL_TYPE_WORD}); // address
   // add numbers to the data stack and try the branch.
@@ -185,7 +185,7 @@ MU_TEST(tick) {
   CLOSE_STREAM();
 
   // Get the dictionary entry so we can verify the address is the same.
-  WordMetadata* wordMeta = GetItemFromDictionary(&state.dict, "+");
+  ForthWord* wordMeta = GetItemFromDictionary(&state.dict, "+");
   (void)CellStackPop(&state.dataStack); // length
   Cell word = CellStackPop(&state.dataStack);
 

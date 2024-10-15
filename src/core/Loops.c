@@ -55,7 +55,7 @@ void LOOP(KernelState *state) {
   CellStackPush(&state->returnStack, index);
   // Run the loop body again.
   ForthWord *loopBody = GetItemFromDictionary(&state->dict, "loop-i-body");
-  loopBody->func(state, loopBody);
+  loopBody->func(state);
 
   // Increment the index and push it back onto the return stack.
   // printf("LOOP: Incrementing index\n");

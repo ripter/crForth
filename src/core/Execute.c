@@ -10,7 +10,7 @@ void Execute(KernelState *state) {
   // Get the word from the dictionary
   ForthWord *foundWordMeta = GetItemFromDictionary(&state->dict, (const char *)word.value);
   if (foundWordMeta != NULL) {
-    foundWordMeta->func(state, foundWordMeta);
+    foundWordMeta->func(state);
   } else {
     fprintf(state->errorStream, "Error: Word not found: %s\n", (char *)word.value);
   }

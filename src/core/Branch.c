@@ -87,6 +87,6 @@ void BranchNZ(KernelState *state) {
   // If the flag is true, branch to the address on the return stack.
   if (flag.value) {
     ForthWord *meta = GetItemFromDictionary(&state->dict, (const char *)word.value);
-    meta->func(state, meta);
+    meta->func(state);
   }
 }

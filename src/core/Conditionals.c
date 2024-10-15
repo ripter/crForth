@@ -19,7 +19,7 @@ void IF(KernelState *state) {
       if (TextIsEqual(word, "else") || TextIsEqual(word, "then")) {
         ForthWord *wordMeta = GetItemFromDictionary(&state->dict, word);
         // Run the else/then word and break out of the loop.
-        wordMeta->func(state, wordMeta);
+        wordMeta->func(state);
         break;
       }
     }
@@ -38,7 +38,7 @@ void ELSE(KernelState *state) {
     while (GetNextWord(state->inputStream, word, MAX_WORD_LENGTH)) {
       if (TextIsEqual(word, "then")) {
         ForthWord *wordMeta = GetItemFromDictionary(&state->dict, word);
-        wordMeta->func(state, wordMeta);
+        wordMeta->func(state);
         break;
       }
     }

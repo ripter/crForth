@@ -2,7 +2,6 @@
 #include "CoreWords.h"
 
 #include "../crForth.h"
-#include "../WordMetadata.h"
 
 // Adds the Core Words to the dictionary.
 // Words *MUST* be lowercase to be found.

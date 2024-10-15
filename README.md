@@ -32,7 +32,7 @@ pkg-config --cflags raylib
 
 These functions work with data pointer defined in the word metadata.
 
-* DoForthString - Runs DoForth with the WordMetadata->data as the input stream and the current Kernel State.
+* DoForthString - Runs DoForth with the ForthWord->data as the input stream and the current Kernel State.
 * Variable - Returns the memmory address for WorldMetadata->data
 * Nothing - Does nothing.
 

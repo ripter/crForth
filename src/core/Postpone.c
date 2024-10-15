@@ -11,6 +11,6 @@ void Postpone(KernelState *state) {
   GetNextWord(state->inputStream, wordBuffer, MAX_WORD_LENGTH);
 
   // Append the word to the current definition.
-  wordMeta = GetLastItemFromDictionary(&state->dict);
+  ForthWord *wordMeta = GetLastItemFromDictionary(&state->dict);
   AppendStringToWordData(wordMeta, wordBuffer);
 }

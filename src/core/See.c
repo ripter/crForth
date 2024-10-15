@@ -7,12 +7,11 @@
 // ( "<spaces>name" -- ) 
 // Display the definition of the word with the given name.
 // https://forth-standard.org/standard/tools/SEE
-void See(KernelState* state, WordMetadata* wordMeta) {
-  (void)wordMeta; // UNUSED
+void See(KernelState* state) {
   // Get the Word name from the input stream.
   char wordName[MAX_WORD_LENGTH];
   GetNextWord(state->inputStream, wordName, MAX_WORD_LENGTH);
-  WordMetadata* meta = GetItemFromDictionary(&state->dict, wordName);
+  ForthWord* meta = GetItemFromDictionary(&state->dict, wordName);
 
   // If the word was not found, check if it's a number.
   if (meta == NULL) {

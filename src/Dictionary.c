@@ -66,7 +66,7 @@ ForthWord* GetItemFromDictionary(Dictionary *dict, const char *key) {
   return NULL; // Key not found
 }
 
-// Set a new WordMetadata for an existing key
+// Set a new ForthWord for an existing key
 bool SetItemInDictionary(Dictionary *dict, const char *key, ForthWord wordMeta) {
   khint_t k = kh_get(dict, dict->map, key); // Find key
   if (k != kh_end(dict->map)) {
