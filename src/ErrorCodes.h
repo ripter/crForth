@@ -12,7 +12,7 @@
 #define ERR_INVALID_LENGTH                "Error 009: Invalid length type for evaluation.\n"
 #define ERR_INVALID_ADDRESS               "Error 010: Invalid address type for evaluation.\n"
 #define ERR_ZERO_LENGTH                   "Error 011: Length for evaluation cannot be zero.\n"
-#define ERR_MISSING_STACK_VALUES          "Error 012: Expected %ld values on the stack, but found %ld instead.\n"
+#define ERR_MISSING_STACK_VALUES          "Error 012: Expected %d values on the stack, but found %ld instead.\n"
 
 #define BAIL_IF_EMPTY_RETURN_STACK()                                           \
   if (IsCellStackEmpty(&state->returnStack)) {                                 \

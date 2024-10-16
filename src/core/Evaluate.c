@@ -22,5 +22,11 @@ void Evaluate(KernelState* state) {
     return;
   }
 
+  cell_t checkedLength = TextLength((const char*)address.value);
+  if (length.value != checkedLength) {
+    fprintf(state->errorStream, ERR_INVALID_LENGTH);
+    return;
+  }
+
   RunForthString(state, (const char *)address.value, length.value);
 }

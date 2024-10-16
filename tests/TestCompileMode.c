@@ -128,7 +128,8 @@ MU_TEST_SUITE(here_tests) {
 }
 
 
-
+//
+// ********** EVALUATE **********
 MU_TEST(evaluate_string) {
   INIT_TEST_STATE();
   // Add a string to the stack and run it as a Forth program.
@@ -189,11 +190,22 @@ MU_TEST(evaluate_missing_address) {
   VERIFY_ERROR(expectedError)
   FREE_TEST_STATE();
 }
-MU_TEST(evaluate_invalid_length) {
+MU_TEST(evaluate_invalid_length_type) {
   INIT_TEST_STATE();
   const char* forthString = "10 9 +";
   CellStackPush(&state.dataStack, (Cell){(cell_t)forthString, CELL_TYPE_WORD}); // Push the string
-  CellStackPush(&state.dataStack, (Cell){(cell_t)forthString, CELL_TYPE_WORD}); // Push invalid length (wrong type)
+  CellStackPush(&state.dataStack, (Cell){(cell_t)19, CELL_TYPE_WORD}); // Push invalid length (wrong type)
+  OPEN_STREAM("evaluate");
+  DoForth(&state);
+  CLOSE_STREAM();
+  VERIFY_ERROR(ERR_INVALID_LENGTH);
+  FREE_TEST_STATE();
+}
+MU_TEST(evaluate_invalid_length_value) {
+  INIT_TEST_STATE();
+  const char* forthString = "10 9 +";
+  CellStackPush(&state.dataStack, (Cell){(cell_t)forthString, CELL_TYPE_WORD}); // Push the string
+  CellStackPush(&state.dataStack, (Cell){TextLength(forthString)+1, CELL_TYPE_NUMBER}); // Wrong length
   OPEN_STREAM("evaluate");
   DoForth(&state);
   CLOSE_STREAM();
@@ -222,17 +234,18 @@ MU_TEST(evaluate_zero_length) {
   FREE_TEST_STATE();
 }
 
-
 MU_TEST_SUITE(evaluate_tests) {
   MU_RUN_TEST(evaluate_string);
   MU_RUN_TEST(evaluate_define_word);
   MU_RUN_TEST(evaluate_undefined_word);
   MU_RUN_TEST(evaluate_missing_length);
   MU_RUN_TEST(evaluate_missing_address);
-  MU_RUN_TEST(evaluate_invalid_length);
+  MU_RUN_TEST(evaluate_invalid_length_type);
+  // MU_RUN_TEST(evaluate_invalid_length_value);
   MU_RUN_TEST(evaluate_invalid_address);
   MU_RUN_TEST(evaluate_zero_length);
 }
+
 
 
 //
@@ -244,7 +257,6 @@ bool TestCompileMode(void) {
   MU_RUN_TEST(test_create_does);
   MU_RUN_TEST(tick_interpret_mode);
   MU_RUN_TEST(tick_compile_mode);
-
   MU_RUN_SUITE(evaluate_tests);
 
   // TODO: make sure we know how HERE is supposed to work.
