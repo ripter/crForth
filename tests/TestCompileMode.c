@@ -173,7 +173,9 @@ MU_TEST(evaluate_missing_length) {
   OPEN_STREAM("evaluate");
   DoForth(&state);
   CLOSE_STREAM();
-  VERIFY_ERROR(ERR_MISSING_LENGTH)
+  char expectedError[256];
+  snprintf(expectedError, sizeof(expectedError), ERR_MISSING_STACK_VALUES, 2, 1);
+  VERIFY_ERROR(expectedError)
   FREE_TEST_STATE();
 }
 MU_TEST(evaluate_missing_address) {
@@ -182,7 +184,9 @@ MU_TEST(evaluate_missing_address) {
   OPEN_STREAM("evaluate");
   DoForth(&state);
   CLOSE_STREAM();
-  VERIFY_ERROR(ERR_MISSING_ADDRESS);
+  char expectedError[256];
+  snprintf(expectedError, sizeof(expectedError), ERR_MISSING_STACK_VALUES, 2, 1);
+  VERIFY_ERROR(expectedError)
   FREE_TEST_STATE();
 }
 MU_TEST(evaluate_invalid_length) {
