@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include "Test.h"
+#include "../src/crForth.h"
 
 int main(void) {
+  PrintHeader();
+  printf("Running Tests...\n");
 
   printf("\n*** GetNextWord Tests ***\n");
   TestGetNext();

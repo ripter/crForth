@@ -108,7 +108,6 @@ MU_TEST(branch_jump_1) {
   mu_assert_double_eq(19, result.value);
   FREE_TEST_STATE();
 }
-
 MU_TEST(branch_with_empty_return_stack) {
   INIT_TEST_STATE();
   OPEN_STREAM("10 9 branch");
@@ -117,7 +116,6 @@ MU_TEST(branch_with_empty_return_stack) {
   VERIFY_ERROR(ERR_EMPTY_STACK);
   FREE_TEST_STATE();
 }
-
 MU_TEST(branch_with_invalid_address) {
   INIT_TEST_STATE();
   // 27 is not a valid address, so the branch should fail.
@@ -127,7 +125,6 @@ MU_TEST(branch_with_invalid_address) {
   VERIFY_ERROR(ERR_INVALID_WORD_ON_RETURN_STACK);
   FREE_TEST_STATE();
 }
-
 MU_TEST(branchnz_basic_true) {
   INIT_TEST_STATE();
   OPEN_STREAM("' + >r >r 10 9 -1 ?branch");
@@ -138,7 +135,6 @@ MU_TEST(branchnz_basic_true) {
   mu_check(IsCellStackEmpty(&state.dataStack));
   FREE_TEST_STATE();
 }
-
 MU_TEST(branchnz_basic_false) {
   INIT_TEST_STATE();
   OPEN_STREAM("' + >r >r 10 9 0 ?branch");
@@ -149,7 +145,6 @@ MU_TEST(branchnz_basic_false) {
   mu_assert_double_eq(10, CellStackPop(&state.dataStack).value);
   FREE_TEST_STATE();
 }
-
 MU_TEST(branch_no_length_error) {
   INIT_TEST_STATE();
   OPEN_STREAM("' + >r drop 10 9 0 ?branch");
@@ -163,7 +158,6 @@ MU_TEST(branch_no_length_error) {
   mu_assert_double_eq(10, CellStackPop(&state.dataStack).value);
   FREE_TEST_STATE();
 }
-
 MU_TEST(branch_jump_test) {
   INIT_TEST_STATE();
 
@@ -177,7 +171,6 @@ MU_TEST(branch_jump_test) {
   mu_assert_double_eq(10, result.value);
   FREE_TEST_STATE();
 }
-
 MU_TEST(tick) {
   INIT_TEST_STATE();
   OPEN_STREAM("' +");
@@ -193,7 +186,6 @@ MU_TEST(tick) {
   mu_assert_double_eq((cell_t)wordMeta->name, word.value);
   FREE_TEST_STATE();
 }
-
 MU_TEST(tick_and_execute) {
   INIT_TEST_STATE();
   // ' xyz EXECUTE is equivalent to xyz
@@ -212,7 +204,6 @@ MU_TEST(tick_and_execute) {
   mu_assert_double_eq(19, result.value);
   FREE_TEST_STATE();
 }
-
 MU_TEST(latest_and_execute) {
   INIT_TEST_STATE();
   OPEN_STREAM(": foobar 10 9 + ; latest execute");
@@ -356,7 +347,6 @@ MU_TEST(for_loop_modify_index) {
   FREE_TEST_STATE();
 }
 
-
 MU_TEST(for_loop_nested) {
   INIT_TEST_STATE();
   OPEN_STREAM("2 0 DO 3 0 DO I J LOOP LOOP");
@@ -382,9 +372,6 @@ MU_TEST(for_loop_leave) {
   mu_assert_double_eq(0, CellStackPop(&state.dataStack).value);
   FREE_TEST_STATE();
 }
-
-
-
 
 MU_TEST_SUITE(loop_tests) {
   MU_RUN_TEST(for_loop_basic);

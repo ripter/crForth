@@ -1,10 +1,7 @@
-#include <stdio.h>
 #include "../crForth.h"
 
 // ( -- )
 // Stops Compile Mode
-void SemiColon(KernelState *state, ForthWord *wordMeta) {
-  (void)wordMeta; // Unused
-  // Stop Compile Mode
+void SemiColon(KernelState *state) {
   state->IsInCompileMode = false;
 }

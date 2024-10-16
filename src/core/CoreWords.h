@@ -69,8 +69,8 @@ void LOOP(KernelState *state);
 // Helper functions
 //
 void DoForthString(KernelState *state, const char* branchName, const char* forthString);
-void DoForthDataString(KernelState *state, ForthWord *wordMeta);
-void DoForthStringAndReturnAddress(KernelState *state, ForthWord *wordMeta);
+void DoForthDataString(KernelState *state);
+void DoForthStringAndReturnAddress(KernelState *state);
 void Variable(KernelState* state, ForthWord *wordMeta);
 
 #endif // COREWORDS_H

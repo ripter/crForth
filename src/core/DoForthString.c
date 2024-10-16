@@ -9,17 +9,22 @@ void ExecuteForthString(KernelState *state, const char *branchWord, const char *
 
 // Runs a string as a Forth program using the given KernelState.
 void DoForthString(KernelState *state, const char* branchName, const char* forthString) {
+  // printf("DoForthString: %s\n", branchName);
   ExecuteForthString(state, branchName, forthString, false);
 }
 
 // Runs the data as a Forth program using the given KernelState.
-void DoForthDataString(KernelState *state, ForthWord *wordMeta) {
-  ExecuteForthString(state, wordMeta->name, wordMeta->data, false);
+void DoForthDataString(KernelState *state) {
+  ForthWord *word = GetItemFromDictionary(&state->dict, state->wordBuffer);
+  // printf("DoForthDataString: %s\n", word->name);
+  ExecuteForthString(state, word->name, word->data, false);
 }
 
 // Runs the data as a Forth program using the given KernelState.
-void DoForthStringAndReturnAddress(KernelState *state, ForthWord *wordMeta) {
-  ExecuteForthString(state, wordMeta->name, wordMeta->data, true);
+void DoForthStringAndReturnAddress(KernelState *state) {
+  ForthWord *word = GetItemFromDictionary(&state->dict, state->wordBuffer);
+  // printf("DoForthStringAndReturnAddress: %s\n", wordMeta->name);
+  ExecuteForthString(state, word->name, word->data, true);
 }
 
 
@@ -27,6 +32,11 @@ void DoForthStringAndReturnAddress(KernelState *state, ForthWord *wordMeta) {
 // Internal helper function that handles Forth string execution and optional return address.
 void ExecuteForthString(KernelState *state, const char *branchWord, const char *input, bool returnAddress) {
   char oldBranch[MAX_WORD_LENGTH];
+
+  if (TextLength(input) == 0) {
+    fprintf(state->errorStream, ERR_EMPTY_FORTH_STRING);
+    return;
+  }
 
   // Push the word "address" to the stack if needed.
   if (returnAddress) {

@@ -17,6 +17,7 @@
 #include "utils.h"
 #include "ErrorCodes.h"
 
+void PrintHeader(void);
 void DoForth(KernelState *state);
 bool GetNextWord(FILE* input, char* buffer, size_t bufferSize);
 bool IsWhitespace(char c);
