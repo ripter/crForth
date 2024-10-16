@@ -19,6 +19,7 @@
 
 void PrintHeader(void);
 void DoForth(KernelState *state);
+void RunForthString(KernelState *state, const char *forthString, cell_t length);
 bool GetNextWord(FILE* input, char* buffer, size_t bufferSize);
 bool IsWhitespace(char c);
 bool IsNumber(const char* word);

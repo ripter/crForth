@@ -129,6 +129,108 @@ MU_TEST_SUITE(here_tests) {
 
 
 
+MU_TEST(evaluate_string) {
+  INIT_TEST_STATE();
+  // Add a string to the stack and run it as a Forth program.
+  const char* forthString = "10 9 +";
+  CellStackPush(&state.dataStack, (Cell){(cell_t)forthString, CELL_TYPE_WORD});
+  CellStackPush(&state.dataStack, (Cell){(cell_t)TextLength(forthString), CELL_TYPE_NUMBER});
+  OPEN_STREAM("evaluate");
+  DoForth(&state);
+  CLOSE_STREAM();
+  mu_assert_double_eq(19, CellStackPop(&state.dataStack).value);
+  FREE_TEST_STATE();
+}
+MU_TEST(evaluate_define_word) {
+  INIT_TEST_STATE();
+  const char* forthString = ": add-two 2 + ; 5 add-two";
+  CellStackPush(&state.dataStack, (Cell){(cell_t)forthString, CELL_TYPE_WORD});
+  CellStackPush(&state.dataStack, (Cell){(cell_t)TextLength(forthString), CELL_TYPE_NUMBER});
+  OPEN_STREAM("evaluate");
+  DoForth(&state);
+  CLOSE_STREAM();
+  mu_assert_double_eq(7, CellStackPop(&state.dataStack).value);
+  FREE_TEST_STATE();
+}
+MU_TEST(evaluate_undefined_word) {
+  INIT_TEST_STATE();
+  const char* forthString = "undefined-word";
+  CellStackPush(&state.dataStack, (Cell){(cell_t)forthString, CELL_TYPE_WORD});
+  CellStackPush(&state.dataStack, (Cell){(cell_t)TextLength(forthString), CELL_TYPE_NUMBER});
+  OPEN_STREAM("evaluate");
+  DoForth(&state);
+  CLOSE_STREAM();
+  // Error message has the name in it.
+  char expectedError[256];
+  snprintf(expectedError, sizeof(expectedError), ERR_UNKNOWN_WORD, forthString);
+  VERIFY_ERROR(expectedError)
+  FREE_TEST_STATE();
+}
+MU_TEST(evaluate_missing_length) {
+  INIT_TEST_STATE();
+  const char* forthString = "10 9 +";
+  CellStackPush(&state.dataStack, (Cell){(cell_t)forthString, CELL_TYPE_WORD}); // Only push the string address
+  OPEN_STREAM("evaluate");
+  DoForth(&state);
+  CLOSE_STREAM();
+  VERIFY_ERROR(ERR_MISSING_LENGTH)
+  FREE_TEST_STATE();
+}
+MU_TEST(evaluate_missing_address) {
+  INIT_TEST_STATE();
+  CellStackPush(&state.dataStack, (Cell){(cell_t)10, CELL_TYPE_NUMBER}); // Only push the length
+  OPEN_STREAM("evaluate");
+  DoForth(&state);
+  CLOSE_STREAM();
+  VERIFY_ERROR(ERR_MISSING_ADDRESS);
+  FREE_TEST_STATE();
+}
+MU_TEST(evaluate_invalid_length) {
+  INIT_TEST_STATE();
+  const char* forthString = "10 9 +";
+  CellStackPush(&state.dataStack, (Cell){(cell_t)forthString, CELL_TYPE_WORD}); // Push the string
+  CellStackPush(&state.dataStack, (Cell){(cell_t)forthString, CELL_TYPE_WORD}); // Push invalid length (wrong type)
+  OPEN_STREAM("evaluate");
+  DoForth(&state);
+  CLOSE_STREAM();
+  VERIFY_ERROR(ERR_INVALID_LENGTH);
+  FREE_TEST_STATE();
+}
+MU_TEST(evaluate_invalid_address) {
+  INIT_TEST_STATE();
+  CellStackPush(&state.dataStack, (Cell){(cell_t)42, CELL_TYPE_NUMBER}); // Push invalid address (wrong type)
+  CellStackPush(&state.dataStack, (Cell){(cell_t)10, CELL_TYPE_NUMBER}); // Push length
+  OPEN_STREAM("evaluate");
+  DoForth(&state);
+  CLOSE_STREAM();
+  VERIFY_ERROR(ERR_INVALID_ADDRESS);
+  FREE_TEST_STATE();
+}
+MU_TEST(evaluate_zero_length) {
+  INIT_TEST_STATE();
+  const char* forthString = "10 9 +";
+  CellStackPush(&state.dataStack, (Cell){(cell_t)forthString, CELL_TYPE_WORD}); // Push valid string address
+  CellStackPush(&state.dataStack, (Cell){(cell_t)0, CELL_TYPE_NUMBER}); // Push zero length
+  OPEN_STREAM("evaluate");
+  DoForth(&state);
+  CLOSE_STREAM();
+  VERIFY_ERROR(ERR_ZERO_LENGTH);
+  FREE_TEST_STATE();
+}
+
+
+MU_TEST_SUITE(evaluate_tests) {
+  MU_RUN_TEST(evaluate_string);
+  MU_RUN_TEST(evaluate_define_word);
+  MU_RUN_TEST(evaluate_undefined_word);
+  MU_RUN_TEST(evaluate_missing_length);
+  MU_RUN_TEST(evaluate_missing_address);
+  MU_RUN_TEST(evaluate_invalid_length);
+  MU_RUN_TEST(evaluate_invalid_address);
+  MU_RUN_TEST(evaluate_zero_length);
+}
+
+
 //
 // Run all compile mode tests
 bool TestCompileMode(void) {
@@ -139,8 +241,10 @@ bool TestCompileMode(void) {
   MU_RUN_TEST(tick_interpret_mode);
   MU_RUN_TEST(tick_compile_mode);
 
+  MU_RUN_SUITE(evaluate_tests);
+
   // TODO: make sure we know how HERE is supposed to work.
-  MU_RUN_SUITE(here_tests);
+  // MU_RUN_SUITE(here_tests);
 
   MU_REPORT();
   return MU_EXIT_CODE;

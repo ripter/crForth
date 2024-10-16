@@ -55,4 +55,5 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, InitWordMetadata("do",        (xt_func_ptr)DO,            true,   NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("i",         (xt_func_ptr)I,             false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("loop",      (xt_func_ptr)LOOP,          true,   NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("evaluate",  (xt_func_ptr)Evaluate,      false,  NULL));
 }

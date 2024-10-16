@@ -47,12 +47,12 @@ void DoForth(KernelState *state) {
           CellStackPush(&state->dataStack, (Cell){num, CELL_TYPE_NUMBER});
         } else {
           // Handle the error: word is not a valid number
-          fprintf(stderr, "Error: Invalid number '%s'.\n", state->wordBuffer);
+          fprintf(state->errorStream, ERR_INVALID_NUMBER, state->wordBuffer);
         }
       }
       // Else, unknown word.
       else {
-        printf(" Unknown word: %s\n", state->wordBuffer);
+        fprintf(state->errorStream, ERR_UNKNOWN_WORD, state->wordBuffer);
       }
     }
   }

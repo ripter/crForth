@@ -63,6 +63,7 @@ void THEN(KernelState *state);
 void DO(KernelState *state);
 void I(KernelState *state);
 void LOOP(KernelState *state);
+void Evaluate(KernelState* state);
 
 
 //
