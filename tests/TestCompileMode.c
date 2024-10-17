@@ -83,48 +83,50 @@ MU_TEST(tick_compile_mode) {
 
 //
 // ********** HERE **********
-// Does the word HERE return a valid address?
-MU_TEST(here_inside_word_returns_valid_address) {
-  INIT_TEST_STATE();
-  OPEN_STREAM(": foobar here ; foobar");
-  DoForth(&state);
-  CLOSE_STREAM();
-
-  mu_check(CellStackSize(&state.dataStack) == 1);
-  Cell result = CellStackPop(&state.dataStack);
-  mu_check(result.type == CELL_TYPE_ADDRESS);
-  mu_check(result.value != 0);  // Ensure HERE returns a valid address
-  FREE_TEST_STATE();
-}
-MU_TEST(test_here_word) {
-  INIT_TEST_STATE();
-  OPEN_STREAM("here");
-  DoForth(&state);
-  CLOSE_STREAM();
-
-  mu_check(CellStackSize(&state.dataStack) == 1);
-  Cell result = CellStackPop(&state.dataStack);
-  mu_check(result.type == CELL_TYPE_ADDRESS);
-  mu_check(result.value != 0);  // Ensure HERE returns a valid address
-  FREE_TEST_STATE();
-}
 // Test for HERE word after ALLOT
-MU_TEST(test_here_after_allot) {
+MU_TEST(here_allot_allocates_space) {
   INIT_TEST_STATE();
-  OPEN_STREAM("here 10 allot here swap -");
+  ForthWord *here = GetItemFromDictionary(&state.dict, HERE_BUFFER_NAME);
+  OPEN_STREAM("here 10 allot allot-size");
   DoForth(&state);
   CLOSE_STREAM();
+  mu_assert_double_eq(1, CellStackSize(&state.dataStack));
+  Cell resultSize = CellStackPop(&state.dataStack);
+  mu_assert_double_eq(10, resultSize.value);
+  FREE_TEST_STATE();
+}
 
-  mu_check(CellStackSize(&state.dataStack) == 1);
-  Cell result = CellStackPop(&state.dataStack);
-  mu_assert_double_eq(10, result.value);  // Difference should be 10 after allotting
+MU_TEST(here_multiple_calls_return_same_address) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("here here here");
+  DoForth(&state);
+  CLOSE_STREAM();
+  // Three calls to HERE should return the same address since CREATE has never been called.
+  mu_assert_double_eq(3, CellStackSize(&state.dataStack));
+  Cell result1 = CellStackPop(&state.dataStack);
+  Cell result2 = CellStackPop(&state.dataStack);
+  Cell result3 = CellStackPop(&state.dataStack);
+  mu_assert_double_eq(result1.value, result2.value);
+  mu_assert_double_eq(result2.value, result3.value);
+  FREE_TEST_STATE();
+}
+MU_TEST(here_create_update_here_to_new_address) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("here create foobar here");
+  DoForth(&state);
+  CLOSE_STREAM();
+  // The second call to HERE should return a different address since CREATE has been called.
+  mu_assert_double_eq(2, CellStackSize(&state.dataStack));
+  Cell result1 = CellStackPop(&state.dataStack);
+  Cell result2 = CellStackPop(&state.dataStack);
+  mu_check(result1.value != result2.value);
   FREE_TEST_STATE();
 }
 
 MU_TEST_SUITE(here_tests) {
-  MU_RUN_TEST(here_inside_word_returns_valid_address);
-  MU_RUN_TEST(test_here_word);
-  MU_RUN_TEST(test_here_after_allot);
+  MU_RUN_TEST(here_multiple_calls_return_same_address);
+  MU_RUN_TEST(here_create_update_here_to_new_address);
+  MU_RUN_TEST(here_allot_allocates_space);
 }
 
 
@@ -241,7 +243,7 @@ MU_TEST_SUITE(evaluate_tests) {
   MU_RUN_TEST(evaluate_missing_length);
   MU_RUN_TEST(evaluate_missing_address);
   MU_RUN_TEST(evaluate_invalid_length_type);
-  // MU_RUN_TEST(evaluate_invalid_length_value);
+  MU_RUN_TEST(evaluate_invalid_length_value);
   MU_RUN_TEST(evaluate_invalid_address);
   MU_RUN_TEST(evaluate_zero_length);
 }
@@ -259,8 +261,7 @@ bool TestCompileMode(void) {
   MU_RUN_TEST(tick_compile_mode);
   MU_RUN_SUITE(evaluate_tests);
 
-  // TODO: make sure we know how HERE is supposed to work.
-  // MU_RUN_SUITE(here_tests);
+  MU_RUN_SUITE(here_tests);
 
   MU_REPORT();
   return MU_EXIT_CODE;

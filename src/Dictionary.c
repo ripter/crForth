@@ -38,7 +38,6 @@ bool AddWordToDictionary(Dictionary *dict, ForthWord wordMeta) {
   return true;                        // Success
 }
 
-
 // Remove an item from the dictionary
 bool RemoveItemFromDictionary(Dictionary *dict, const char *key) {
   khint_t k = kh_get(dict, dict->map, key); // Find key
@@ -79,6 +78,33 @@ bool SetItemInDictionary(Dictionary *dict, const char *key, ForthWord wordMeta) 
   return false; // Key not found
 }
 
+// Rename a key in the dictionary
+bool RenameItemInDictionary(Dictionary *dict, const char *oldKey, const char *newKey) {
+  int ret;
+  khiter_t k;
+
+  // Check if the old key exists
+  k = kh_get(dict, dict->map, oldKey);
+  if (k == kh_end(dict->map)) {
+    return false; // Old key not found
+  }
+
+  // Get the value associated with the old key
+  ForthWord value = kh_value(dict->map, k);
+
+  // Add the new key with the value
+  k = kh_put(dict, dict->map, newKey, &ret);
+  if (ret == -1) {
+    return false; // Failed to insert new key
+  }
+  kh_value(dict->map, k) = value;
+
+  // Remove the old key
+  k = kh_get(dict, dict->map, oldKey);
+  kh_del(dict, dict->map, k);
+
+  return true; // Rename was successful
+}
 
 // Print all the keys in the dictionary
 void GetKeysInDictionary(Dictionary *dict) {
@@ -90,9 +116,11 @@ void GetKeysInDictionary(Dictionary *dict) {
   }
 }
 
+// Returns the last item added to the dictionary
 ForthWord* GetLastItemFromDictionary(Dictionary *dict) {
   if (dict->lastKey != NULL) {
     return GetItemFromDictionary(dict, dict->lastKey);
   }
   return NULL; // No last item exists
 }
+

@@ -4,6 +4,7 @@
 : R@ r> dup >r ;
 : 2>R >r >r ;
 : 2R> r> r> ;
+: 2drop drop drop ;
 
 
 

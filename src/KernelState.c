@@ -15,7 +15,7 @@ void InitKernelState(KernelState *state) {
   state->outputStream = NULL;
   state->errorStream = NULL;
   state->wordBuffer[0] = '\0';
-  state->branchBuffer[0] = '\0';
+  // state->branchBuffer[0] = '\0';
 }
 
 
@@ -33,5 +33,5 @@ void FreeKernelState(KernelState *state) {
   state->outputStream = NULL;
   state->errorStream = NULL;
   state->wordBuffer[0] = '\0';
-  state->branchBuffer[0] = '\0';
+  // state->branchBuffer[0] = '\0';
 }

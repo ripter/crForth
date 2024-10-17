@@ -18,11 +18,13 @@ void InitDictionary(Dictionary *dict);
 void FreeDictionary(Dictionary *dict);
 bool AddItemToDictionary(Dictionary *dict, const char *key, ForthWord meta);
 bool AddWordToDictionary(Dictionary *dict, ForthWord wordMeta);
-bool RemoveItemFromDictionary(Dictionary *dict, const char *key);
 bool HasItemInDictionary(Dictionary *dict, const char *key);
-ForthWord* GetItemFromDictionary(Dictionary *dict, const char *key);
+bool RemoveItemFromDictionary(Dictionary *dict, const char *key);
+bool RenameItemInDictionary(Dictionary *dict, const char *oldKey, const char *newKey);
 bool SetItemInDictionary(Dictionary *dict, const char *key, ForthWord meta);
-void GetKeysInDictionary(Dictionary *dict);
+ForthWord* GetItemFromDictionary(Dictionary *dict, const char *key);
 ForthWord* GetLastItemFromDictionary(Dictionary *dict);
+void GetKeysInDictionary(Dictionary *dict);
+
 
 #endif // DICTIONARY_H

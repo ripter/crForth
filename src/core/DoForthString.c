@@ -31,7 +31,7 @@ void DoForthStringAndReturnAddress(KernelState *state) {
 
 // Internal helper function that handles Forth string execution and optional return address.
 void ExecuteForthString(KernelState *state, const char *branchWord, const char *input, bool returnAddress) {
-  char oldBranch[MAX_WORD_LENGTH];
+  // char oldBranch[MAX_WORD_LENGTH];
 
   if (TextLength(input) == 0) {
     fprintf(state->errorStream, ERR_EMPTY_FORTH_STRING);
@@ -49,14 +49,14 @@ void ExecuteForthString(KernelState *state, const char *branchWord, const char *
   state->inputStream = inputStream;
 
   // Save the branch word so it can be used in the Forth program.
-  TextCopy(oldBranch, state->branchBuffer);
-  TextCopy(state->branchBuffer, branchWord);
+  // TextCopy(oldBranch, state->branchBuffer);
+  // TextCopy(state->branchBuffer, branchWord);
 
   // Run the Forth system with the new stream.
   DoForth(state);
 
   // Restore the branch word.
-  TextCopy(state->branchBuffer, oldBranch);
+  // TextCopy(state->branchBuffer, oldBranch);
 
   // Close the stream and restore the original stream.
   state->inputStream = originalInputStream;

@@ -3,19 +3,14 @@
 #include "CoreWords.h"
 
 // ( "<spaces>name" -- ) ( R: -- a-addr ) 
-// Creates a new word in the dictionary with the given name.
+// Names the unanmed word pointed to by HERE.
 // https://forth-standard.org/standard/core/CREATE
 void Create(KernelState *state) {
   // Get the name of the new word.
   char newName[MAX_WORD_LENGTH];
   GetNextWord(state->inputStream, newName, MAX_WORD_LENGTH);
-  // Reserve 1 cell of variable space for the new word.
-  char* newWordData = (char*)MemAlloc(sizeof(cell_t));
-  // Create a new WordMeta for the newly created word.
-  ForthWord newWordMeta = InitWordMetadata(newName, (xt_func_ptr)Variable, false, newWordData);
-  // Add the new word to the dictionary.
-  AddWordToDictionary(&state->dict, newWordMeta);
-  // Push the "address" of the new word onto the stack.
-  char *name = newWordMeta.name;
-  CellStackPush(&state->returnStack, (Cell){(cell_t)name, CELL_TYPE_WORD});
+  // Reanme the HERE buffer to the new name.
+  if (!RenameItemInDictionary(&state->dict, HERE_BUFFER_NAME, newName)) {
+    fprintf(state->errorStream, "Error: Unable to rename HERE buffer to %s\n", newName);
+  }
 }

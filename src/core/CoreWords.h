@@ -4,6 +4,8 @@
 #include "../KernelState.h"
 #include "../ForthWord.h"
 
+#define HERE_BUFFER_NAME  "__HERE_BUFFER_NAME__"
+
 // Adds all of the core words to the dictionary.
 void AddCoreWords(KernelState *state);
 
@@ -64,6 +66,8 @@ void DO(KernelState *state);
 void I(KernelState *state);
 void LOOP(KernelState *state);
 void Evaluate(KernelState* state);
+void Allot(KernelState* state);
+void AllocatedSize(KernelState *state);
 
 
 //
