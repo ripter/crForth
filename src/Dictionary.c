@@ -91,6 +91,8 @@ bool RenameItemInDictionary(Dictionary *dict, const char *oldKey, const char *ne
 
   // Get the value associated with the old key
   ForthWord value = kh_value(dict->map, k);
+  // Update the internal name to the new key
+  value.name = (char *)newKey;
 
   // Add the new key with the value
   k = kh_put(dict, dict->map, newKey, &ret);

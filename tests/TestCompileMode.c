@@ -95,7 +95,6 @@ MU_TEST(here_allot_allocates_space) {
   mu_assert_double_eq(10, resultSize.value);
   FREE_TEST_STATE();
 }
-
 MU_TEST(here_multiple_calls_return_same_address) {
   INIT_TEST_STATE();
   OPEN_STREAM("here here here");

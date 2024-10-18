@@ -3,6 +3,7 @@
 #include "raylib.h"
 
 #include "../crForth.h"
+#include "CoreWords.h"
 
 // ( "<spaces>name" -- ) 
 // Display the definition of the word with the given name.
@@ -23,8 +24,20 @@ void See(KernelState* state) {
     printf("Word not found in dictionary: '%s'\n", wordName);
     return;
   }
+  // Is is a Variable?
+  if (meta->func == (xt_func_ptr)Variable) {
+    printf("Variable<%ld>: %s\n", meta->dataBufferLength, meta->name);
+    return;
+  }
+  // Is it HERE?
+  if (meta->func == (xt_func_ptr)Here) {
+    // Get the HERE buffer instead of the HERE word.
+    meta = GetItemFromDictionary(&state->dict, HERE_BUFFER_NAME);
+    printf("HERE<%ld>: %s\n", meta->dataBufferLength, meta->data);
+    return;
+  }
   // If the word is implemented in C, display a message.
-  if (meta->data == NULL) {
+  if (meta->dataBufferLength == 0) {
     printf("Word '%s' is implemented in C.\n", meta->name);
     return;
   }

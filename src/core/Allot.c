@@ -11,8 +11,13 @@ void Allot(KernelState* state) {
   // Attempt to get the address of the HERE temporary buffer.
   ForthWord *here = GetItemFromDictionary(&state->dict, HERE_BUFFER_NAME);
   if (here == NULL) {
-    fprintf(state->errorStream, "Error: HERE buffer not found. Please call it before calling ALLOT.\n");
-    return;
+    // Create the buffer word.
+    if (!AddWordToDictionary(&state->dict, InitWordMetadata(HERE_BUFFER_NAME, (xt_func_ptr)Variable, false, NULL))) {
+      fprintf(state->errorStream, "Error: Unable to allot HERE buffer.\n");
+      return;
+    }
+    // Get the new buffer.
+    here = GetItemFromDictionary(&state->dict, HERE_BUFFER_NAME);
   }
   // Get the value on the stack.
   Cell n = CellStackPop(&state->dataStack);
@@ -39,5 +44,6 @@ void Allot(KernelState* state) {
     fprintf(state->errorStream, "Error: Unable to change alloted memory from %ld to %ld.\n", here->dataBufferLength, newSize);
   } else {
     here->dataBufferLength = newSize;
+    // printf("Allocated %ld bytes of memory.\n", n.value);
   }
 }
