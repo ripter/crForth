@@ -366,7 +366,7 @@ MU_TEST(for_loop_leave) {
   OPEN_STREAM("5 0 DO I 3 = IF LEAVE THEN I LOOP");
   DoForth(&state);
   CLOSE_STREAM();
-  mu_assert_double_eq(4, CellStackSize(&state.dataStack));
+  mu_assert_double_eq(3, CellStackSize(&state.dataStack));
   mu_assert_double_eq(2, CellStackPop(&state.dataStack).value);
   mu_assert_double_eq(1, CellStackPop(&state.dataStack).value);
   mu_assert_double_eq(0, CellStackPop(&state.dataStack).value);

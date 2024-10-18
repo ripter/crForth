@@ -68,6 +68,7 @@ void LOOP(KernelState *state);
 void Evaluate(KernelState* state);
 void Allot(KernelState* state);
 void AllocatedSize(KernelState *state);
+void Leave(KernelState *state);
 
 
 //

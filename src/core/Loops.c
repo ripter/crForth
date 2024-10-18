@@ -66,3 +66,16 @@ void LOOP(KernelState *state) {
   // Run Loop again.
   LOOP(state);
 }
+
+
+// ( -- )
+// Exit the current loop.
+// https://forth-standard.org/standard/core/LEAVE
+void Leave(KernelState *state) {
+  // Stop compiling
+  state->IsInCompileMode = false;
+  // Pop the loop control parameters from the return stack.
+  (void)CellStackPop(&state->returnStack);
+  (void)CellStackPop(&state->returnStack);
+}
+

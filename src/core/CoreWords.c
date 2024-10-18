@@ -58,4 +58,5 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, InitWordMetadata("evaluate",        (xt_func_ptr)Evaluate,      false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("allot",           (xt_func_ptr)Allot,         false,  NULL));
   AddWordToDictionary(&state->dict, InitWordMetadata("allot-size",      (xt_func_ptr)AllocatedSize, false,  NULL));
+  AddWordToDictionary(&state->dict, InitWordMetadata("leave",           (xt_func_ptr)Leave,         false,  NULL));
 }
