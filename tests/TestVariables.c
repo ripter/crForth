@@ -109,23 +109,6 @@ MU_TEST(create_and_does) {
   FreeKernelState(&state);
 }
 
-MU_TEST(create_pushes_address_to_stack) {
-  KernelState state = {0};
-  InitKernelState(&state);
-  AddCoreWords(&state);
-
-  OPEN_STREAM("create foobar");
-  DoForth(&state);
-  CLOSE_STREAM();
-
-  // The "address" of the new word's data buffer should be on the return stack
-  // becuase this is a streaming kernel, the address is the word itself.
-  Cell stackAddr = CellStackPop(&state.returnStack);
-  mu_assert_string_eq("foobar", (char *)stackAddr.value);
-
-  FreeKernelState(&state);
-}
-
 //
 // Run all the Tests
 //
@@ -137,7 +120,6 @@ bool TestVariables(void) {
   MU_RUN_TEST(create_empty_stack);
   MU_RUN_TEST(create_multiple_words);
   MU_RUN_TEST(create_and_does);
-  MU_RUN_TEST(create_pushes_address_to_stack);
 
   MU_REPORT();
   return MU_EXIT_CODE;

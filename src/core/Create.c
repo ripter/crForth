@@ -2,8 +2,10 @@
 #include "../crForth.h"
 #include "CoreWords.h"
 
-// ( "<spaces>name" -- ) ( R: -- a-addr ) 
-// Names the unanmed word pointed to by HERE.
+// ( "<spaces>name" -- ) 
+// Creates a Variable in the dictionary as name.
+// If there is data in the HERE buffer, it will be the value of the variable.
+// Variables return their address when called.
 // https://forth-standard.org/standard/core/CREATE
 void Create(KernelState *state) {
   // Get the name of the new word.

@@ -91,15 +91,15 @@ bool RenameItemInDictionary(Dictionary *dict, const char *oldKey, const char *ne
 
   // Get the value associated with the old key
   ForthWord value = kh_value(dict->map, k);
-  // Update the internal name to the new key
-  value.name = (char *)newKey;
+  // Create a new value with the updated internal name
+  ForthWord newValue = InitWordMetadata(newKey, value.func, value.isImmediate, value.data);
 
   // Add the new key with the value
   k = kh_put(dict, dict->map, newKey, &ret);
   if (ret == -1) {
     return false; // Failed to insert new key
   }
-  kh_value(dict->map, k) = value;
+  kh_value(dict->map, k) = newValue;
 
   // Remove the old key
   k = kh_get(dict, dict->map, oldKey);
