@@ -8,11 +8,11 @@
 
 
 
-: test
-  5 0 DO 
-    I . 
-  LOOP
-;
+\ : test
+\   5 0 DO 
+\     I . 
+\   LOOP
+\ ;
 
 \ : BEGIN
 \   here 2>r

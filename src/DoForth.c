@@ -15,6 +15,10 @@ void DoForth(KernelState *state) {
     if (TextIsEqual(state->wordBuffer, "bye")) {
       break;
     }
+    if (TextIsEqual(state->wordBuffer, "'bye'")) {
+      fprintf(state->outputStream, "'Goodbye!'\n");
+      break;
+    }
     //
     // Compile Mode
     if (state->IsInCompileMode) {
