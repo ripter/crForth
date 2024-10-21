@@ -13,7 +13,7 @@ ForthWord InitWordMetadata(const char *name, xt_func_ptr func, bool isImmediate,
   size_t nameLength = TextLength(name) + 1; // +1 for the null terminator
   meta.name = (char *)MemAlloc(nameLength);
   if (meta.name == NULL) {
-    // Handle allocation failure (optional)
+    // Handle allocation failure
   } else {
     strcpy(meta.name, name);
   }

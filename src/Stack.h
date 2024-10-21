@@ -11,6 +11,7 @@ typedef enum {
   CELL_TYPE_ADDRESS,
   CELL_TYPE_BOOL,
   CELL_TYPE_VARIABLE,
+  CELL_TYPE_DOSYS,
 } CellType;
 
 // Define the type for the cell, the basic data type for the stack.

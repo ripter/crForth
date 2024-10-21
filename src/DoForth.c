@@ -3,6 +3,7 @@
 #include "crForth.h"
 #include "./core/CoreWords.h"
 
+// This is the main entry point for the Forth interpreter.
 // Runs the Forth Kernel using the given KernelState and input stream.
 void DoForth(KernelState *state) {
   ForthWord* wordMeta; // Metadata for the current word.

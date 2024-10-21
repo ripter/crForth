@@ -6,6 +6,12 @@
 
 #define HERE_BUFFER_NAME  "__HERE_BUFFER_NAME__"
 
+typedef struct {
+  cell_t limit;
+  cell_t index;
+  char* loopSrc;
+} DoSys;
+
 // Adds all of the core words to the dictionary.
 void AddCoreWords(KernelState *state);
 

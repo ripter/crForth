@@ -6,6 +6,8 @@
 // If flag is false, skip until THEN or ELSE. 
 // https://forth-standard.org/standard/core/IF
 void IF(KernelState *state) {
+  // printf("IF: Start\n");
+  // DotS(state);
   char word[MAX_WORD_LENGTH];
   Cell flag = CellStackPop(&state->dataStack);
   // Push the flag to the return stack so ELSE and THEN can use it.
@@ -24,6 +26,9 @@ void IF(KernelState *state) {
       }
     }
   }
+
+  // printf("IF: END\n");
+  // DotS(state);
 }
 
 // ( R: flag -- )
