@@ -1,5 +1,5 @@
 #include <stdbool.h>
-#include "raylib.h"
+#include <raylib.h>
 #include "./libs/klib/kvec.h"
 #include "Stack.h"
 
@@ -42,3 +42,14 @@ Cell CellStackPeek(CellStack *stack, size_t index) {
     return (Cell){0}; /* Return zero-initialized value */
   }
 }
+
+const char *CellTypeToName(CellType cellType) {
+  switch (cellType) {
+  #define X(name) case CELL_TYPE_##name: return #name;
+    CELL_TYPE_LIST
+  #undef X
+  default:
+    return "UNKNOWN";
+  }
+}
+

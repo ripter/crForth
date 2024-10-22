@@ -54,7 +54,9 @@ void ELSE(KernelState *state) {
 // Completes the IF/ELSE words.
 // https://forth-standard.org/standard/core/THEN
 void THEN(KernelState *state) {
+  // Remove the flag from the return stack.
   // Pop the flag value off the stack.
+  printf("THEN: Popping flag off the return stack\n");
   (void)CellStackPop(&state->returnStack);
 }
 

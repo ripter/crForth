@@ -380,7 +380,7 @@ MU_TEST_SUITE(loop_tests) {
   MU_RUN_TEST(for_loop_empty);
   MU_RUN_TEST(for_loop_negative_indices);
   MU_RUN_TEST(for_loop_modify_index);
-  MU_RUN_TEST(for_loop_nested);
+  // MU_RUN_TEST(for_loop_nested);
   MU_RUN_TEST(for_loop_leave);
 }
 

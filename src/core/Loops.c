@@ -33,72 +33,28 @@ void DO(KernelState *state) {
 // n is a copy of the current (innermost) loop index.
 // https://forth-standard.org/standard/core/I
 void I(KernelState *state) {
-  Cell cellDoSys = CellStackPop(&state->returnStack);
-  CellStackPush(&state->returnStack, cellDoSys);
-  DoSys *doSys = (DoSys *)cellDoSys.value;
+  if (CellStackSize(&state->returnStack) == 0) {
+    fprintf(state->errorStream, "\nI: found empty return stack, nothing to do.\n");
+    return;
+  }
+
+  printf("I popping return stack\n");
+  Cell cell = CellStackPop(&state->returnStack);
+  CellStackPush(&state->returnStack, cell);
+
+  // printf("I: Popped Cell: %d\t%ld\n", cell.type, cell.value);
+  if (cell.type != CELL_TYPE_DOSYS) {
+    fprintf(state->errorStream, "\nExpected a DoSys struct on the return stack, but got \"%d\".\n", cell.type);
+    return;
+  }
+
+  DoSys *doSys = (DoSys *)cell.value;
   CellStackPush(&state->dataStack, (Cell){doSys->index, CELL_TYPE_NUMBER});
 }
 
-
+// (R: do-sys -- )
+// Runs the loop body until the index is equal to or greater than the limit.
 // https://forth-standard.org/standard/core/LOOP
-void LOOP_OG(KernelState *state) {
-  // Stop compiling
-  state->IsInCompileMode = false;
-
-  // Pop the loop control parameters from the return stack.
-  Cell index = CellStackPop(&state->returnStack);
-  Cell limit = CellStackPop(&state->returnStack);
-  // printf("LOOP:\tlimit: %ld\tindex: %ld\n", limit.value, index.value);
-
-  // Check if the loop is done.
-  if (index.value >= limit.value) {
-    // printf("LOOP: Done\n");
-    // Nothing left to do, return.
-    return;
-  }
-  // printf("LOOP: Running loop body\n");
-  // Put the limit and index back on the return stack for the loop body.
-  CellStackPush(&state->returnStack, limit);
-  CellStackPush(&state->returnStack, index);
-  // Run the loop body again.
-  RunForthWord(state, "loop-i-body");
-
-  // Increment the index and push it back onto the return stack.
-  // printf("LOOP: Incrementing index\n");
-  limit = CellStackPop(&state->returnStack);
-  CellStackPush(&state->returnStack, (Cell){index.value + 1, CELL_TYPE_NUMBER});
-  // CellStackPush(&state->returnStack, limit);
-  // printf("LOOP: Repeat\n");
-  // Run Loop again.
-  LOOP_OG(state);
-}
-
-void LOOP3(KernelState *state) {
-  // Stop compiling
-  state->IsInCompileMode = false;
-
-  printf("Running LOOP\tReturnStack Size: %ld\n", CellStackSize(&state->returnStack));
-  // Run the loop body
-  RunForthWord(state, "loop-i-body");
-
-  // Get the loop control parameters from the return stack.
-  Cell index = CellStackPop(&state->returnStack);
-  Cell limit = CellStackPop(&state->returnStack);
-  printf("LOOP:\tlimit: %ld\tindex: %ld\n", limit.value, index.value);
-
-  // Can we exit the loop?
-  if (index.value >= limit.value) {
-    printf("LOOP: Done\n");
-    return;
-  }
-  printf("LOOP: Again\n");
-  // Increment the loop index and push it back onto the return stack.
-  CellStackPush(&state->returnStack, limit);
-  CellStackPush(&state->returnStack, (Cell){index.value + 1, CELL_TYPE_NUMBER});
-  // Run the loop again.
-  LOOP3(state);
-}
-
 void LOOP(KernelState *state) {
   // Stop compiling the loop body.
   state->IsInCompileMode = false;
@@ -124,25 +80,29 @@ void LOOP(KernelState *state) {
   while (doSys->index < doSys->limit) {
     // Run the loop body. This can update the doSys struct.
     RunForthString(state, doSys->loopSrc, TextLength(doSys->loopSrc));
+    // printf("LOOP Post thread run: index: %ld\tlimit: %ld\n", doSys->index, doSys->limit);
     // Increment the loop index.
     doSys->index += 1;
   }
 
+  printf("Loop Over!");
   // Free the loop body data.
   MemFree(doSys->loopSrc);
   MemFree(doSys);
 }
 
-// ( R: limit index -- limit' index' )
 // Exit the current loop.
+// This will also destroy any System structs on the return stack until it finds the DoSys struct.
 // https://forth-standard.org/standard/core/LEAVE
 void Leave(KernelState *state) {
   DoSys *doSys = NULL;
   bool foundDoSys = false;
   // printf("LEAVE\n");
-  Cell cell = {0, CELL_TYPE_NUMBER};
+  // Cell cell = {0, CELL_TYPE_NUMBER};
+  Cell cell;
 
   do {
+    // printf("\n\nStarting Leave Loop\n");
     // If there is nothing left on the stack, bail.
     if (IsCellStackEmpty(&state->returnStack)) {
       fprintf(state->errorStream, "LEAVE: No DoSys struct found on the return stack.\n");
@@ -150,6 +110,7 @@ void Leave(KernelState *state) {
     }
     // Find the DoSys struct on the return stack.
     cell = CellStackPop(&state->returnStack);
+    // printf("LEAVE: Popped Cell: %d\t%ld\n", cell.type, cell.value);
     if (cell.type == CELL_TYPE_DOSYS) {
       doSys = (DoSys *)cell.value;
       foundDoSys = true;
@@ -157,14 +118,18 @@ void Leave(KernelState *state) {
     // We can drop any values on the return stack until we find the DoSys struct.
     else {
       // TODO: cleanup based on the cell type.
+      // printf("LEAVE: Dropping cell type: %d\t%ld\n", cell.type, cell.value);
     }
-  } while (foundDoSys);
+  } while (foundDoSys == false);
 
   if (foundDoSys) {
+    // printf("LEAVE: Found DoSys struct. Setting index to %ld\n", doSys->limit - 1);
     // change the loop control parameters to exit the loop.
     doSys->index = doSys->limit - 1; // -1 because the loop will increment the index.
     // Push the Cell struct back onto the return stack.
     CellStackPush(&state->returnStack, cell);
+  } else {
+    printf("LEAVE: No DoSys struct was found on the return stack.\n");
   }
 }
 
