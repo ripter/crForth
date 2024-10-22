@@ -6,18 +6,18 @@
 // If flag is false, skip until THEN or ELSE. 
 // https://forth-standard.org/standard/core/IF
 void IF(KernelState *state) {
-  // printf("IF: Start\n");
-  // DotS(state);
   char word[MAX_WORD_LENGTH];
   Cell flag = CellStackPop(&state->dataStack);
+
+  // create the if-sys struct
+  IfSys *ifSys = MemAlloc(sizeof(IfSys));
+  ifSys->flag = flag.value;
   // Push the flag to the return stack so ELSE and THEN can use it.
-  CellStackPush(&state->returnStack, flag);
+  CellStackPush(&state->returnStack, (Cell){(cell_t)ifSys, CELL_TYPE_IFSYS});
 
   if (flag.value == FFALSE) {
-    // printf("IF: flag is false, skipping until ELSE or THEN\n");
     // Skip until ELSE or THEN
     while (GetNextWord(state->inputStream, word, MAX_WORD_LENGTH)) {
-      // printf("IF: skipping word: %s\n", word);
       if (TextIsEqual(word, "else") || TextIsEqual(word, "then")) {
         ForthWord *wordMeta = GetItemFromDictionary(&state->dict, word);
         // Run the else/then word and break out of the loop.
@@ -26,9 +26,6 @@ void IF(KernelState *state) {
       }
     }
   }
-
-  // printf("IF: END\n");
-  // DotS(state);
 }
 
 // ( R: flag -- )
@@ -36,9 +33,15 @@ void IF(KernelState *state) {
 // https://forth-standard.org/standard/core/ELSE
 void ELSE(KernelState *state) {
   char word[MAX_WORD_LENGTH];
-  Cell flag = CellStackPop(&state->returnStack);
-  CellStackPush(&state->returnStack, flag);
-  if (flag.value != FFALSE) {
+
+  Cell cell = CellStackPop(&state->returnStack);
+  CellStackPush(&state->returnStack, cell);
+  if (cell.type != CELL_TYPE_IFSYS) {
+    fprintf(state->errorStream, "ELSE: Expected a flag on the return stack, but got \"%s\".\n", CellTypeToName(cell.type));
+  }
+
+  IfSys *ifSys = (IfSys *)cell.value;
+  if (ifSys->flag != FFALSE) {
     // Skip until THEN
     while (GetNextWord(state->inputStream, word, MAX_WORD_LENGTH)) {
       if (TextIsEqual(word, "then")) {
@@ -55,8 +58,14 @@ void ELSE(KernelState *state) {
 // https://forth-standard.org/standard/core/THEN
 void THEN(KernelState *state) {
   // Remove the flag from the return stack.
-  // Pop the flag value off the stack.
-  printf("THEN: Popping flag off the return stack\n");
-  (void)CellStackPop(&state->returnStack);
+  Cell cell = CellStackPop(&state->returnStack);
+  if (cell.type != CELL_TYPE_IFSYS) {
+    // oops, something else might have borked our return value.
+    // put it back and bail.
+    CellStackPush(&state->returnStack, cell);
+    return;
+  }
+  // Free the IfSys struct.
+  MemFree((IfSys *)cell.value);
 }
 

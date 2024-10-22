@@ -38,16 +38,16 @@ void I(KernelState *state) {
     return;
   }
 
-  printf("I popping return stack\n");
+  // Get the DoSys struct from the return stack and put it back.
+  // Maybe in the future, we can just peek at the top of the stack.
   Cell cell = CellStackPop(&state->returnStack);
   CellStackPush(&state->returnStack, cell);
-
-  // printf("I: Popped Cell: %d\t%ld\n", cell.type, cell.value);
+  // Check if the top of the return stack is a DoSys struct.
   if (cell.type != CELL_TYPE_DOSYS) {
     fprintf(state->errorStream, "\nExpected a DoSys struct on the return stack, but got \"%d\".\n", cell.type);
     return;
   }
-
+  // Get the index from the DoSys struct and push it to the data stack.
   DoSys *doSys = (DoSys *)cell.value;
   CellStackPush(&state->dataStack, (Cell){doSys->index, CELL_TYPE_NUMBER});
 }
@@ -80,12 +80,12 @@ void LOOP(KernelState *state) {
   while (doSys->index < doSys->limit) {
     // Run the loop body. This can update the doSys struct.
     RunForthString(state, doSys->loopSrc, TextLength(doSys->loopSrc));
-    // printf("LOOP Post thread run: index: %ld\tlimit: %ld\n", doSys->index, doSys->limit);
     // Increment the loop index.
     doSys->index += 1;
   }
 
-  printf("Loop Over!");
+  // Pop the DoSys struct off the return stack.
+  cellDoSys = CellStackPop(&state->returnStack);
   // Free the loop body data.
   MemFree(doSys->loopSrc);
   MemFree(doSys);
@@ -97,12 +97,9 @@ void LOOP(KernelState *state) {
 void Leave(KernelState *state) {
   DoSys *doSys = NULL;
   bool foundDoSys = false;
-  // printf("LEAVE\n");
-  // Cell cell = {0, CELL_TYPE_NUMBER};
   Cell cell;
 
   do {
-    // printf("\n\nStarting Leave Loop\n");
     // If there is nothing left on the stack, bail.
     if (IsCellStackEmpty(&state->returnStack)) {
       fprintf(state->errorStream, "LEAVE: No DoSys struct found on the return stack.\n");
@@ -110,24 +107,24 @@ void Leave(KernelState *state) {
     }
     // Find the DoSys struct on the return stack.
     cell = CellStackPop(&state->returnStack);
-    // printf("LEAVE: Popped Cell: %d\t%ld\n", cell.type, cell.value);
     if (cell.type == CELL_TYPE_DOSYS) {
       doSys = (DoSys *)cell.value;
       foundDoSys = true;
     }
     // We can drop any values on the return stack until we find the DoSys struct.
     else {
-      // TODO: cleanup based on the cell type.
-      // printf("LEAVE: Dropping cell type: %d\t%ld\n", cell.type, cell.value);
+      // TODO: cleanup based on the cell type. Otherwise, we could leak memory.
+      printf("LEAVE: Dropping cell type: %d\t%ld\n", cell.type, cell.value);
     }
   } while (foundDoSys == false);
 
   if (foundDoSys) {
-    // printf("LEAVE: Found DoSys struct. Setting index to %ld\n", doSys->limit - 1);
     // change the loop control parameters to exit the loop.
     doSys->index = doSys->limit - 1; // -1 because the loop will increment the index.
     // Push the Cell struct back onto the return stack.
     CellStackPush(&state->returnStack, cell);
+    // Skip to the end
+    fseek(state->inputStream, 0, SEEK_END);
   } else {
     printf("LEAVE: No DoSys struct was found on the return stack.\n");
   }

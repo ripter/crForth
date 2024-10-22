@@ -12,7 +12,8 @@
   X(BOOL)                                                                      \
   X(ADDRESS)                                                                   \
   X(VARIABLE)                                                                  \
-  X(DOSYS)
+  X(DOSYS)                                                                     \
+  X(IFSYS)
 
 typedef enum {
   #define X(name) CELL_TYPE_##name,

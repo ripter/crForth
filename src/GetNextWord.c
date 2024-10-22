@@ -17,12 +17,9 @@ bool GetNextWord(FILE* input, char* buffer, size_t bufferSize) {
 
   // Loop until we reach the end of the file or a whitespace character
   while ((c = fgetc(input))) {
-    // Check for both types of EOF, break or error.
-    if ((c == EOF) && feof(input)) { break; } // End of file reached, handle like end of word.
-    if ((c == EOF) && ferror(input)) { 
-      fprintf(stderr, "\nError: reading from file\n"); 
-      return false; 
-    }
+    // There are a few reasons to reach the end of the file.
+    // we don't care about the difference between EOF and feof, just that we're done.
+    if (c == EOF) { break; }
     // Ignore leading whitespace, bail on trailing whitespace.
     if (IsWhitespace(c) && wordLength == 0) { continue; }
     if (IsWhitespace(c) && wordLength > 0) { break; }

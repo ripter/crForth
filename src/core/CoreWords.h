@@ -12,6 +12,10 @@ typedef struct {
   char* loopSrc;
 } DoSys;
 
+typedef struct {
+  cell_t flag;
+} IfSys;
+
 // Adds all of the core words to the dictionary.
 void AddCoreWords(KernelState *state);
 
