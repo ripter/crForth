@@ -16,7 +16,7 @@ void DoForthString(KernelState *state, const char* branchName, const char* forth
 // Runs the data as a Forth program using the given KernelState.
 void DoForthDataString(KernelState *state) {
   ForthWord *word = GetItemFromDictionary(&state->dict, state->wordBuffer);
-  // printf("DoForthDataString: %s\n", word->name);
+  printf("DoForthDataString: %s\n", word->name);
   ExecuteForthString(state, word->name, GetStringValue(word->data), false);
 }
 

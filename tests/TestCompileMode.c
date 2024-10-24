@@ -10,10 +10,8 @@
 
 MU_TEST(can_run_forth_from_dictionary) {
   INIT_TEST_STATE();
-
   // Add a forth script directly into the dictionary.
-  char *script = MemAlloc(100);
-  strcpy(script, "1 +");
+  String *script = CreateString("1 +");
   AddWordToDictionary(&state.dict, CreateForthWord("test++", (xt_func_ptr)DoForthDataString, false, script));
   OPEN_STREAM("4 test++");
   DoForth(&state);
@@ -24,6 +22,7 @@ MU_TEST(can_run_forth_from_dictionary) {
   // mu_assert_int_eq(result == 5, "test++ should add 1 to the top of the stack");
   mu_assert_int_eq(5, result.value);
 
+  FreeString(script);
   FREE_TEST_STATE();
 }
 

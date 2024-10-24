@@ -1,5 +1,5 @@
 #include <string.h>
-#include "raylib.h"
+#include <raylib.h>
 
 #include "crForth.h"
 
@@ -13,13 +13,17 @@ ForthWord CreateForthWord(const char *name, xt_func_ptr func, bool isImmediate, 
   size_t nameLength = TextLength(name) + 1; // +1 for the null terminator
   meta.name = (char *)MemAlloc(nameLength);
   if (meta.name == NULL) {
-    // Handle allocation failure
+    TraceLog(LOG_ERROR, "Failed to allocate memory for ForthWord name.");
   } else {
-    strcpy(meta.name, name);
+    TextCopy(meta.name, name);
   }
   meta.func = func;
   meta.isImmediate = isImmediate;
-  meta.data = CreateString(data);
+  if (data != NULL) {
+    meta.data = CreateString(data);
+  } else {
+    meta.data = NULL;
+  }
   return meta;
 }
 
