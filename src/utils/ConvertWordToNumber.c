@@ -3,7 +3,7 @@
 #include <inttypes.h>
 #include <stdbool.h>
 
-#include "crForth.h"
+#include "../crForth.h"
 
 // Converts a word to a number, storing the result in numPtr.
 // Returns true if the conversion was successful, false otherwise.
