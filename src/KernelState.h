@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "Dictionary.h"
 #include "Stack.h"
+#include "String.h"
 
 #define MAX_WORD_LENGTH 256 // This does NOT include space for the null terminator.
 
@@ -12,6 +13,7 @@ typedef struct {
   Dictionary dict;                    // The dictionary of Forth words.
   CellStack dataStack;                // The data stack.
   CellStack returnStack;              // The return stack.
+  String *compilePtr;                 // Pointer to the current compile buffer.
   bool IsInCompileMode;               // Are we in compile mode?
   char wordBuffer[MAX_WORD_LENGTH];   // Buffer for the current word being processed.
   FILE *inputStream;                  // The input stream for the Forth system.

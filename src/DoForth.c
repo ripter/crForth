@@ -33,8 +33,7 @@ void DoForth(KernelState *state) {
         }
       } 
       // If the word is not immediate, add it to the data string.
-      wordMeta = GetLastItemFromDictionary(&state->dict);
-      AppendStringToWordData(wordMeta, state->wordBuffer);
+      AppendToString(state->compilePtr, state->wordBuffer);
     }
     //
     // Interpret Mode

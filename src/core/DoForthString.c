@@ -17,14 +17,14 @@ void DoForthString(KernelState *state, const char* branchName, const char* forth
 void DoForthDataString(KernelState *state) {
   ForthWord *word = GetItemFromDictionary(&state->dict, state->wordBuffer);
   // printf("DoForthDataString: %s\n", word->name);
-  ExecuteForthString(state, word->name, word->data, false);
+  ExecuteForthString(state, word->name, GetStringValue(word->data), false);
 }
 
 // Runs the data as a Forth program using the given KernelState.
 void DoForthStringAndReturnAddress(KernelState *state) {
   ForthWord *word = GetItemFromDictionary(&state->dict, state->wordBuffer);
   // printf("DoForthStringAndReturnAddress: %s\n", wordMeta->name);
-  ExecuteForthString(state, word->name, word->data, true);
+  ExecuteForthString(state, word->name, GetStringValue(word->data), true);
 }
 
 

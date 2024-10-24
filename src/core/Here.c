@@ -13,7 +13,7 @@ void Here(KernelState *state) {
   if (here == NULL) {
     // Create the buffer word.
     // We don't need to allocate memory for the buffer yet, ALLOT or COLON will handle that.
-    if (!AddWordToDictionary(&state->dict, InitWordMetadata(HERE_BUFFER_NAME, (xt_func_ptr)Variable, false, NULL))) {
+    if (!AddWordToDictionary(&state->dict, CreateForthWord(HERE_BUFFER_NAME, (xt_func_ptr)Variable, false, NULL))) {
       fprintf(state->errorStream, "Error: Unable to create HERE buffer.\n");
       return;
     }

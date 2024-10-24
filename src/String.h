@@ -2,15 +2,17 @@
 #define STRING_H
 
 #include <stdlib.h>
-#include "kstring.h"
+#include "libs/klib/kstring.h"
 
-// Defining the String alias for kstring_t
+// A String, powered by kstring
 typedef kstring_t String;
 
 // Function to create a String
 String *CreateString(const char *value);
 // Function to free the String
 void FreeString(String *str);
+// Function to change the buffer size of the String
+void SetStringBufferLength(String *str, size_t new_length);
 
 // Function to append to the String
 void AppendToString(String *str, const char *suffix);

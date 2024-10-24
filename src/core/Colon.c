@@ -13,7 +13,7 @@ void Colon(KernelState *state) {
   // Create a text buffter to hold the word definition.
   char* wordDef = (char *)MemAlloc(MAX_WORD_LENGTH);
   // Create a new WordMeta for the newly created word.
-  ForthWord newWordMeta = InitWordMetadata(newName, (xt_func_ptr)DoForthDataString, false, wordDef);
+  ForthWord newWordMeta = CreateForthWord(newName, (xt_func_ptr)DoForthDataString, false, wordDef);
   // Add the new word to the dictionary.
   AddWordToDictionary(&state->dict, newWordMeta);
   // Start Compile Mode

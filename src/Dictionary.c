@@ -18,7 +18,7 @@ void FreeDictionary(Dictionary *dict) {
     for (k = kh_begin(dict->map); k != kh_end(dict->map); ++k) {
       if (kh_exist(dict->map, k)) {
         ForthWord *metadata = &kh_value(dict->map, k);
-        FreeWordMetadata(metadata);   // Free the ForthWord
+        FreeForthWord(metadata);   // Free the ForthWord
       }
     }
     kh_destroy(dict, dict->map); // Destroy the khash map
@@ -43,7 +43,7 @@ bool RemoveItemFromDictionary(Dictionary *dict, const char *key) {
   khint_t k = kh_get(dict, dict->map, key); // Find key
   if (k != kh_end(dict->map)) {
     ForthWord *meta = &kh_value(dict->map, k);
-    FreeWordMetadata(meta);         // Free the ForthWord using the helper function
+    FreeForthWord(meta);         // Free the ForthWord using the helper function
     kh_del(dict, dict->map, k); // Remove the key-value pair from the map
     return true;                // Success
   }
@@ -70,7 +70,7 @@ bool SetItemInDictionary(Dictionary *dict, const char *key, ForthWord wordMeta) 
   khint_t k = kh_get(dict, dict->map, key); // Find key
   if (k != kh_end(dict->map)) {
     ForthWord *old_meta = &kh_value(dict->map, k);
-    FreeWordMetadata(old_meta); // Free the old value
+    FreeForthWord(old_meta); // Free the old value
 
     kh_value(dict->map, k) = wordMeta; // Store the new value
     return true;                       // Success
@@ -92,7 +92,7 @@ bool RenameItemInDictionary(Dictionary *dict, const char *oldKey, const char *ne
   // Get the value associated with the old key
   ForthWord value = kh_value(dict->map, k);
   // Create a new value with the updated internal name
-  ForthWord newValue = InitWordMetadata(newKey, value.func, value.isImmediate, value.data);
+  ForthWord newValue = CreateForthWord(newKey, value.func, value.isImmediate, GetStringValue(value.data));
 
   // Add the new key with the value
   k = kh_put(dict, dict->map, newKey, &ret);

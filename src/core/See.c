@@ -13,6 +13,7 @@ void See(KernelState* state) {
   char wordName[MAX_WORD_LENGTH];
   GetNextWord(state->inputStream, wordName, MAX_WORD_LENGTH);
   ForthWord* meta = GetItemFromDictionary(&state->dict, wordName);
+  size_t bufferSize = GetStringBufferLength(meta->data);
 
   // If the word was not found, check if it's a number.
   if (meta == NULL) {
@@ -26,21 +27,21 @@ void See(KernelState* state) {
   }
   // Is is a Variable?
   if (meta->func == (xt_func_ptr)Variable) {
-    printf("Variable<%ld>: %s\n", meta->dataBufferLength, meta->name);
+    printf("Variable<%ld>: %s\n", bufferSize, meta->name);
     return;
   }
   // Is it HERE?
   if (meta->func == (xt_func_ptr)Here) {
     // Get the HERE buffer instead of the HERE word.
     meta = GetItemFromDictionary(&state->dict, HERE_BUFFER_NAME);
-    printf("HERE<%ld>: %s\n", meta->dataBufferLength, meta->data);
+    printf("HERE<%ld>: %s\n", bufferSize, GetStringValue(meta->data));
     return;
   }
   // If the word is implemented in C, display a message.
-  if (meta->dataBufferLength == 0) {
+  if (bufferSize == 0) {
     printf("Word '%s' is implemented in C.\n", meta->name);
     return;
   }
   // Display the word's definition.
-  printf("\n: %s\n  %s\n; %s\n", TextToUpper(meta->name), meta->data, meta->isImmediate ? "IMMEDIATE" : "");
+  printf("\n: %s\n  %s\n; %s\n", TextToUpper(meta->name), GetStringValue(meta->data), meta->isImmediate ? "IMMEDIATE" : "");
 }

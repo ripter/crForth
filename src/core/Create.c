@@ -16,7 +16,7 @@ void Create(KernelState *state) {
   ForthWord *hereWord = GetItemFromDictionary(&state->dict, HERE_BUFFER_NAME);
 
   if (hereWord == NULL) {
-    if (!AddWordToDictionary(&state->dict, InitWordMetadata(newName, (xt_func_ptr)Variable, false, NULL))) {
+    if (!AddWordToDictionary(&state->dict, CreateForthWord(newName, (xt_func_ptr)Variable, false, NULL))) {
       fprintf(state->errorStream, "Error: Unable to create %s in the Dictionary.\n", newName);
       return;
     }

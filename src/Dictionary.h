@@ -16,7 +16,6 @@ typedef struct {
 // Function prototypes
 void InitDictionary(Dictionary *dict);
 void FreeDictionary(Dictionary *dict);
-bool AddItemToDictionary(Dictionary *dict, const char *key, ForthWord meta);
 bool AddWordToDictionary(Dictionary *dict, ForthWord wordMeta);
 bool HasItemInDictionary(Dictionary *dict, const char *key);
 bool RemoveItemFromDictionary(Dictionary *dict, const char *key);

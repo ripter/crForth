@@ -15,15 +15,16 @@ void DO(KernelState *state) {
   DoSys *doSys = MemAlloc(sizeof(DoSys));
   doSys->limit = limit.value;
   doSys->index = index.value;
-  doSys->loopSrc = NULL;
-
+  doSys->loopSrc = CreateString("");
   // Push the DoSys struct onto the return stack.
   CellStackPush(&state->returnStack, (Cell){(cell_t)doSys, CELL_TYPE_DOSYS});
 
   // We need a new word to compile the loop body into.
-  ForthWord loopBody = InitWordMetadata("loop-i-body", (xt_func_ptr)DoForthDataString, false, NULL);
-  AddWordToDictionary(&state->dict, loopBody);
+  // ForthWord loopBody = CreateForthWord("loop-i-body", (xt_func_ptr)DoForthDataString, false, NULL);
+  // AddWordToDictionary(&state->dict, loopBody);
 
+  // Set the loopSrc as the compile target.
+  state->compilePtr = doSys->loopSrc;
   // Start Compiling, this will cause the next words to be "compiled" into the word at the Top of the Dictionary.
   // The Top of the Dictionary is the last word added, which is the loop body.
   state->IsInCompileMode = true;
@@ -93,13 +94,6 @@ void LOOP(KernelState *state) {
     return;
   }
   DoSys *doSys = (DoSys *)cellDoSys.value;
-  // Grab the recently compiled loop body and put it in the DoSys struct.
-  ForthWord *loopBody = GetLastItemFromDictionary(&state->dict);
-  // Take ownership of the loop body data.
-  doSys->loopSrc = loopBody->data;
-  loopBody->data = NULL; // Prevent FreeForthWord from freeing the data.
-  // Remove the loop body from the dictionary.
-  RemoveItemFromDictionary(&state->dict, "loop-i-body");
 
   // Push the DoSys struct back onto the return stack.
   // This enables other words to access the loop control parameters.
@@ -109,10 +103,14 @@ void LOOP(KernelState *state) {
   // index and limit can be modified by the loop body.
   while (doSys->index < doSys->limit) {
     // Run the loop body. This can update the doSys struct.
-    RunForthString(state, doSys->loopSrc, TextLength(doSys->loopSrc));
+    RunForthString(state, GetStringValue(doSys->loopSrc), GetStringLength(doSys->loopSrc));
     // Increment the loop index.
     doSys->index += 1;
   }
+
+  // Restore the compile pointer.
+  ForthWord *latestWord = GetLastItemFromDictionary(&state->dict);
+  state->compilePtr = latestWord->data;
 
   // Pop the DoSys struct off the return stack.
   cellDoSys = CellStackPop(&state->returnStack);

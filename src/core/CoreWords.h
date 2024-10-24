@@ -9,7 +9,7 @@
 typedef struct {
   cell_t limit;
   cell_t index;
-  char* loopSrc;
+  String *loopSrc;
 } DoSys;
 
 typedef struct {

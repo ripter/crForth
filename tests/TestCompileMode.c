@@ -14,7 +14,7 @@ MU_TEST(can_run_forth_from_dictionary) {
   // Add a forth script directly into the dictionary.
   char *script = MemAlloc(100);
   strcpy(script, "1 +");
-  AddWordToDictionary(&state.dict, InitWordMetadata("test++", (xt_func_ptr)DoForthDataString, false, script));
+  AddWordToDictionary(&state.dict, CreateForthWord("test++", (xt_func_ptr)DoForthDataString, false, script));
   OPEN_STREAM("4 test++");
   DoForth(&state);
   CLOSE_STREAM();
