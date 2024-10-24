@@ -52,6 +52,34 @@ void I(KernelState *state) {
   CellStackPush(&state->dataStack, (Cell){doSys->index, CELL_TYPE_NUMBER});
 }
 
+// ( -- n ) 
+// https://forth-standard.org/standard/core/J
+void J(KernelState *state) {
+  size_t stackSize = CellStackSize(&state->returnStack);
+  if (stackSize < 2) {
+    fprintf(state->errorStream, "\nJ: No outer loop available.\n");
+    return;
+  }
+  int count = 0; // We want to find the 2nd DoSys struct on the return stack.
+  for (size_t i=0; i < stackSize; i++) {
+    Cell cell = CellStackPeek(&state->returnStack, i);
+    // Skip any non-DoSys structs.
+    if (cell.type != CELL_TYPE_DOSYS) {
+      continue;
+    }
+    // Skip the first DoSys struct.
+    if (count == 0) { 
+      count++; 
+      continue;
+    }
+    // Found it! Get the index from the DoSys struct and push it to the data stack.
+    DoSys *doSys = (DoSys *)cell.value;
+    CellStackPush(&state->dataStack, (Cell){doSys->index, CELL_TYPE_NUMBER});
+    printf("J: Found the 2nd DoSys struct on the return stack. Index: %ld\n", doSys->index);
+    break;
+  }
+}
+
 // (R: do-sys -- )
 // Runs the loop body until the index is equal to or greater than the limit.
 // https://forth-standard.org/standard/core/LOOP
@@ -70,6 +98,8 @@ void LOOP(KernelState *state) {
   // Take ownership of the loop body data.
   doSys->loopSrc = loopBody->data;
   loopBody->data = NULL; // Prevent FreeForthWord from freeing the data.
+  // Remove the loop body from the dictionary.
+  RemoveItemFromDictionary(&state->dict, "loop-i-body");
 
   // Push the DoSys struct back onto the return stack.
   // This enables other words to access the loop control parameters.
@@ -113,8 +143,10 @@ void Leave(KernelState *state) {
     }
     // We can drop any values on the return stack until we find the DoSys struct.
     else {
-      // TODO: cleanup based on the cell type. Otherwise, we could leak memory.
-      printf("LEAVE: Dropping cell type: %d\t%ld\n", cell.type, cell.value);
+      // cleanup based on the cell type. Otherwise, we could leak memory.
+      if (cell.type == CELL_TYPE_IFSYS) {
+        MemFree((IfSys *)cell.value);
+      }
     }
   } while (foundDoSys == false);
 
