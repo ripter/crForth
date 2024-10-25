@@ -9,15 +9,15 @@
 // https://forth-standard.org/standard/core/ALLOT
 void Allot(KernelState* state) {
   // Attempt to get the address of the HERE temporary buffer.
-  ForthWord *here = GetItemFromDictionary(&state->dict, HERE_BUFFER_NAME);
+  ForthWord *here = GetItemFromDictionary(&state->dict, TEMP_BUFFER_NAME);
   if (here == NULL) {
     // Create the buffer word.
-    if (!AddWordToDictionary(&state->dict, CreateForthWord(HERE_BUFFER_NAME, (xt_func_ptr)Variable, false, NULL))) {
+    if (!AddWordToDictionary(&state->dict, CreateForthWord(TEMP_BUFFER_NAME, (xt_func_ptr)Variable, false, NULL))) {
       fprintf(state->errorStream, "Error: Unable to allot HERE buffer.\n");
       return;
     }
     // Get the new buffer.
-    here = GetItemFromDictionary(&state->dict, HERE_BUFFER_NAME);
+    here = GetItemFromDictionary(&state->dict, TEMP_BUFFER_NAME);
   }
   // Get the value on the stack.
   Cell n = CellStackPop(&state->dataStack);

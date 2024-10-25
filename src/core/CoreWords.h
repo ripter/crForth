@@ -4,7 +4,7 @@
 #include "../KernelState.h"
 #include "../ForthWord.h"
 
-#define HERE_BUFFER_NAME  "__HERE_BUFFER_NAME__"
+#define TEMP_BUFFER_NAME  "__HERE_BUFFER_NAME__"
 
 typedef struct {
   cell_t limit;

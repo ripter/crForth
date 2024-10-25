@@ -16,7 +16,7 @@ int main(void) {
   // TestBranch();
 
   printf("\n*** CompileMode Tests ***\n");
-  // TestCompileMode();
+  TestCompileMode();
 
   printf("\n*** Variables Tests ***\n");
   // TestVariables();

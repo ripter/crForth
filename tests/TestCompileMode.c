@@ -47,6 +47,7 @@ MU_TEST(test_create_does) {
   DoForth(&state);
   CLOSE_STREAM();
 
+  mu_assert_double_eq(2, CellStackSize(&state.dataStack)); // stack should have address and value
   Cell result = CellStackPop(&state.dataStack);
   mu_assert_double_eq(9, result.value);
   FREE_TEST_STATE();
@@ -85,7 +86,7 @@ MU_TEST(tick_compile_mode) {
 // Test for HERE word after ALLOT
 MU_TEST(here_allot_allocates_space) {
   INIT_TEST_STATE();
-  // ForthWord *here = GetItemFromDictionary(&state.dict, HERE_BUFFER_NAME);
+  // ForthWord *here = GetItemFromDictionary(&state.dict, TEMP_BUFFER_NAME);
   OPEN_STREAM("here 10 allot allot-size");
   DoForth(&state);
   CLOSE_STREAM();

@@ -34,12 +34,6 @@ MU_TEST(can_define_word_and_see_it) {
   buffer[bytesRead] = '\0';  // Null-terminate the buffer
 
   const char *expected = "\n: MAGIC\n  10 9 + \n; \n";
-
-  if (strcmp(expected, buffer) != 0) {
-    PrintWithControlChars(buffer);
-    // printf("Expected: |%s|\n", expected);
-    // printf("Actual:   |%s|\n", buffer);
-  }
   mu_assert_string_eq(expected, buffer);
   FREE_TEST_STATE();
 }

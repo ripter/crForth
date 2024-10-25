@@ -22,7 +22,7 @@ ForthWord CreateForthWord(const char *name, xt_func_ptr func, bool isImmediate, 
   if (data != NULL) {
     meta.data = CreateString(data);
   } else {
-    meta.data = NULL;
+    meta.data = CreateString("");
   }
   return meta;
 }

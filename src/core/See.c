@@ -33,7 +33,7 @@ void See(KernelState* state) {
   // Is it HERE?
   if (meta->func == (xt_func_ptr)Here) {
     // Get the HERE buffer instead of the HERE word.
-    meta = GetItemFromDictionary(&state->dict, HERE_BUFFER_NAME);
+    meta = GetItemFromDictionary(&state->dict, TEMP_BUFFER_NAME);
     fprintf(state->outputStream, "HERE<%ld>: %s\n", bufferSize, GetStringValue(meta->data));
     return;
   }
