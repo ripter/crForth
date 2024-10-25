@@ -114,12 +114,12 @@ MU_TEST(create_and_does) {
 //
 bool TestVariables(void) {
 
-  // MU_RUN_TEST(non_existent_word_lookup);
-  // MU_RUN_TEST(create_add_dictionary_item);
-  // MU_RUN_TEST(create_creates_variable);
-  // MU_RUN_TEST(create_empty_stack);
-  // MU_RUN_TEST(create_multiple_words);
-  // MU_RUN_TEST(create_and_does);
+  MU_RUN_TEST(non_existent_word_lookup);
+  MU_RUN_TEST(create_add_dictionary_item);
+  MU_RUN_TEST(create_creates_variable);
+  MU_RUN_TEST(create_empty_stack);
+  MU_RUN_TEST(create_multiple_words);
+  MU_RUN_TEST(create_and_does);
 
   MU_REPORT();
   return MU_EXIT_CODE;
