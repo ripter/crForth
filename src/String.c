@@ -24,6 +24,13 @@ void AppendToString(String *str, const char *suffix) {
   }
 }
 
+void AppendWordToString(String *str, const char *word) {
+  if (str) {
+    kputs(word, str);
+    kputc(' ', str);
+  }
+}
+
 // Function to free the String
 void FreeString(String *str) {
   if (str) {

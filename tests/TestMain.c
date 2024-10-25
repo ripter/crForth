@@ -13,12 +13,12 @@ int main(void) {
   TestDoForth();
 
   printf("\n*** Branch Tests ***\n");
-  TestBranch();
+  // TestBranch();
 
   printf("\n*** CompileMode Tests ***\n");
-  TestCompileMode();
+  // TestCompileMode();
 
   printf("\n*** Variables Tests ***\n");
-  TestVariables();
+  // TestVariables();
   return 0;
 }

@@ -33,7 +33,7 @@ void DoForth(KernelState *state) {
         }
       } 
       // If the word is not immediate, add it to the data string.
-      AppendToString(state->compilePtr, state->wordBuffer);
+      AppendWordToString(state->compilePtr, state->wordBuffer);
     }
     //
     // Interpret Mode

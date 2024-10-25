@@ -16,6 +16,8 @@ void SetStringBufferLength(String *str, size_t new_length);
 
 // Function to append to the String
 void AppendToString(String *str, const char *suffix);
+// Appends a word to the string, followed by a space
+void AppendWordToString(String *str, const char *word);
 
 // Function to get the length of the String
 size_t GetStringLength(const String *str);
