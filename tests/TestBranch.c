@@ -349,7 +349,7 @@ MU_TEST(for_loop_modify_index) {
 
 MU_TEST(for_loop_nested) {
   INIT_TEST_STATE();
-  OPEN_STREAM("2 0 DO 7 4 DO I J LOOP LOOP");
+  OPEN_STREAM("2 0 DO 7 4 DO J I LOOP LOOP");
   DoForth(&state);
   CLOSE_STREAM();
   mu_assert_double_eq(12, CellStackSize(&state.dataStack));

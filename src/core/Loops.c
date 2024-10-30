@@ -11,6 +11,8 @@ void DO(KernelState *state) {
   // Create a new DoSys struct to hold the loop control parameters.
   DoSys *doSys = CreateDoSys();
 
+  //
+  // Compile Mode
   // When in Compile Mode, postpone thte word "do" to the current definition.
   if (state->IsInCompileMode) {
     // Put a nested DoSys struct on the return stack so LOOP can find it.
@@ -20,6 +22,8 @@ void DO(KernelState *state) {
     return;
   }
 
+  //
+  // Interpret Mode
   // Pop the stack to setup the loop control parameters.
   Cell index = CellStackPop(&state->dataStack);
   Cell limit = CellStackPop(&state->dataStack);
@@ -42,7 +46,7 @@ void DO(KernelState *state) {
 void I(KernelState *state) {
   // Loop for the first DoSys struct on the return stack.
   size_t stackSize = CellStackSize(&state->returnStack); 
-  for (size_t i=0; i < stackSize; i++) {
+  for (size_t i=stackSize-1; i >= 0; i--) {
     Cell cell = CellStackPeek(&state->returnStack, i);
     // Skip any non-DoSys structs.
     if (cell.type != CELL_TYPE_DOSYS) {
@@ -61,7 +65,7 @@ void J(KernelState *state) {
   // Loop for the second DoSys struct on the return stack.
   size_t stackSize = CellStackSize(&state->returnStack);
   int foundCount = 0;
-  for (size_t i=0; i < stackSize; i++) {
+  for (size_t i=stackSize-1; i >= 0; i--) {
     Cell cell = CellStackPeek(&state->returnStack, i);
     // Skip any non-DoSys structs.
     if (cell.type != CELL_TYPE_DOSYS) {
@@ -75,32 +79,8 @@ void J(KernelState *state) {
     // Found it! Get the index from the DoSys struct and push it to the data stack.
     DoSys *doSys = (DoSys *)cell.value;
     CellStackPush(&state->dataStack, (Cell){doSys->index, CELL_TYPE_NUMBER});
-    // printf("\nJ: Found the 2nd DoSys struct on the return stack. Index: %ld Limit: %ld\n", doSys->index, doSys->limit);
     break;
   }
-  // size_t stackSize = CellStackSize(&state->returnStack);
-  // if (stackSize < 2) {
-  //   fprintf(state->errorStream, "\nJ: No outer loop available.\n");
-  //   return;
-  // }
-  // int count = 0; // We want to find the 2nd DoSys struct on the return stack.
-  // for (size_t i=0; i < stackSize; i++) {
-  //   Cell cell = CellStackPeek(&state->returnStack, i);
-  //   // Skip any non-DoSys structs.
-  //   if (cell.type != CELL_TYPE_DOSYS) {
-  //     continue;
-  //   }
-  //   // Skip the first DoSys struct.
-  //   if (count == 0) { 
-  //     count++; 
-  //     continue;
-  //   }
-  //   // Found it! Get the index from the DoSys struct and push it to the data stack.
-  //   DoSys *doSys = (DoSys *)cell.value;
-  //   CellStackPush(&state->dataStack, (Cell){doSys->index, CELL_TYPE_NUMBER});
-  //   printf("J: Found the 2nd DoSys struct on the return stack. Index: %ld\n", doSys->index);
-  //   break;
-  // }
 }
 
 // (R: do-sys -- )
@@ -115,6 +95,8 @@ void LOOP(KernelState *state) {
   }
   DoSys *doSys = (DoSys *)cellDoSys.value;
 
+  // 
+  // Compile Mode
   // Is this a nested loop?
   if (doSys->isNested) {
     // Postpone the word "loop" to the current definition.
@@ -122,17 +104,12 @@ void LOOP(KernelState *state) {
     return;
   }
 
-
+  // 
+  // Interpret Mode
   // Stop compiling the loop body.
   state->IsInCompileMode = false;
-  // printf("\nLoop (0x%lX) Index: %ld Limit: %ld\t %s\n", (cell_t)doSys, doSys->index, doSys->limit, GetStringValue(doSys->loopSrc));
-
   // Push the DoSys struct back onto the return stack.
-  // This enables other words to access the loop control parameters.
   CellStackPush(&state->returnStack, cellDoSys);
-
-  // printf("\nStarting loop (0x%lX) from %ld to %ld\n", (cell_t)doSys, doSys->index, doSys->limit);
-  // printf("\nLoop body: %s\n", GetStringValue(doSys->loopSrc));
   // Run the loop!
   // index and limit can be modified by the loop body.
   while (doSys->index < doSys->limit) {
@@ -141,7 +118,6 @@ void LOOP(KernelState *state) {
     // Increment the loop index.
     doSys->index += 1;
   }
-  // printf("\nEnding loop (0x%lX) from %ld to %ld\n", (cell_t)doSys, doSys->index, doSys->limit);
 
   // Clean up after the loop.
   // Pop the DoSys struct off the return stack, we are done with it.
