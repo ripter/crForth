@@ -74,6 +74,7 @@ void ELSE(KernelState *state);
 void THEN(KernelState *state);
 void DO(KernelState *state);
 void I(KernelState *state);
+void J(KernelState *state);
 void LOOP(KernelState *state);
 void Evaluate(KernelState* state);
 void Allot(KernelState* state);

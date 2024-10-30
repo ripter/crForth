@@ -108,12 +108,20 @@ void LOOP(KernelState *state) {
     doSys->index += 1;
   }
 
-  // Restore the compile pointer.
-  ForthWord *latestWord = GetLastItemFromDictionary(&state->dict);
-  state->compilePtr = latestWord->data;
+  // Clean up after the loop.
+  // Pop the DoSys struct off the return stack, we are done with it.
+  (void)CellStackPop(&state->returnStack);
+  // Try to get an outer loop.
+  Cell cellOuterDoSys = CellStackPeek(&state->returnStack, 0);
+  // Restore the compile pointer to the outer loop or the latest word.
+  if (cellOuterDoSys.type == CELL_TYPE_DOSYS) {
+    DoSys *outerDoSys = (DoSys *)cellOuterDoSys.value;
+    state->compilePtr = outerDoSys->loopSrc;
+  } else {
+    ForthWord *latestWord = GetLastItemFromDictionary(&state->dict);
+    state->compilePtr = latestWord->data;
+  }
 
-  // Pop the DoSys struct off the return stack.
-  cellDoSys = CellStackPop(&state->returnStack);
   // Free the loop body data.
   MemFree(doSys->loopSrc);
   MemFree(doSys);

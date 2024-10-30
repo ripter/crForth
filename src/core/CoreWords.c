@@ -59,4 +59,5 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, CreateForthWord("allot",           (xt_func_ptr)Allot,         false,  NULL));
   AddWordToDictionary(&state->dict, CreateForthWord("allot-size",      (xt_func_ptr)AllocatedSize, false,  NULL));
   AddWordToDictionary(&state->dict, CreateForthWord("leave",           (xt_func_ptr)Leave,         false,  NULL));
+  AddWordToDictionary(&state->dict, CreateForthWord("j",               (xt_func_ptr)J,            false,  NULL));
 }

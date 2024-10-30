@@ -7,6 +7,7 @@
 // Define the possible types of values in the stack.
 // Cells hold a type and a value. The type tells us how to interpret the value.
 #define CELL_TYPE_LIST                                                         \
+  X(EMPTY)                                                                     \
   X(NUMBER)                                                                    \
   X(WORD)                                                                      \
   X(BOOL)                                                                      \

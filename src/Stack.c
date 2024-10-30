@@ -21,8 +21,7 @@ Cell CellStackPop(CellStack *stack) {
   if (kv_size(*stack) > 0) {
     return kv_A(*stack, --kv_size(*stack));
   } else {
-    TraceLog(LOG_WARNING, "CellStackPop: Stack underflow");
-    return (Cell){0, CELL_TYPE_NUMBER}; /* Return zero-initialized value */
+    return (Cell){0, CELL_TYPE_EMPTY};
   }
 }
 
@@ -38,8 +37,7 @@ Cell CellStackPeek(CellStack *stack, size_t index) {
   if (index < kv_size(*stack)) {
     return kv_A(*stack, index);
   } else {
-    TraceLog(LOG_WARNING, "Index out of bounds");
-    return (Cell){0}; /* Return zero-initialized value */
+    return (Cell){0, CELL_TYPE_EMPTY};
   }
 }
 
