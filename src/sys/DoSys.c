@@ -9,3 +9,9 @@ DoSys *CreateDoSys(void) {
   doSys->isNested = false;
   return doSys;
 }
+
+void FreeDoSys(DoSys *doSys) {
+  FreeString(doSys->loopSrc);
+  MemFree(doSys);
+}
+

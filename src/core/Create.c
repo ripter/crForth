@@ -19,12 +19,6 @@ void Create(KernelState *state) {
     return;
   }
 
-  // Was there any data in the temp buffer?
-  ForthWord *tempWord = GetItemFromDictionary(&state->dict, TEMP_BUFFER_NAME); 
-  // If so, set the value of the new word to the data in the temp buffer.
-  if (tempWord != NULL && tempWord->data != NULL) {
-    FreeString(newWord.data);      // Free the default data.
-    newWord.data = tempWord->data; // claim ownership of the data.
-    tempWord->data = NULL;         // Drop refrence, newWord now owns the data.
-  }
+  // Move the compile pointer to the new word.
+  state->compilePtr = newWord.data; 
 }

@@ -134,8 +134,7 @@ void LOOP(KernelState *state) {
   }
 
   // Free the loop body data.
-  MemFree(doSys->loopSrc);
-  MemFree(doSys);
+  FreeDoSys(doSys);
 }
 
 // Exit the current loop.

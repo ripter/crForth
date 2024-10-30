@@ -8,17 +8,10 @@
 // It will continue to return the same address until the word is defined with CREATE.
 // https://forth-standard.org/standard/core/HERE
 void Here(KernelState *state) {
-  // Attempt to get the address of the HERE temporary buffer.
-  ForthWord *here = GetItemFromDictionary(&state->dict, TEMP_BUFFER_NAME);
-  if (here == NULL) {
-    // Create the buffer word.
-    // We don't need to allocate memory for the buffer yet, ALLOT or COLON will handle that.
-    if (!AddWordToDictionary(&state->dict, CreateForthWord(TEMP_BUFFER_NAME, (xt_func_ptr)Variable, false, NULL))) {
-      fprintf(state->errorStream, "Error: Unable to create HERE buffer.\n");
-      return;
-    }
-    here = GetItemFromDictionary(&state->dict, TEMP_BUFFER_NAME);
-  }
-
-  CellStackPush(&state->dataStack, (Cell){(cell_t)here->name, CELL_TYPE_ADDRESS});
+  // Compile pointer gives us the start of the buffer.
+  cell_t here = (cell_t)state->compilePtr->s;
+  // Use the buffer length to calculate the offset.
+  size_t offset = GetStringBufferLength(state->compilePtr);
+  // Push the address + offset to the stack.
+  CellStackPush(&state->dataStack, (Cell){(cell_t)here + offset, CELL_TYPE_ADDRESS});
 }

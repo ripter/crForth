@@ -15,6 +15,7 @@ typedef struct {
 } DoSys;
 
 DoSys *CreateDoSys(void);
+void FreeDoSys(DoSys *doSys);
 
 
 
