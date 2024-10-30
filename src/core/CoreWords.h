@@ -6,25 +6,15 @@
 
 #define TEMP_BUFFER_NAME  "__HERE_BUFFER_NAME__"
 
-typedef struct {
-  cell_t limit;
-  cell_t index;
-  String *loopSrc;
-} DoSys;
-
-typedef struct {
-  cell_t flag;
-} IfSys;
 
 // Adds all of the core words to the dictionary.
 void AddCoreWords(KernelState *state);
+
 
 //
 // Core Words
 //
 // Idealy, this should be a small set of words that are required to build the rest of the system.
-// These should be the only words that can not be implemented in Forth itself.
-// Expect for the ones that are more efficient to implement in C.
 // Side note: this list is not alphabetized, its the order they were implemented. I find the history of things interesting.
 void Add(KernelState *state);
 void Skip(KernelState *state);
@@ -89,5 +79,7 @@ void DoForthString(KernelState *state, const char* branchName, const char* forth
 void DoForthDataString(KernelState *state);
 void DoForthStringAndReturnAddress(KernelState *state);
 void Variable(KernelState* state, ForthWord *wordMeta);
+
+
 
 #endif // COREWORDS_H

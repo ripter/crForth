@@ -349,15 +349,21 @@ MU_TEST(for_loop_modify_index) {
 
 MU_TEST(for_loop_nested) {
   INIT_TEST_STATE();
-  OPEN_STREAM("2 0 DO 3 0 DO I J LOOP LOOP");
+  OPEN_STREAM("2 0 DO 7 4 DO I J LOOP LOOP");
   DoForth(&state);
   CLOSE_STREAM();
-  mu_assert_double_eq(6, CellStackSize(&state.dataStack));
-  mu_assert_double_eq(2, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(12, CellStackSize(&state.dataStack));
+  mu_assert_double_eq(6, CellStackPop(&state.dataStack).value);
   mu_assert_double_eq(1, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(5, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(1, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(4, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(1, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(6, CellStackPop(&state.dataStack).value);
   mu_assert_double_eq(0, CellStackPop(&state.dataStack).value);
-  mu_assert_double_eq(2, CellStackPop(&state.dataStack).value);
-  mu_assert_double_eq(1, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(5, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(0, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(4, CellStackPop(&state.dataStack).value);
   mu_assert_double_eq(0, CellStackPop(&state.dataStack).value);
   FREE_TEST_STATE();
 }

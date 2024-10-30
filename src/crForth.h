@@ -16,6 +16,7 @@
 #include "KernelState.h"
 #include "utils.h"
 #include "ErrorCodes.h"
+#include "sys/Sys.h"
 
 void PrintHeader(void);
 void DoForth(KernelState *state);
