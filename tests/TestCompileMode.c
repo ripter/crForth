@@ -158,8 +158,8 @@ MU_TEST(evaluate_string) {
   INIT_TEST_STATE();
   // Add a string to the stack and run it as a Forth program.
   const char* forthString = "10 9 +";
-  CellStackPush(&state.dataStack, (Cell){(cell_t)forthString, CELL_TYPE_WORD});
-  CellStackPush(&state.dataStack, (Cell){(cell_t)TextLength(forthString), CELL_TYPE_NUMBER});
+  CellStackPush(&state.dataStack, (Cell){(CellValue)forthString, CELL_TYPE_WORD});
+  CellStackPush(&state.dataStack, (Cell){(CellValue)TextLength(forthString), CELL_TYPE_NUMBER});
   OPEN_STREAM("evaluate");
   DoForth(&state);
   CLOSE_STREAM();
@@ -169,8 +169,8 @@ MU_TEST(evaluate_string) {
 MU_TEST(evaluate_define_word) {
   INIT_TEST_STATE();
   const char* forthString = ": add-two 2 + ; 5 add-two";
-  CellStackPush(&state.dataStack, (Cell){(cell_t)forthString, CELL_TYPE_WORD});
-  CellStackPush(&state.dataStack, (Cell){(cell_t)TextLength(forthString), CELL_TYPE_NUMBER});
+  CellStackPush(&state.dataStack, (Cell){(CellValue)forthString, CELL_TYPE_WORD});
+  CellStackPush(&state.dataStack, (Cell){(CellValue)TextLength(forthString), CELL_TYPE_NUMBER});
   OPEN_STREAM("evaluate");
   DoForth(&state);
   CLOSE_STREAM();
@@ -180,8 +180,8 @@ MU_TEST(evaluate_define_word) {
 MU_TEST(evaluate_undefined_word) {
   INIT_TEST_STATE();
   const char* forthString = "undefined-word";
-  CellStackPush(&state.dataStack, (Cell){(cell_t)forthString, CELL_TYPE_WORD});
-  CellStackPush(&state.dataStack, (Cell){(cell_t)TextLength(forthString), CELL_TYPE_NUMBER});
+  CellStackPush(&state.dataStack, (Cell){(CellValue)forthString, CELL_TYPE_WORD});
+  CellStackPush(&state.dataStack, (Cell){(CellValue)TextLength(forthString), CELL_TYPE_NUMBER});
   OPEN_STREAM("evaluate");
   DoForth(&state);
   CLOSE_STREAM();
@@ -194,31 +194,31 @@ MU_TEST(evaluate_undefined_word) {
 MU_TEST(evaluate_missing_length) {
   INIT_TEST_STATE();
   const char* forthString = "10 9 +";
-  CellStackPush(&state.dataStack, (Cell){(cell_t)forthString, CELL_TYPE_WORD}); // Only push the string address
+  CellStackPush(&state.dataStack, (Cell){(CellValue)forthString, CELL_TYPE_WORD}); // Only push the string address
   OPEN_STREAM("evaluate");
   DoForth(&state);
   CLOSE_STREAM();
   char expectedError[256];
-  snprintf(expectedError, sizeof(expectedError), ERR_MISSING_STACK_VALUES, 2, (cell_t)1);
+  snprintf(expectedError, sizeof(expectedError), ERR_MISSING_STACK_VALUES, 2, (CellValue)1);
   VERIFY_ERROR(expectedError)
   FREE_TEST_STATE();
 }
 MU_TEST(evaluate_missing_address) {
   INIT_TEST_STATE();
-  CellStackPush(&state.dataStack, (Cell){(cell_t)10, CELL_TYPE_NUMBER}); // Only push the length
+  CellStackPush(&state.dataStack, (Cell){(CellValue)10, CELL_TYPE_NUMBER}); // Only push the length
   OPEN_STREAM("evaluate");
   DoForth(&state);
   CLOSE_STREAM();
   char expectedError[256];
-  snprintf(expectedError, sizeof(expectedError), ERR_MISSING_STACK_VALUES, 2, (cell_t)1);
+  snprintf(expectedError, sizeof(expectedError), ERR_MISSING_STACK_VALUES, 2, (CellValue)1);
   VERIFY_ERROR(expectedError)
   FREE_TEST_STATE();
 }
 MU_TEST(evaluate_invalid_length_type) {
   INIT_TEST_STATE();
   const char* forthString = "10 9 +";
-  CellStackPush(&state.dataStack, (Cell){(cell_t)forthString, CELL_TYPE_WORD}); // Push the string
-  CellStackPush(&state.dataStack, (Cell){(cell_t)19, CELL_TYPE_WORD}); // Push invalid length (wrong type)
+  CellStackPush(&state.dataStack, (Cell){(CellValue)forthString, CELL_TYPE_WORD}); // Push the string
+  CellStackPush(&state.dataStack, (Cell){(CellValue)19, CELL_TYPE_WORD}); // Push invalid length (wrong type)
   OPEN_STREAM("evaluate");
   DoForth(&state);
   CLOSE_STREAM();
@@ -228,7 +228,7 @@ MU_TEST(evaluate_invalid_length_type) {
 MU_TEST(evaluate_invalid_length_value) {
   INIT_TEST_STATE();
   const char* forthString = "10 9 +";
-  CellStackPush(&state.dataStack, (Cell){(cell_t)forthString, CELL_TYPE_WORD}); // Push the string
+  CellStackPush(&state.dataStack, (Cell){(CellValue)forthString, CELL_TYPE_WORD}); // Push the string
   CellStackPush(&state.dataStack, (Cell){TextLength(forthString)+1, CELL_TYPE_NUMBER}); // Wrong length
   OPEN_STREAM("evaluate");
   DoForth(&state);
@@ -238,8 +238,8 @@ MU_TEST(evaluate_invalid_length_value) {
 }
 MU_TEST(evaluate_invalid_address) {
   INIT_TEST_STATE();
-  CellStackPush(&state.dataStack, (Cell){(cell_t)42, CELL_TYPE_NUMBER}); // Push invalid address (wrong type)
-  CellStackPush(&state.dataStack, (Cell){(cell_t)10, CELL_TYPE_NUMBER}); // Push length
+  CellStackPush(&state.dataStack, (Cell){(CellValue)42, CELL_TYPE_NUMBER}); // Push invalid address (wrong type)
+  CellStackPush(&state.dataStack, (Cell){(CellValue)10, CELL_TYPE_NUMBER}); // Push length
   OPEN_STREAM("evaluate");
   DoForth(&state);
   CLOSE_STREAM();
@@ -249,8 +249,8 @@ MU_TEST(evaluate_invalid_address) {
 MU_TEST(evaluate_zero_length) {
   INIT_TEST_STATE();
   const char* forthString = "10 9 +";
-  CellStackPush(&state.dataStack, (Cell){(cell_t)forthString, CELL_TYPE_WORD}); // Push valid string address
-  CellStackPush(&state.dataStack, (Cell){(cell_t)0, CELL_TYPE_NUMBER}); // Push zero length
+  CellStackPush(&state.dataStack, (Cell){(CellValue)forthString, CELL_TYPE_WORD}); // Push valid string address
+  CellStackPush(&state.dataStack, (Cell){(CellValue)0, CELL_TYPE_NUMBER}); // Push zero length
   OPEN_STREAM("evaluate");
   DoForth(&state);
   CLOSE_STREAM();

@@ -9,5 +9,5 @@ void AllocatedSize(KernelState *state) {
     return;
   }
   ForthWord *word = GetItemFromDictionary(&state->dict, (char *)addr.value);
-  CellStackPush(&state->dataStack, (Cell){(cell_t)GetStringBufferLength(word->data), CELL_TYPE_NUMBER});
+  CellStackPush(&state->dataStack, (Cell){(CellValue)GetStringBufferLength(word->data), CELL_TYPE_NUMBER});
 }

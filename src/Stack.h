@@ -23,11 +23,11 @@ typedef enum {
 } CellType;
 
 // Define the type for the cell, the basic data type for the stack.
-typedef intptr_t cell_t;
+typedef intptr_t CellValue;
 
 // Define a struct to hold both the value and its type.
 typedef struct {
-  cell_t value;       // The actual value.
+  CellValue value;       // The actual value.
   CellType type;     // The type of the value.
 } Cell;
 

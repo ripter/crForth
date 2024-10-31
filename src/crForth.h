@@ -20,7 +20,7 @@
 
 void PrintHeader(void);
 void DoForth(KernelState *state);
-void RunForthString(KernelState *state, const char *forthString, cell_t length);
+void RunForthString(KernelState *state, const char *forthString, CellValue length);
 void RunForthWord(KernelState *state, const char *forthWord);
 bool GetNextWord(FILE* input, char* buffer, size_t bufferSize);
 

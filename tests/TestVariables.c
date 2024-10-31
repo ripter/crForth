@@ -49,7 +49,7 @@ MU_TEST(create_creates_variable) {
   // Find the memory address of the new word.
   ForthWord *newWord = GetItemFromDictionary(&state.dict, "foobar");
 
-  mu_assert_double_eq((cell_t)&newWord->data, result.value);
+  mu_assert_double_eq((CellValue)&newWord->data, result.value);
   FreeKernelState(&state);
 }
 

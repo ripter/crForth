@@ -40,7 +40,9 @@ These functions work with data pointer defined in the word metadata.
 
 
 ## To Fix:
+* Stop using `cell_t`, the `_t` is an internal C naming thing.
 * LOOPS!
+  * ✅ DO LOOP
 * CoreForth is loading the CoreWords from a path relative to the path used to run crForth. It should be either included into the binary, or relative to the binary location, not the calling location.
 * need TYPE
 * Finish ' tick

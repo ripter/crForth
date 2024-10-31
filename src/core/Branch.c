@@ -23,7 +23,7 @@ void Skip(KernelState *state) {
   }
 
   // Skip the number of words specified by the parsed number.
-  for (cell_t i = 0; i < num.value; i++) {
+  for (CellValue i = 0; i < num.value; i++) {
     GetNextWord(state->inputStream, wordBuffer, MAX_WORD_LENGTH);
   }
 }
@@ -36,7 +36,7 @@ void SkipOnZero(KernelState *state) {
 
   // Skip the number of words specified by the parsed number.
   if (num1.value == 0) {
-    for (cell_t i = 0; i < num2.value; i++) {
+    for (CellValue i = 0; i < num2.value; i++) {
       char wordBuffer[MAX_WORD_LENGTH];
       GetNextWord(state->inputStream, wordBuffer, MAX_WORD_LENGTH);
     }

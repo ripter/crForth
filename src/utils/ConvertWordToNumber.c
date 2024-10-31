@@ -7,7 +7,7 @@
 
 // Converts a word to a number, storing the result in numPtr.
 // Returns true if the conversion was successful, false otherwise.
-bool ConvertWordToNumber(const char* word, cell_t* numPtr) {
+bool ConvertWordToNumber(const char* word, CellValue* numPtr) {
     char* endptr;
     errno = 0; // Reset errno before conversion
 
@@ -31,6 +31,6 @@ bool ConvertWordToNumber(const char* word, cell_t* numPtr) {
     }
 
     // Successful conversion
-    *numPtr = (cell_t)num;
+    *numPtr = (CellValue)num;
     return true;
 }

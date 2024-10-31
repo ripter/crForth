@@ -18,7 +18,7 @@ void See(KernelState* state) {
   // If the word was not found, check if it's a number.
   if (meta == NULL) {
     if (IsNumber(wordName)) {
-      cell_t num = (cell_t)atoi(wordName);
+      CellValue num = (CellValue)atoi(wordName);
       fprintf(state->outputStream, "Literal: %ld\n", num);
       return;
     }

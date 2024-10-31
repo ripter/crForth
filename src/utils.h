@@ -2,7 +2,7 @@
 #define UTILS_H
 
 bool IsNullTerminatedString(const char *ptr, int maxLength);
-bool ConvertWordToNumber(const char* word, cell_t* numPtr);
+bool ConvertWordToNumber(const char* word, CellValue* numPtr);
 bool IsNumber(const char* word);
 bool IsWhitespace(char c);
 

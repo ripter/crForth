@@ -13,7 +13,7 @@ void Tick(KernelState *state) {
   // Look up the word in the dictionary
   ForthWord* foundWordMeta = GetItemFromDictionary(&state->dict, wordBuffer);
   if (foundWordMeta != NULL) {
-    CellStackPush(&state->dataStack, (Cell){(cell_t)foundWordMeta->name, CELL_TYPE_WORD});
+    CellStackPush(&state->dataStack, (Cell){(CellValue)foundWordMeta->name, CELL_TYPE_WORD});
     CellStackPush(&state->dataStack, (Cell){TextLength(foundWordMeta->name), CELL_TYPE_NUMBER});
   } else {
     fprintf(state->errorStream, "Error: Word not found: %s\n", wordBuffer);

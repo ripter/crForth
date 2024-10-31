@@ -46,7 +46,7 @@ void DoForth(KernelState *state) {
       }
       // Else, attempt to convert the word to a number and push it to the stack.
       else if (IsNumber(state->wordBuffer)) {
-        cell_t num;
+        CellValue num;
         if (ConvertWordToNumber(state->wordBuffer, &num)) {
           CellStackPush(&state->dataStack, (Cell){num, CELL_TYPE_NUMBER});
         } else {

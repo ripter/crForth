@@ -97,7 +97,7 @@ MU_TEST(branch_jump_1) {
   // Get the word from the dictionary so we can push it's "address" to the return stack.
   ForthWord *branchWord = GetItemFromDictionary(&state.dict, "+");
   CellStackPush(&state.returnStack, (Cell){1, CELL_TYPE_NUMBER});                // length
-  CellStackPush(&state.returnStack, (Cell){(cell_t)branchWord->name, CELL_TYPE_WORD}); // address
+  CellStackPush(&state.returnStack, (Cell){(CellValue)branchWord->name, CELL_TYPE_WORD}); // address
   // add numbers to the data stack and try the branch.
   // Because the address on the returnStack is "+", the branch should execute the + word.
   OPEN_STREAM("10 9 branch");
@@ -183,7 +183,7 @@ MU_TEST(tick) {
   Cell word = CellStackPop(&state.dataStack);
 
   // Tick should push the address of the word to the stack.
-  mu_assert_double_eq((cell_t)wordMeta->name, word.value);
+  mu_assert_double_eq((CellValue)wordMeta->name, word.value);
   FREE_TEST_STATE();
 }
 MU_TEST(tick_and_execute) {

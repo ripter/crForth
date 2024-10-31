@@ -2,7 +2,7 @@
 #include "crForth.h"
 
 // Runs the Forth system with the given string.
-void RunForthString(KernelState *state, const char *forthString, cell_t length) {
+void RunForthString(KernelState *state, const char *forthString, CellValue length) {
   // Convert the string to a stream, saving the original stream.
   FILE *inputStream = fmemopen((void *)forthString, length, "r");
   if (inputStream == NULL) {

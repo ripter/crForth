@@ -9,5 +9,5 @@ void PrintHeader(void) {
   printf(" \\___|_|  |_|  \\___/|_|   \\__|_| |_| \n");
   printf("                                        \n");
   printf("crForth version: %s\n", APP_VERSION);
-  printf("Cell Size: %zu bytes\n", sizeof(cell_t));
+  printf("Cell Size: %zu bytes\n", sizeof(CellValue));
 }

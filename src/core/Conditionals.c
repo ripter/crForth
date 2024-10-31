@@ -13,7 +13,7 @@ void IF(KernelState *state) {
   IfSys *ifSys = MemAlloc(sizeof(IfSys));
   ifSys->flag = flag.value;
   // Push the flag to the return stack so ELSE and THEN can use it.
-  CellStackPush(&state->returnStack, (Cell){(cell_t)ifSys, CELL_TYPE_IFSYS});
+  CellStackPush(&state->returnStack, (Cell){(CellValue)ifSys, CELL_TYPE_IFSYS});
 
   if (flag.value == FFALSE) {
     // Skip until ELSE or THEN

@@ -18,10 +18,10 @@ void Here(KernelState *state) {
     return;
   }
   // Compile pointer gives us the start of the buffer.
-  cell_t here = (cell_t)state->compilePtr->s;
+  CellValue here = (CellValue)state->compilePtr->s;
   // Use the buffer length to calculate the offset.
   size_t offset = GetStringBufferLength(state->compilePtr);
   printf("\nHERE: 0x%lx + %ld = 0x%lx\t\"%s\"\n", here, offset, (here + offset), state->compilePtr->s);
   // Push the address + offset to the stack.
-  CellStackPush(&state->dataStack, (Cell){(cell_t)here + offset, CELL_TYPE_ADDRESS});
+  CellStackPush(&state->dataStack, (Cell){(CellValue)here + offset, CELL_TYPE_ADDRESS});
 }

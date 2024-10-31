@@ -17,7 +17,7 @@ void DO(KernelState *state) {
   if (state->IsInCompileMode) {
     // Put a nested DoSys struct on the return stack so LOOP can find it.
     doSys->isNested = true;
-    CellStackPush(&state->returnStack, (Cell){(cell_t)doSys, CELL_TYPE_DOSYS});
+    CellStackPush(&state->returnStack, (Cell){(CellValue)doSys, CELL_TYPE_DOSYS});
     AppendToString(state->compilePtr, "do ");
     return;
   }
@@ -34,7 +34,7 @@ void DO(KernelState *state) {
   doSys->limit = limit.value;
   doSys->index = index.value;
   // Push the DoSys struct onto the return stack.
-  CellStackPush(&state->returnStack, (Cell){(cell_t)doSys, CELL_TYPE_DOSYS});
+  CellStackPush(&state->returnStack, (Cell){(CellValue)doSys, CELL_TYPE_DOSYS});
   // Start compiling to the DoSys struct.
   state->compilePtr = doSys->loopSrc;
   state->IsInCompileMode = true;
