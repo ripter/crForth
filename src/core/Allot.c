@@ -16,7 +16,7 @@ void Allot(KernelState* state) {
     return;
   }
   // Validate the new size.
-  size_t currentSize = GetStringBufferLength(state->compilePtr);
+  size_t currentSize = GetStringBufferLength(state->hereBuffer);
   size_t newSize = currentSize + n.value;
   // printf("\n\tcurrentSize: %ld\n", currentSize);
   // printf("\n\tnewSize: %ld\n", newSize);
@@ -24,6 +24,6 @@ void Allot(KernelState* state) {
     fprintf(state->errorStream, "Error: \"%ld ALLOT\" would result in the negative buffer size %ld.\n", n.value, newSize);
     return;
   }
-  // printf("\n\t0x%lx from %ld to %ld\n", (cell_t)state->compilePtr->s, currentSize, newSize);
-  SetStringBufferLength(state->compilePtr, newSize);
+  // printf("\n\t0x%lx from %ld to %ld\n", (CellValue)state->hereBuffer->s, currentSize, newSize);
+  SetStringBufferLength(state->hereBuffer, newSize);
 }

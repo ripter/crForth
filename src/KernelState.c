@@ -11,16 +11,17 @@ void InitKernelState(KernelState *state) {
   InitCellStack(&state->dataStack);
   InitCellStack(&state->returnStack);
   // state->compilePtr = CreateString("");
-  state->compilePtr = NULL; // someone needs to set this before use.
   state->IsInCompileMode = false;
+  state->compilePtr = NULL; // someone needs to set this before use.
   state->inputStream = NULL;
   state->outputStream = NULL;
   state->errorStream = NULL;
   state->wordBuffer[0] = '\0';
 
-  // Set the compile pointer to the scratch buffer.
-  ForthWord *scratch = GetItemFromDictionary(&state->dict, SCRATCH_BUFFER_NAME);
-  state->compilePtr = scratch->data;
+
+  // HERE gets a scratch buffer.
+  state->hereBuffer = CreateString("");
+  state->compilePtr = state->hereBuffer;
 }
 
 
@@ -40,5 +41,6 @@ void FreeKernelState(KernelState *state) {
   state->errorStream = NULL;
   state->wordBuffer[0] = '\0';
 
+  FreeString(state->hereBuffer);
   state->compilePtr = NULL; 
 }

@@ -122,18 +122,10 @@ MU_TEST(here_create_update_here_to_new_address) {
   FREE_TEST_STATE();
 }
 MU_TEST(here_multiple_allots_update_here_correctly) {
-  printf("\n\nSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS\n");
   INIT_TEST_STATE();
-  // OPEN_STREAM("here 5 allot here swap - here 15 allot here swap -");
-  OPEN_STREAM("here 5 allot here  15 allot here");
+  OPEN_STREAM("here 5 allot here swap - here 15 allot here swap -");
   DoForth(&state);
   CLOSE_STREAM();
-
-  state.outputStream = stdout;
-  printf("\n");
-  DotS(&state);
-  printf("\n");
-
   // Check that the differences between HERE calls are correct (5 and 15).
   mu_assert_double_eq(2, CellStackSize(&state.dataStack));
   Cell diff1 = CellStackPop(&state.dataStack);
@@ -141,7 +133,6 @@ MU_TEST(here_multiple_allots_update_here_correctly) {
   mu_assert_double_eq(15, diff1.value);
   mu_assert_double_eq(5, diff2.value);
   FREE_TEST_STATE();
-  printf("\nEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\n\n");
 }
 
 MU_TEST_SUITE(here_tests) {

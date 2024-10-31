@@ -6,15 +6,15 @@
 
 #include "Dictionary.h"
 #include "crForth.h"
-#include "core/CoreWords.h"
+// #include "core/CoreWords.h"
 
 
 
 void InitDictionary(Dictionary *dict) {
   dict->map = kh_init(dict); // Initialize the khash dictionary
   // Add a scratch buffer to the dictionary
-  ForthWord scratch = CreateForthWord(SCRATCH_BUFFER_NAME, (xt_func_ptr)Variable, false, NULL);
-  AddWordToDictionary(dict, scratch); 
+  // ForthWord scratch = CreateForthWord(SCRATCH_BUFFER_NAME, (xt_func_ptr)Variable, false, NULL);
+  // AddWordToDictionary(dict, scratch); 
 }
 
 void FreeDictionary(Dictionary *dict) {

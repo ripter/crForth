@@ -14,6 +14,7 @@ typedef struct {
   CellStack dataStack;                // The data stack.
   CellStack returnStack;              // The return stack.
   String *compilePtr;                 // Pointer to the current compile buffer.
+  String *hereBuffer;                 // Scratch buffer for HERE and related words.
   bool IsInCompileMode;               // Are we in compile mode?
   char wordBuffer[MAX_WORD_LENGTH];   // Buffer for the current word being processed.
   FILE *inputStream;                  // The input stream for the Forth system.

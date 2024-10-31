@@ -19,6 +19,9 @@ void Create(KernelState *state) {
     return;
   }
 
+  // Take over the HERE buffer.
+  newWord.data = state->hereBuffer;
+  state->hereBuffer = CreateString("");
   // Move the compile pointer to the new word.
   state->compilePtr = newWord.data; 
 }
