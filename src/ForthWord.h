@@ -16,7 +16,6 @@ typedef struct {
   xt_func_ptr func;        // Function pointer to run when the word is executed
   bool isImmediate;        // Flag to indicate if the word is immediate
   String *data;            // Data used by the function
-  // size_t dataBufferLength; // Length of the data buffer
 } ForthWord;
 
 ForthWord CreateForthWord(const char *name, xt_func_ptr func, bool isImmediate, const char *data);

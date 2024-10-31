@@ -4,7 +4,6 @@
 #include "../KernelState.h"
 #include "../ForthWord.h"
 
-#define TEMP_BUFFER_NAME  "__HERE_BUFFER_NAME__"
 
 
 // Adds all of the core words to the dictionary.

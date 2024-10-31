@@ -30,13 +30,6 @@ void See(KernelState* state) {
     fprintf(state->outputStream, "Variable<%ld>: %s\n", bufferSize, meta->name);
     return;
   }
-  // Is it HERE?
-  if (meta->func == (xt_func_ptr)Here) {
-    // Get the HERE buffer instead of the HERE word.
-    meta = GetItemFromDictionary(&state->dict, TEMP_BUFFER_NAME);
-    fprintf(state->outputStream, "HERE<%ld>: %s\n", bufferSize, GetStringValue(meta->data));
-    return;
-  }
   // If the word is implemented in C, display a message.
   if (bufferSize == 0) {
     fprintf(state->outputStream, "Word '%s' is implemented in C.\n", meta->name);
