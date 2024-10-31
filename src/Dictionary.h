@@ -4,7 +4,7 @@
 #include "./libs/klib/khash.h"
 #include "ForthWord.h"
 
-#define SCRATCH_BUFFER_NAME  "__scratch_buffer__"
+// #define SCRATCH_BUFFER_NAME  "__scratch_buffer__"
 
 // Create a khash map with string keys and function pointer values
 KHASH_MAP_INIT_STR(dict, ForthWord)

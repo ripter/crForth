@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include "./libs/klib/kvec.h"
 
+#define MAX_WORD_LENGTH 256 // This does NOT include space for the null terminator.
+
 // Define the possible types of values in the stack.
 // Cells hold a type and a value. The type tells us how to interpret the value.
 #define CELL_TYPE_LIST                                                         \

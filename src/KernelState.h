@@ -6,8 +6,6 @@
 #include "Stack.h"
 #include "String.h"
 
-#define MAX_WORD_LENGTH 256 // This does NOT include space for the null terminator.
-
 // The KernelState struct holds the state of the Forth system.
 typedef struct {
   Dictionary dict;                    // The dictionary of Forth words.

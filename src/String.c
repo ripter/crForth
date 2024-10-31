@@ -1,11 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <raylib.h>
-#include "./libs/klib/kstring.h"
-
-// Defining the String alias for kstring_t
-typedef kstring_t String;
+#include "String.h"
 
 // Function to create a String
 String *CreateString(const char *value) {
@@ -23,11 +16,31 @@ void AppendToString(String *str, const char *suffix) {
     kputs(suffix, str);
   }
 }
-
+// Appends to the string, followed by a space
 void AppendWordToString(String *str, const char *word) {
   if (str) {
     kputs(word, str);
     kputc(' ', str);
+  }
+}
+// Handles converting a cell to a string and then appends it with a space to the string.
+void AppendCellToString(String *str, Cell cell) {
+  if (!str) { return; }
+  char buffer[MAX_WORD_LENGTH];
+
+  switch (cell.type) {
+    case CELL_TYPE_ADDRESS:
+      snprintf(buffer, sizeof(buffer), "[0x%lx]", (CellValue)cell.value);
+      kputs(buffer, str);
+      kputc(' ', str);
+      break;
+    case CELL_TYPE_NUMBER:
+      snprintf(buffer, sizeof(buffer), "%ld", (CellValue)cell.value);
+      kputs(buffer, str);
+      kputc(' ', str);
+      break;
+    default:
+      break;
   }
 }
 
