@@ -273,7 +273,6 @@ bool TestCompileMode(void) {
   MU_RUN_TEST(tick_interpret_mode);
   MU_RUN_TEST(tick_compile_mode);
   MU_RUN_SUITE(evaluate_tests);
-
   MU_RUN_SUITE(here_tests);
 
   MU_REPORT();
