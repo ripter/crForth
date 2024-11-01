@@ -61,4 +61,5 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, CreateForthWord("leave",           (xt_func_ptr)Leave,         false,  NULL));
   AddWordToDictionary(&state->dict, CreateForthWord("j",               (xt_func_ptr)J,             false,  NULL));
   AddWordToDictionary(&state->dict, CreateForthWord("constant",        (xt_func_ptr)Constant,      false,  NULL));
+  AddWordToDictionary(&state->dict, CreateForthWord("s\"",             (xt_func_ptr)Sq,            false,  NULL));
 }

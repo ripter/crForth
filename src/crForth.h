@@ -11,6 +11,8 @@
 
 #include <stdio.h>
 #include "Stack.h"
+#include "String.h"
+#include "StringPool.h"
 #include "ForthWord.h"
 #include "Dictionary.h"
 #include "KernelState.h"

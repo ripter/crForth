@@ -1,7 +1,6 @@
 # crForth
 UNFINISHED: Yet Another Forth implimentation, In C
 
-
 This is not a Forth for your embeded system. This is a Forth intergrated into Raylib. It will only work on systems where Raylib can be found.
 
 Core Libraries Used:
@@ -28,6 +27,10 @@ pkg-config --cflags raylib
 
 
 
+### crForth Features
+* Runs on a stream.
+
+
 ### C Helper Functions
 
 These functions work with data pointer defined in the word metadata.
@@ -40,9 +43,10 @@ These functions work with data pointer defined in the word metadata.
 
 
 ## To Fix:
-* Stop using `cell_t`, the `_t` is an internal C naming thing.
+* BASE
 * LOOPS!
   * ✅ DO LOOP
+  * BEGIN WHILE REPEAT
 * CoreForth is loading the CoreWords from a path relative to the path used to run crForth. It should be either included into the binary, or relative to the binary location, not the calling location.
 * need TYPE
 * Finish ' tick
