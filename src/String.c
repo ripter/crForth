@@ -32,16 +32,19 @@ void AppendCellToString(String *str, Cell cell) {
     case CELL_TYPE_ADDRESS:
       snprintf(buffer, sizeof(buffer), "[0x%lx]", (CellValue)cell.value);
       kputs(buffer, str);
-      kputc(' ', str);
       break;
     case CELL_TYPE_NUMBER:
       snprintf(buffer, sizeof(buffer), "%ld", (CellValue)cell.value);
       kputs(buffer, str);
-      kputc(' ', str);
       break;
     default:
+      snprintf(buffer, sizeof(buffer), "%ld", (CellValue)cell.value);
+      kputs(buffer, str);
       break;
   }
+
+  // Add a space after the value.
+  kputc(' ', str);
 }
 
 // Function to free the String
