@@ -26,15 +26,9 @@ MU_TEST(can_define_word_and_see_it) {
   DoForth(&state);
   CLOSE_STREAM();
 
-  // Get the output from the output stream
-  fflush(state.outputStream);
-  rewind(state.outputStream);
-  char buffer[1024];
-  size_t bytesRead = fread(buffer, 1, sizeof(buffer) - 1, state.outputStream);
-  buffer[bytesRead] = '\0';  // Null-terminate the buffer
-
+  String *actual = StreamToString(state.outputStream);
   const char *expected = "\n: MAGIC\n  10 9 + \n; \n";
-  mu_assert_string_eq(expected, buffer);
+  mu_assert_string_eq(expected, GetStringValue(actual));
   FREE_TEST_STATE();
 }
 

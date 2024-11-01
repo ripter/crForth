@@ -15,7 +15,7 @@ MU_TEST(sq_and_type_basic) {
   CLOSE_STREAM();
   // Verify the output
   String *actual = StreamToString(state.outputStream);
-  mu_assert_string_eq("hello",  actual->s);
+  mu_assert_string_eq("hello",  GetStringValue(actual));
   FREE_TEST_STATE();
 }
 // Test for creating multiple strings and printing them
@@ -27,7 +27,7 @@ MU_TEST(sq_and_type_multiple_strings) {
   CLOSE_STREAM();
   // Verify the output
   String *actual = StreamToString(state.outputStream);
-  mu_assert_string_eq("firstsecond", actual->s);
+  mu_assert_string_eq("firstsecond", GetStringValue(actual));
   FREE_TEST_STATE();
 }
 // Test for creating an empty string
@@ -39,7 +39,7 @@ MU_TEST(sq_and_type_empty_string) {
   CLOSE_STREAM();
   // Verify the output (should be empty)
   String *actual = StreamToString(state.outputStream);
-  mu_assert_string_eq("", actual->s);
+  mu_assert_string_eq("", GetStringValue(actual));
   FREE_TEST_STATE();
 }
 
