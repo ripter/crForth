@@ -35,6 +35,6 @@ void Sq(KernelState *state) {
   AppendToString(str, buffer);   // Append the buffer to the string
 
   // Push the string address to the stack.
-  CellStackPush(&state->dataStack, (Cell){(CellValue)str, CELL_TYPE_ADDRESS});
+  CellStackPush(&state->dataStack, (Cell){(CellValue)str->s, CELL_TYPE_ADDRESS});
   CellStackPush(&state->dataStack, (Cell){GetStringLength(str), CELL_TYPE_NUMBER});
 }

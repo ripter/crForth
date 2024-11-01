@@ -73,3 +73,18 @@ void SetStringBufferLength(String *str, size_t new_length) {
   str->m = new_length;         // Buffer Size
   str->l = TextLength(str->s); // Text Length
 }
+
+
+// Function to read the contents of a stream into a String
+String *StreamToString(FILE *stream) {
+  String *str = CreateString("");
+  char buffer[1024];
+  fflush(stream);
+  rewind(stream);
+  size_t bytesRead;
+  while ((bytesRead = fread(buffer, 1, sizeof(buffer) - 1, stream)) > 0) {
+    buffer[bytesRead] = '\0'; // Null-terminate the buffer
+    AppendToString(str, buffer);
+  }
+  return str;
+}

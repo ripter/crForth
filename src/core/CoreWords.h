@@ -71,6 +71,7 @@ void AllocatedSize(KernelState *state);
 void Leave(KernelState *state);
 void Constant(KernelState *state);
 void Sq(KernelState *state);
+void Type(KernelState *state);
 
 
 //

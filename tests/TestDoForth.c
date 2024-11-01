@@ -29,7 +29,7 @@ MU_TEST(can_define_word_and_see_it) {
   // Get the output from the output stream
   fflush(state.outputStream);
   rewind(state.outputStream);
-  char buffer[1024];  // Adjust size as needed
+  char buffer[1024];
   size_t bytesRead = fread(buffer, 1, sizeof(buffer) - 1, state.outputStream);
   buffer[bytesRead] = '\0';  // Null-terminate the buffer
 
@@ -39,6 +39,7 @@ MU_TEST(can_define_word_and_see_it) {
 }
 
 
+//
 // Test for the CONSTANT word
 MU_TEST(constant_word_definition) {
   INIT_TEST_STATE();
@@ -68,11 +69,12 @@ MU_TEST(constant_word_reuse) {
 
   FREE_TEST_STATE();
 }
-
+// Constant Tests
 MU_TEST_SUITE(constant_tests) {
   MU_RUN_TEST(constant_word_definition);
   MU_RUN_TEST(constant_word_reuse);
 }
+
 
 //
 // Run all the Tests

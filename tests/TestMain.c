@@ -20,5 +20,9 @@ int main(void) {
 
   printf("\n*** Variables Tests ***\n");
   TestVariables();
+
+  printf("\n*** String Tests ***\n");
+  TestStrings();
+
   return 0;
 }

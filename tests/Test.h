@@ -52,6 +52,7 @@ bool TestBranch(void);
 bool TestCompileMode(void);
 bool TestDoForth(void);
 bool TestVariables(void);
+bool TestStrings(void);
 
 
 

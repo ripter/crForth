@@ -30,4 +30,7 @@ const char *GetStringValue(const String *str);
 // Function to get the buffer length of the String
 size_t GetStringBufferLength(const String *str);
 
+// Convert a stream to a string
+String *StreamToString(FILE *stream);
+
 #endif // STRING_H
