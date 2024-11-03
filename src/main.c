@@ -3,7 +3,7 @@
 
 #include "crForth.h"
 #include "core/CoreWords.h"
-#include "forth/CoreForth.h"
+#include "file/FileWords.h"
 
 
 //------------------------------------------------------------------------------------
@@ -13,10 +13,11 @@ int main(void) {
   // Initialize the kernel state
   KernelState state = {0};
   InitKernelState(&state);
-  // Add the core words defined in C to the dictionary.
-  AddCoreWords(&state);
-  // Add the core words defined in Forth to the dictionary.
-  AddCoreForthWords(&state);
+  // Add words defined in C to the dictionary.
+  AddCoreWords(&state); // https://forth-standard.org/standard/core
+  AddFileWords(&state); // https://forth-standard.org/standard/file
+  // Add words defined in Forth to the dictionary.
+  RunForthFile(&state, "forth/CoreWords.fth");
   // Map the standard input/output streams to the kernel state.
   state.inputStream = stdin;
   state.outputStream = stdout;

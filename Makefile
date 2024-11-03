@@ -31,6 +31,7 @@ test: $(TEST_OUT)
 # Create the build folder if it doesn't exist
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
+	cp -r src/forth $(BUILD_DIR)/forth
 
 # Compile main executable
 $(OUT): $(BUILD_DIR) $(SRC)

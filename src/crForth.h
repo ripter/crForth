@@ -24,6 +24,7 @@ void PrintHeader(void);
 void DoForth(KernelState *state);
 void RunForthString(KernelState *state, const char *forthString, CellValue length);
 void RunForthWord(KernelState *state, const char *forthWord);
+void RunForthFile(KernelState *state, const char *filePath);
 bool GetNextWord(FILE* input, char* buffer, size_t bufferSize);
 
 #endif // CRFORTH_H
