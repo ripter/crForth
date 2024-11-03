@@ -11,7 +11,8 @@
 #define INIT_TEST_STATE()                                                      \
   KernelState state = {0};                                                     \
   InitKernelState(&state);                                                     \
-  AddCoreWords(&state);
+  AddCoreWords(&state);                                                        \
+  AddForthWords(&state);
 
 #define FREE_TEST_STATE()                                                      \
   FreeKernelState(&state);                                                     \

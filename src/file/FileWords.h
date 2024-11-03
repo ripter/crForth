@@ -6,6 +6,10 @@
 
 #include "../crForth.h"
 
+// Adds all of the file words to the dictionary.
+void AddFileWords(KernelState *state);
+
+// ( addr u -- )
 void Included(KernelState *state);
 
 

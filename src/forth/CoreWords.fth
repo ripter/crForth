@@ -7,9 +7,12 @@
 : 2drop drop drop ;
 : cr 10 emit ;
 
-: type2 ( addr u -- )
+
+\ https://forth-standard.org/standard/core/TYPE
+: type ( addr u -- )
   0 DO              \ loop from 0 to u-1
     dup i + c@ emit \ print the character at addr+
   loop
+  drop              \ drop the addr
 ;
 

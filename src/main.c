@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "raylib.h"
+#include <raylib.h>
 
 #include "crForth.h"
 #include "core/CoreWords.h"
@@ -17,14 +17,15 @@ int main(void) {
   AddCoreWords(&state); // https://forth-standard.org/standard/core
   AddFileWords(&state); // https://forth-standard.org/standard/file
   // Add words defined in Forth to the dictionary.
-  RunForthFile(&state, "forth/CoreWords.fth");
+  AddForthWords(&state);
   // Map the standard input/output streams to the kernel state.
   state.inputStream = stdin;
   state.outputStream = stdout;
   state.errorStream = stderr;
 
-  
-  // Loaded and Ready! Show the version and prompt the user.
+
+  // Everything is ready to go!
+  printf("\n\n");
   PrintHeader();
   printf("Type 'bye' to exit.\n\n");
 

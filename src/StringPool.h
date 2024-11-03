@@ -1,7 +1,7 @@
 #ifndef STRING_POOL_H
 #define STRING_POOL_H
 
-#define STRING_POOL_SIZE 5
+#define STRING_POOL_SIZE 15
 
 #include "String.h"
 

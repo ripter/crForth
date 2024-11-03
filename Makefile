@@ -18,6 +18,7 @@ TEST_SRC = $(wildcard ./tests/*.c) $(SHARED_SRC)
 
 # Output binary folder and name
 BUILD_DIR = ./build
+FORTH_DIR = $(BUILD_DIR)/forth
 OUT = $(BUILD_DIR)/crForth
 TEST_OUT = $(BUILD_DIR)/crForth_test
 
@@ -31,13 +32,18 @@ test: $(TEST_OUT)
 # Create the build folder if it doesn't exist
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
-	cp -r src/forth $(BUILD_DIR)/forth
+
+# Copy forth files only if they have changed
+$(FORTH_DIR): $(BUILD_DIR)
+	mkdir -p $(FORTH_DIR)
+	rsync -u src/forth/*.fth $(FORTH_DIR)
+
 
 # Compile main executable
-$(OUT): $(BUILD_DIR) $(SRC)
+$(OUT): $(FORTH_DIR) $(SRC)
 	$(CC) $(CFLAGS) $(RAYLIB_CFLAGS) -o $(OUT) $(SRC) $(RAYLIB_LIBS)
 
-$(TEST_OUT): $(BUILD_DIR) $(TEST_SRC) $(SRC)
+$(TEST_OUT): $(FORTH_DIR) $(TEST_SRC) $(SRC)
 	$(CC) $(CFLAGS) $(RAYLIB_CFLAGS) -o $(TEST_OUT) $(TEST_SRC) $(RAYLIB_LIBS)
 
 
