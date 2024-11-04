@@ -1,16 +1,28 @@
-: false 0 ; \ 0 is the false value in Forth
-: true -1 ; \ -1 is the traditional true value in Forth, although anything non-zero is considered true
+: FALSE 0 ; \ 0 is the false value in Forth
+: TRUE -1 ; \ -1 is the traditional true value in Forth, although anything non-zero is considered true
 : 1+ 1 + ;
-: R@ r> dup >r ;
+: R@ ( -- x ) ( R: x -- x ) r> dup >r ; \ https://forth-standard.org/standard/core/RFetch
 : 2>R >r >r ;
-: 2R> r> r> ;
-: 2drop drop drop ;
-: cr 10 emit ;
+: 2R>   ( -- x1 x2 ) ( R: x1 x2 -- ) r> r> ;    \ https://forth-standard.org/standard/core/TwoRfrom
+: 2DROP ( x1 x2 -- )  drop drop ;               \ https://forth-standard.org/standard/core/TwoDROP
+: OVER  ( x1 x2 -- x1 x2 x1 ) >r dup r> swap ;  \ https://forth-standard.org/standard/core/OVER
+: NIP   ( x1 x2 -- x2 ) swap drop ;             \ https://forth-standard.org/standard/core/NIP
+: 2DUP  ( x1 x2 -- x1 x2 x1 x2 ) over over ;    \ https://forth-standard.org/standard/core/TwoDUP
 
+: CR 10 emit ;
+
+\ https://forth-standard.org/standard/core/MAX
+: MAX ( n1 n2 -- n ) 
+  2dup > if 
+    drop
+  else
+    nip
+  then
+;
 
 \ https://forth-standard.org/standard/core/TYPE
-: type ( addr u -- )
-  0 DO              \ loop from 0 to u-1
+: TYPE ( addr u -- )
+  0 max 0 do        \ loop from 0 to u-1
     dup i + c@ emit \ print the character at addr+
   loop
   drop              \ drop the addr
