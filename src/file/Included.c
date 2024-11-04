@@ -6,6 +6,7 @@
 // Example: s" src/forth/CoreWords.fth" included
 // https://forth-standard.org/standard/file/INCLUDED
 void Included(KernelState *state) {
+  printf("\nIncluded Called\n");
   Cell u = CellStackPop(&state->dataStack);
   Cell addr = CellStackPop(&state->dataStack);
   const char *CWD = GetWorkingDirectory();
@@ -14,13 +15,14 @@ void Included(KernelState *state) {
   AppendToString(path, (char *)addr.value);
 
   // u can be shorter than the string, so we need to truncate it.
-  if (u.value > 0 && (size_t)u.value < path->l) {
-    path->l = u.value;
-    path->s[u.value] = '\0';
+  size_t totalLength = (size_t)u.value + TextLength(CWD) + 1;
+  if (u.value > 0 &&  totalLength < path->l) {
+    path->l = totalLength;
+    path->s[totalLength] = '\0';
   }
 
   if (!FileExists(GetStringValue(path))) {
-    fprintf(state->errorStream, "File not found: %s\n", GetStringValue(path));
+    fprintf(state->errorStream, "File not found: '%s'\n", GetStringValue(path));
     return;
   }
 

@@ -34,8 +34,6 @@ MU_TEST(can_define_word_and_see_it) {
 
 MU_TEST(can_include_file) {
   INIT_TEST_STATE();
-  state.outputStream = stdout;
-  state.errorStream = stderr;
   OPEN_STREAM("s\" tests/basicTests.fth\" included --test-answer-to-life--");
   DoForth(&state);
   CLOSE_STREAM();

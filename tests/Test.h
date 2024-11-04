@@ -5,14 +5,15 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include <raylib.h>
-#include "minunit.h"
 #include "../src/crForth.h"
 #include "../src/core/CoreWords.h"
+#include "../src/file/FileWords.h"
 
 #define INIT_TEST_STATE()                                                      \
   KernelState state = {0};                                                     \
   InitKernelState(&state);                                                     \
   AddCoreWords(&state);                                                        \
+  AddFileWords(&state);                                                        \
   AddForthWords(&state);
 
 #define FREE_TEST_STATE()                                                      \

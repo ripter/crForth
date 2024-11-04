@@ -36,6 +36,5 @@ int main(void) {
     printf("All tests PASSED.\n");
   }
 
-  // return anyFailed ? 1 : 0;
   return 0;
 }
