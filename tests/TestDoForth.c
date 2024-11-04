@@ -32,6 +32,17 @@ MU_TEST(can_define_word_and_see_it) {
   FREE_TEST_STATE();
 }
 
+MU_TEST(can_include_file) {
+  INIT_TEST_STATE();
+  state.outputStream = stdout;
+  state.errorStream = stderr;
+  OPEN_STREAM("s\" tests/basicTests.fth\" included --test-answer-to-life--");
+  DoForth(&state);
+  CLOSE_STREAM();
+  Cell result = CellStackPop(&state.dataStack);
+  mu_assert_double_eq(42, result.value);
+  FREE_TEST_STATE();
+}
 
 //
 // Test for the CONSTANT word
@@ -73,11 +84,12 @@ MU_TEST_SUITE(constant_tests) {
 //
 // Run all the Tests
 //
-bool TestDoForth(void) {
+int TestDoForth(void) {
 
   MU_RUN_TEST(basic_64bit_number);
   MU_RUN_TEST(can_define_word_and_see_it);
   MU_RUN_SUITE(constant_tests);
+  MU_RUN_TEST(can_include_file);
 
   MU_REPORT();
   return MU_EXIT_CODE;

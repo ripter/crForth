@@ -265,7 +265,7 @@ MU_TEST_SUITE(evaluate_tests) {
 
 //
 // Run all compile mode tests
-bool TestCompileMode(void) {
+int TestCompileMode(void) {
 
   MU_RUN_TEST(can_run_forth_from_dictionary);
   MU_RUN_TEST(basic_plus_one_test);

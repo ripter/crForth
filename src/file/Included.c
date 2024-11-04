@@ -2,17 +2,29 @@
 
 
 // ( addr u -- )
-// Loads and executes the file at the given path.
+// Using Current Working Directory as the base path, loads and executes the file at the given path.
 // Example: s" src/forth/CoreWords.fth" included
 // https://forth-standard.org/standard/file/INCLUDED
 void Included(KernelState *state) {
   Cell u = CellStackPop(&state->dataStack);
   Cell addr = CellStackPop(&state->dataStack);
-  // Get the path string from the address and length.
-  char path[u.value + 1];
-  for (int i = 0; i < u.value; i++) {
-    path[i] = (char)addr.value + i;
+  const char *CWD = GetWorkingDirectory();
+  String *path = CreateString(CWD);
+  AppendToString(path, "/");
+  AppendToString(path, (char *)addr.value);
+
+  // u can be shorter than the string, so we need to truncate it.
+  if (u.value > 0 && (size_t)u.value < path->l) {
+    path->l = u.value;
+    path->s[u.value] = '\0';
   }
 
-  printf("Included: %s\n", path);
+  if (!FileExists(GetStringValue(path))) {
+    fprintf(state->errorStream, "File not found: %s\n", GetStringValue(path));
+    return;
+  }
+
+  // Run it!
+  fprintf(state->outputStream, "Included: %s\n", GetStringValue(path));
+  RunForthFile(state, GetStringValue(path));
 }

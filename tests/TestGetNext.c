@@ -133,7 +133,7 @@ MU_TEST(prog_simple_1) {
 //
 // Run all the Tests
 //
-bool TestGetNext(void) {
+int TestGetNext(void) {
 
   MU_RUN_TEST(empty_string);
   MU_RUN_TEST(basic_string_1);

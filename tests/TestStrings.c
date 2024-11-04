@@ -56,7 +56,7 @@ MU_TEST_SUITE(sq_and_type_tests) {
 //
 // Run all the Tests
 //
-bool TestStrings(void) {
+int TestStrings(void) {
   MU_RUN_SUITE(sq_and_type_tests);
 
   MU_REPORT();

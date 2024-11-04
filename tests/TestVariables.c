@@ -112,8 +112,7 @@ MU_TEST(create_and_does) {
 //
 // Run all the Tests
 //
-bool TestVariables(void) {
-
+int TestVariables(void) {
   MU_RUN_TEST(non_existent_word_lookup);
   MU_RUN_TEST(create_add_dictionary_item);
   MU_RUN_TEST(create_creates_variable);

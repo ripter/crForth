@@ -396,7 +396,7 @@ MU_TEST_SUITE(loop_tests) {
 
 //
 // Run all branch tests
-bool TestBranch(void) {
+int TestBranch(void) {
   MU_RUN_SUITE(skip_tests);
   MU_RUN_SUITE(branch_tests);
   MU_RUN_SUITE(if_else_then_tests);

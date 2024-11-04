@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include <raylib.h>
+#include "minunit.h"
 #include "../src/crForth.h"
 #include "../src/core/CoreWords.h"
 
@@ -48,12 +49,14 @@
 
 void PrintWithControlChars(const char *str);
 
-bool TestGetNext(void);
-bool TestBranch(void);
-bool TestCompileMode(void);
-bool TestDoForth(void);
-bool TestVariables(void);
-bool TestStrings(void);
+typedef int (*TestFunc)(void);
+
+int TestGetNext(void);
+int TestBranch(void);
+int TestCompileMode(void);
+int TestDoForth(void);
+int TestVariables(void);
+int TestStrings(void);
 
 
 

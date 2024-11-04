@@ -6,23 +6,36 @@ int main(void) {
   PrintHeader();
   printf("Running Tests...\n");
 
-  printf("\n*** GetNextWord Tests ***\n");
-  TestGetNext();
+  // Array of test functions and corresponding names
+  TestFunc tests[] = {TestGetNext,     TestDoForth,   TestBranch,
+                      TestCompileMode, TestVariables, TestStrings};
+  const char *testNames[] = {"GetNextWord", "DoForth",   "Branch",
+                             "CompileMode", "Variables", "String"};
+  String *testResults = CreateString("");
 
-  printf("\n*** DoForth Tests ***\n");
-  TestDoForth();
+  // Number of tests
+  int numTests = sizeof(tests) / sizeof(tests[0]);
+  bool anyFailed = false;
 
-  printf("\n*** Branch Tests ***\n");
-  TestBranch();
+  // Run all tests and print individual section headers
+  for (int i = 0; i < numTests; i++) {
+    printf("\n*** %s Tests ***\n", testNames[i]);
+    int result = tests[i]();
+    if (result != 0) {
+      AppendToString(testResults, "FAILED: ");
+      AppendToString(testResults, testNames[i]);
+      AppendToString(testResults, "\n");
+      anyFailed = true;
+    }
+  }
 
-  printf("\n*** CompileMode Tests ***\n");
-  TestCompileMode();
+  if (anyFailed) {
+    printf("\n*** Failed Tests ***\n");
+    printf("%s", GetStringValue(testResults));
+  } else {
+    printf("All tests PASSED.\n");
+  }
 
-  printf("\n*** Variables Tests ***\n");
-  TestVariables();
-
-  printf("\n*** String Tests ***\n");
-  TestStrings();
-
+  // return anyFailed ? 1 : 0;
   return 0;
 }
