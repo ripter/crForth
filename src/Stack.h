@@ -43,6 +43,21 @@ void CellStackPush(CellStack *stack, Cell value);
 Cell CellStackPop(CellStack *stack);
 bool IsCellStackEmpty(CellStack *stack);
 size_t CellStackSize(CellStack *stack);
+
+/**
+ * @brief Peeks at an element in the specified stack without modifying it.
+ *
+ * This function retrieves the `Cell` at a given index from the `CellStack`. 
+ * The index is zero-based and is relative to the bottom of the stack, meaning
+ * `index 0` corresponds to the base (first) element. If the index is out of 
+ * bounds (greater than or equal to the size of the stack), the function returns 
+ * an empty `Cell` with a type `CELL_TYPE_EMPTY` and value `0`.
+ *
+ * @param stack A pointer to the `CellStack` to be peeked at.
+ * @param index The zero-based index of the cell to retrieve.
+ * @return The `Cell` at the specified index, or an empty `Cell` if the index is out of bounds.
+ */
+
 Cell CellStackPeek(CellStack *stack, size_t index);
 
 const char* CellTypeToName(CellType type);

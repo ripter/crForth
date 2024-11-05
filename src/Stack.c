@@ -41,6 +41,8 @@ Cell CellStackPeek(CellStack *stack, size_t index) {
   }
 }
 
+
+
 const char *CellTypeToName(CellType cellType) {
   switch (cellType) {
   #define X(name) case CELL_TYPE_##name: return #name;

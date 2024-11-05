@@ -20,16 +20,16 @@
 ;
 
 \ https://forth-standard.org/standard/core/qDO
-: ?DO ( n1 n2 -- )
-    2dup = if 2drop else DO then 
-;
+\ : ?DO ( n1 n2 -- )
+\     2dup = if 2drop else DO then 
+\ ;
 
 
 \ https://forth-standard.org/standard/core/TYPE
-: TYPE ( addr u -- )
-  0 max 0 do       \ loop from 0 to u-1
-    dup i + c@ emit \ print the character at addr+
-  loop
-  drop              \ drop the addr
-;
+\ : TYPE ( addr u -- )
+\   0 max 0 do       \ loop from 0 to u-1
+\     dup i + c@ emit \ print the character at addr+
+\   loop
+\   drop              \ drop the addr
+\ ;
 

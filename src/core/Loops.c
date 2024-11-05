@@ -15,9 +15,10 @@ void DO(KernelState *state) {
   // Compile Mode
   // When in Compile Mode, postpone thte word "do" to the current definition.
   if (state->IsInCompileMode) {
+    printf("DO: already compiling, postponing the word \"do\".\n");
     // Put a nested DoSys struct on the return stack so LOOP can find it.
-    doSys->isNested = true;
-    CellStackPush(&state->returnStack, (Cell){(CellValue)doSys, CELL_TYPE_DOSYS});
+    // doSys->isNested = true;
+    // CellStackPush(&state->returnStack, (Cell){(CellValue)doSys, CELL_TYPE_DOSYS});
     AppendToString(state->compilePtr, "do ");
     return;
   }
@@ -99,6 +100,16 @@ void J(KernelState *state) {
 // Runs the loop body until the index is equal to or greater than the limit.
 // https://forth-standard.org/standard/core/LOOP
 void LOOP(KernelState *state) {
+  // DOs and Colon definitions mean we are in compile mode, or at least it's not useful to check for compile mode.
+  // Instead we need to loop through the return stack to find the DoSys struct.
+  size_t rstackSize = CellStackSize(&state->returnStack);
+  // If there is nothing on the return stack, postpone the word "loop" to the current definition.
+  if (rstackSize == 0) {
+    printf("LOOP: No DoSys struct found on the return stack.\n");
+    AppendToString(state->compilePtr, "loop ");
+    return;
+  }
+
   // Get the DoSys struct from the return stack.
   Cell cellDoSys = CellStackPop(&state->returnStack);
   if (cellDoSys.type != CELL_TYPE_DOSYS) {

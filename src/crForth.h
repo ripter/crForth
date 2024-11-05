@@ -1,7 +1,7 @@
 #ifndef CRFORTH_H
 #define CRFORTH_H
 
-#define APP_VERSION "0.0.4-dev"
+#define APP_VERSION "0.0.5-dev"
 
 #define FILE_EXTENSION ".fth"
 
