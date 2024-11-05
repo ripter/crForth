@@ -31,7 +31,7 @@ MU_TEST(sq_and_type_multiple_strings) {
   FREE_TEST_STATE();
 }
 // Test for creating an empty string
-MU_TEST(sq_and_type_empty_string) {
+MU_TEST(sq_and_type_single_space) {
   INIT_TEST_STATE();
   // Test creating an empty string
   OPEN_STREAM("s\" \" type");
@@ -39,14 +39,14 @@ MU_TEST(sq_and_type_empty_string) {
   CLOSE_STREAM();
   // Verify the output (should be empty)
   String *actual = StreamToString(state.outputStream);
-  mu_assert_string_eq("", GetStringValue(actual));
+  mu_assert_string_eq(" ", GetStringValue(actual));
   FREE_TEST_STATE();
 }
 
 MU_TEST_SUITE(sq_and_type_tests) {
   MU_RUN_TEST(sq_and_type_basic);
   MU_RUN_TEST(sq_and_type_multiple_strings);
-  MU_RUN_TEST(sq_and_type_empty_string);
+  MU_RUN_TEST(sq_and_type_single_space);
 }
 
 

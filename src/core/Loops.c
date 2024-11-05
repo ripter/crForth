@@ -46,6 +46,10 @@ void DO(KernelState *state) {
 void I(KernelState *state) {
   // Loop for the first DoSys struct on the return stack.
   size_t stackSize = CellStackSize(&state->returnStack); 
+  if (stackSize == 0) {
+    fprintf(state->errorStream, "I: No DoSys struct found on the return stack.\n");
+    return;
+  }
   for (size_t i=stackSize-1; i >= 0; i--) {
     Cell cell = CellStackPeek(&state->returnStack, i);
     // Skip any non-DoSys structs.
@@ -64,19 +68,27 @@ void I(KernelState *state) {
 void J(KernelState *state) {
   // Loop for the second DoSys struct on the return stack.
   size_t stackSize = CellStackSize(&state->returnStack);
+  if (stackSize < 2) {
+    fprintf(state->errorStream,
+            stackSize == 0
+                ? "J: No DoSys struct found on the return stack.\n"
+                : "J: Only one DoSys struct found on the return stack.\n");
+    return;
+  }
   int foundCount = 0;
-  for (size_t i=stackSize-1; i >= 0; i--) {
+  for (size_t i = stackSize - 1; i >= 0; i--) {
     Cell cell = CellStackPeek(&state->returnStack, i);
     // Skip any non-DoSys structs.
     if (cell.type != CELL_TYPE_DOSYS) {
       continue;
     }
     // Skip the first DoSys struct.
-    if (foundCount == 0) { 
-      foundCount++; 
+    if (foundCount == 0) {
+      foundCount++;
       continue;
     }
-    // Found it! Get the index from the DoSys struct and push it to the data stack.
+    // Found it! Get the index from the DoSys struct and push it to the data
+    // stack.
     DoSys *doSys = (DoSys *)cell.value;
     CellStackPush(&state->dataStack, (Cell){doSys->index, CELL_TYPE_NUMBER});
     break;

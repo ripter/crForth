@@ -6,7 +6,6 @@
 // Example: s" src/forth/CoreWords.fth" included
 // https://forth-standard.org/standard/file/INCLUDED
 void Included(KernelState *state) {
-  printf("\nIncluded Called\n");
   Cell u = CellStackPop(&state->dataStack);
   Cell addr = CellStackPop(&state->dataStack);
   const char *CWD = GetWorkingDirectory();

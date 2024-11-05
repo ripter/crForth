@@ -113,7 +113,8 @@ MU_TEST(branch_with_empty_return_stack) {
   OPEN_STREAM("10 9 branch");
   DoForth(&state);
   CLOSE_STREAM();
-  VERIFY_ERROR(ERR_EMPTY_STACK);
+  String *error = StreamToString(state.errorStream);
+  mu_assert_string_eq(ERR_EMPTY_STACK, GetStringValue(error));
   FREE_TEST_STATE();
 }
 MU_TEST(branch_with_invalid_address) {
@@ -346,7 +347,6 @@ MU_TEST(for_loop_modify_index) {
   mu_assert_double_eq(2, CellStackPop(&state.dataStack).value);
   FREE_TEST_STATE();
 }
-
 MU_TEST(for_loop_nested) {
   INIT_TEST_STATE();
   OPEN_STREAM("2 0 DO 7 4 DO J I LOOP LOOP");
@@ -379,6 +379,58 @@ MU_TEST(for_loop_leave) {
   FREE_TEST_STATE();
 }
 
+MU_TEST(for_loop_basic_with_qdo) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("5 0 ?DO I LOOP");
+  DoForth(&state);
+  CLOSE_STREAM();
+
+  String *error = StreamToString(state.errorStream);
+  mu_assert_string_eq("", GetStringValue(error));
+  // Assert that the loop ran and output is correct
+  mu_assert_double_eq(5, CellStackSize(&state.dataStack));
+  mu_assert_double_eq(4, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(3, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(2, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(1, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(0, CellStackPop(&state.dataStack).value);
+  FREE_TEST_STATE();
+}
+
+MU_TEST(for_loop_empty_with_qdo) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("5 5 ?DO I LOOP");
+  DoForth(&state);
+  CLOSE_STREAM();
+  // Assert that the loop did not run and the stack is empty
+  mu_assert_double_eq(0, CellStackSize(&state.dataStack));
+  FREE_TEST_STATE();
+}
+
+MU_TEST(for_loop_negative_with_qdo) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("-3 0 ?DO I LOOP");
+  DoForth(&state);
+  CLOSE_STREAM();
+  // Assert that the loop ran correctly for negative to positive range
+  mu_assert_double_eq(3, CellStackSize(&state.dataStack));
+  mu_assert_double_eq(-1, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(-2, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(-3, CellStackPop(&state.dataStack).value);
+  FREE_TEST_STATE();
+}
+
+MU_TEST(for_loop_single_iteration_with_qdo) {
+  INIT_TEST_STATE();
+  OPEN_STREAM("0 1 ?DO I LOOP");
+  DoForth(&state);
+  CLOSE_STREAM();
+  // Assert that the loop ran once with one element on the stack
+  mu_assert_double_eq(1, CellStackSize(&state.dataStack));
+  mu_assert_double_eq(0, CellStackPop(&state.dataStack).value);
+  FREE_TEST_STATE();
+}
+
 MU_TEST_SUITE(loop_tests) {
   MU_RUN_TEST(for_loop_basic);
   MU_RUN_TEST(for_loop_reverse);
@@ -388,6 +440,10 @@ MU_TEST_SUITE(loop_tests) {
   MU_RUN_TEST(for_loop_modify_index);
   MU_RUN_TEST(for_loop_nested);
   MU_RUN_TEST(for_loop_leave);
+  MU_RUN_TEST(for_loop_basic_with_qdo);
+  MU_RUN_TEST(for_loop_empty_with_qdo);
+  // MU_RUN_TEST(for_loop_negative_with_qdo);
+  // MU_RUN_TEST(for_loop_single_iteration_with_qdo);
 }
 
 
