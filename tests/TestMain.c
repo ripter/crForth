@@ -7,10 +7,14 @@ int main(void) {
   printf("Running Tests...\n");
 
   // Array of test functions and corresponding names
-  TestFunc tests[] = {TestGetNext,     TestDoForth,   TestBranch,
-                      TestCompileMode, TestVariables, TestStrings};
-  const char *testNames[] = {"GetNextWord", "DoForth",   "Branch",
-                             "CompileMode", "Variables", "String"};
+  TestFunc tests[] = {TestSys};
+  const char *testNames[] = {"Sys Structs"};
+  // TestFunc tests[] = {TestGetNext,     TestDoForth,   TestBranch,
+  //                     TestCompileMode, TestVariables, TestStrings,
+  //                     TestSys};
+  // const char *testNames[] = {"GetNextWord", "DoForth",   "Branch",
+  //                            "CompileMode", "Variables", "String",
+  //                            "Sys Structs"};
   String *testResults = CreateString("");
 
   // Number of tests

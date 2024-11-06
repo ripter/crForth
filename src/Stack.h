@@ -15,8 +15,14 @@
   X(BOOL)                                                                      \
   X(ADDRESS)                                                                   \
   X(VARIABLE)                                                                  \
-  X(DOSYS)                                                                     \
-  X(IFSYS)
+  X(XT)                                                                        \
+  X(COLON_SYS)                                                                 \
+  X(DO_SYS)                                                                    \
+  X(CASE_SYS)                                                                  \
+  X(OF_SYS)                                                                    \
+  X(LOOP_SYS)                                                                  \
+  X(NEST_SYS)                                                                  \
+  X(IF_SYS)
 
 typedef enum {
   #define X(name) CELL_TYPE_##name,

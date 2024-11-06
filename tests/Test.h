@@ -1,10 +1,11 @@
 #ifndef TEST_H
 #define TEST_H
 
-#include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include <string.h>
 #include <raylib.h>
+
 #include "../src/crForth.h"
 #include "../src/core/CoreWords.h"
 #include "../src/file/FileWords.h"
@@ -58,6 +59,7 @@ int TestCompileMode(void);
 int TestDoForth(void);
 int TestVariables(void);
 int TestStrings(void);
+int TestSys(void);
 
 
 

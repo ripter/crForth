@@ -1,12 +1,16 @@
 #include <raylib.h>
 #include "../crForth.h"
 
-// ( c-addr u -- )
+// ( XT -- )
 // Pop the string on the stack as a Forth word and run it.
 // https://forth-standard.org/standard/core/EXECUTE
 void Execute(KernelState *state) {
-  (void)CellStackPop(&state->dataStack);       // u
-  Cell word = CellStackPop(&state->dataStack); // c-addr
+  Cell cell = CellStackPop(&state->dataStack); 
 
-  RunForthWord(state, (const char *)word.value);
+  if (cell.type != CELL_TYPE_XT) {
+    fprintf(state->errorStream, "Error: Expected XT, got %d\n", cell.type);
+    return;
+  }
+
+  // RunForthWord(state, (const char *)word.value);
 }

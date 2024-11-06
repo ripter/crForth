@@ -13,7 +13,7 @@ void IF(KernelState *state) {
   IfSys *ifSys = MemAlloc(sizeof(IfSys));
   ifSys->flag = flag.value;
   // Push the flag to the return stack so ELSE and THEN can use it.
-  CellStackPush(&state->returnStack, (Cell){(CellValue)ifSys, CELL_TYPE_IFSYS});
+  CellStackPush(&state->returnStack, (Cell){(CellValue)ifSys, CELL_TYPE_IF_SYS});
 
   if (flag.value == FFALSE) {
     // Skip until ELSE or THEN
@@ -36,7 +36,7 @@ void ELSE(KernelState *state) {
 
   Cell cell = CellStackPop(&state->returnStack);
   CellStackPush(&state->returnStack, cell);
-  if (cell.type != CELL_TYPE_IFSYS) {
+  if (cell.type != CELL_TYPE_IF_SYS) {
     fprintf(state->errorStream, "ELSE: Expected a flag on the return stack, but got \"%s\".\n", CellTypeToName(cell.type));
   }
 
@@ -59,7 +59,7 @@ void ELSE(KernelState *state) {
 void THEN(KernelState *state) {
   // Remove the flag from the return stack.
   Cell cell = CellStackPop(&state->returnStack);
-  if (cell.type != CELL_TYPE_IFSYS) {
+  if (cell.type != CELL_TYPE_IF_SYS) {
     // oops, something else might have borked our return value.
     // put it back and bail.
     CellStackPush(&state->returnStack, cell);

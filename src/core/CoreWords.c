@@ -15,7 +15,7 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, CreateForthWord("branch",          (xt_func_ptr)Branch,        false,  NULL));
   AddWordToDictionary(&state->dict, CreateForthWord("?branch",         (xt_func_ptr)BranchNZ,      false,  NULL));
   AddWordToDictionary(&state->dict, CreateForthWord(".s",              (xt_func_ptr)DotS,          true,   NULL));
-  AddWordToDictionary(&state->dict, CreateForthWord(":",               (xt_func_ptr)Colon,         false,  NULL));
+  AddWordToDictionary(&state->dict, CreateForthWord(":",               (xt_func_ptr)Colon,         true,   NULL));
   AddWordToDictionary(&state->dict, CreateForthWord(";",               (xt_func_ptr)SemiColon,     true,   NULL));
   AddWordToDictionary(&state->dict, CreateForthWord("words",           (xt_func_ptr)Words,         false,  NULL));
   AddWordToDictionary(&state->dict, CreateForthWord("see",             (xt_func_ptr)See,           false,  NULL));
@@ -62,5 +62,6 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, CreateForthWord("j",               (xt_func_ptr)J,             false,  NULL));
   AddWordToDictionary(&state->dict, CreateForthWord("constant",        (xt_func_ptr)Constant,      false,  NULL));
   AddWordToDictionary(&state->dict, CreateForthWord("s\"",             (xt_func_ptr)Sq,            false,  NULL));
+  AddWordToDictionary(&state->dict, CreateForthWord(":noname",         (xt_func_ptr)ColonNONAME,   true,   NULL));
   // AddWordToDictionary(&state->dict, CreateForthWord("type",            (xt_func_ptr)Type,          false,  NULL));
 }

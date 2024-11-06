@@ -35,7 +35,7 @@ void DO(KernelState *state) {
   doSys->limit = limit.value;
   doSys->index = index.value;
   // Push the DoSys struct onto the return stack.
-  CellStackPush(&state->returnStack, (Cell){(CellValue)doSys, CELL_TYPE_DOSYS});
+  CellStackPush(&state->returnStack, (Cell){(CellValue)doSys, CELL_TYPE_DO_SYS});
   // Start compiling to the DoSys struct.
   state->compilePtr = doSys->loopSrc;
   state->IsInCompileMode = true;
@@ -54,7 +54,7 @@ void I(KernelState *state) {
   for (size_t i=stackSize-1; i >= 0; i--) {
     Cell cell = CellStackPeek(&state->returnStack, i);
     // Skip any non-DoSys structs.
-    if (cell.type != CELL_TYPE_DOSYS) {
+    if (cell.type != CELL_TYPE_DO_SYS) {
       continue;
     }
     // Found it! Get the index from the DoSys struct and push it to the data stack.
@@ -80,7 +80,7 @@ void J(KernelState *state) {
   for (size_t i = stackSize - 1; i >= 0; i--) {
     Cell cell = CellStackPeek(&state->returnStack, i);
     // Skip any non-DoSys structs.
-    if (cell.type != CELL_TYPE_DOSYS) {
+    if (cell.type != CELL_TYPE_DO_SYS) {
       continue;
     }
     // Skip the first DoSys struct.
@@ -112,7 +112,7 @@ void LOOP(KernelState *state) {
 
   // Get the DoSys struct from the return stack.
   Cell cellDoSys = CellStackPop(&state->returnStack);
-  if (cellDoSys.type != CELL_TYPE_DOSYS) {
+  if (cellDoSys.type != CELL_TYPE_DO_SYS) {
     fprintf(state->errorStream, "Expected a DoSys struct on the return stack, but got \"%d\".\n", cellDoSys.type);
     return;
   }
@@ -137,7 +137,7 @@ void LOOP(KernelState *state) {
   // index and limit can be modified by the loop body.
   while (doSys->index < doSys->limit) {
     // Run the loop body. This can update the doSys struct.
-    RunForthString(state, GetStringValue(doSys->loopSrc), GetStringLength(doSys->loopSrc));
+    RunForthOnCharPtr(state, GetStringValue(doSys->loopSrc), GetStringLength(doSys->loopSrc));
     // Increment the loop index.
     doSys->index += 1;
   }
@@ -148,7 +148,7 @@ void LOOP(KernelState *state) {
   // Try to get an outer loop.
   Cell cellOuterDoSys = CellStackPeek(&state->returnStack, 0);
   // Restore the compile pointer to the outer loop or the latest word.
-  if (cellOuterDoSys.type == CELL_TYPE_DOSYS) {
+  if (cellOuterDoSys.type == CELL_TYPE_DO_SYS) {
     DoSys *outerDoSys = (DoSys *)cellOuterDoSys.value;
     state->compilePtr = outerDoSys->loopSrc;
   } else {
@@ -176,14 +176,14 @@ void Leave(KernelState *state) {
     }
     // Find the DoSys struct on the return stack.
     cell = CellStackPop(&state->returnStack);
-    if (cell.type == CELL_TYPE_DOSYS) {
+    if (cell.type == CELL_TYPE_DO_SYS) {
       doSys = (DoSys *)cell.value;
       foundDoSys = true;
     }
     // We can drop any values on the return stack until we find the DoSys struct.
     else {
       // cleanup based on the cell type. Otherwise, we could leak memory.
-      if (cell.type == CELL_TYPE_IFSYS) {
+      if (cell.type == CELL_TYPE_IF_SYS) {
         MemFree((IfSys *)cell.value);
       }
     }

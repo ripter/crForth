@@ -28,5 +28,5 @@ void Evaluate(KernelState* state) {
     return;
   }
 
-  RunForthString(state, (const char *)address.value, length.value);
+  RunForthOnCharPtr(state, (const char *)address.value, length.value);
 }

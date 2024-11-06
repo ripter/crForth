@@ -5,6 +5,25 @@
 #include "../String.h"
 
 //
+// ColonSys
+// A struct for definitions.
+typedef struct {
+  String *name; // The name of the definition.
+  String *src;  // The source code for the definition.
+} ColonSys;
+
+// Function to create a ColonSys, src is not owned by the ColonSys.
+ColonSys *CreateColonSys(const char* newName, String *src);
+// Function to free the ColonSys, does not free the src string.
+void FreeColonSys(ColonSys *colonSys);
+
+//
+// NestSys
+typedef struct {
+  String *src; // The source code for the nest.
+} NestSys;
+
+//
 // DoSys
 // A struct to hold the loop control parameters.
 typedef struct {

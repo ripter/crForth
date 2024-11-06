@@ -31,7 +31,7 @@ void PrintHeader(void);
 // Runs the Forth file at the given path.
 void RunForthFile(KernelState *state, const char *filePath);
 // Runs the Forth string.
-void RunForthString(KernelState *state, const char *forthString, CellValue length);
+void RunForthOnCharPtr(KernelState *state, const char *forthString, CellValue length);
 // Runs the Forth word.
 void RunForthWord(KernelState *state, const char *forthWord);
 
