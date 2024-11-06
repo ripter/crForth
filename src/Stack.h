@@ -51,6 +51,18 @@ bool IsCellStackEmpty(CellStack *stack);
 size_t CellStackSize(CellStack *stack);
 
 /**
+ * @brief Peeks at the top element in the specified stack without modifying it.
+ *
+ * This function retrieves the `Cell` at the top of the `CellStack`. 
+ * If the stack is empty, it returns an empty `Cell` with a type `CELL_TYPE_EMPTY` 
+ * and value `0`.
+ *
+ * @param stack A pointer to the `CellStack` to be peeked at.
+ * @return The `Cell` at the top of the stack, or an empty `Cell` if the stack is empty.
+ */
+Cell CellStackPeekTop(CellStack *stack);
+
+/**
  * @brief Peeks at an element in the specified stack without modifying it.
  *
  * This function retrieves the `Cell` at a given index from the `CellStack`. 

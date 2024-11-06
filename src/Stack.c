@@ -41,7 +41,13 @@ Cell CellStackPeek(CellStack *stack, size_t index) {
   }
 }
 
-
+Cell CellStackPeekTop(CellStack *stack) {
+  size_t size = kv_size(*stack);
+  if (size == 0) {
+    return (Cell){0, CELL_TYPE_EMPTY}; // Return an empty Cell if stack is empty
+  }
+  return kv_A(*stack, size - 1); // Access the top element
+}
 
 const char *CellTypeToName(CellType cellType) {
   switch (cellType) {

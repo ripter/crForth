@@ -42,6 +42,16 @@ MU_TEST(can_include_file) {
   FREE_TEST_STATE();
 }
 
+MU_TEST(can_nest_definitions) {
+  INIT_TEST_STATE();
+  OPEN_STREAM(": OUTER : INNER + ; INNER ; 10 9 OUTER");
+  DoForth(&state);
+  CLOSE_STREAM();
+  Cell result = CellStackPop(&state.dataStack);
+  mu_assert_double_eq(19, result.value);
+  FREE_TEST_STATE();
+}
+
 //
 // Test for the CONSTANT word
 MU_TEST(constant_word_definition) {
@@ -88,6 +98,7 @@ int TestDoForth(void) {
   MU_RUN_TEST(can_define_word_and_see_it);
   MU_RUN_SUITE(constant_tests);
   MU_RUN_TEST(can_include_file);
+  MU_RUN_TEST(can_nest_definitions);
 
   MU_REPORT();
   return MU_EXIT_CODE;
