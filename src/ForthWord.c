@@ -22,9 +22,7 @@ ForthWord CreateForthWord(const char *name, xt_func_ptr func, bool isImmediate, 
   if (data != NULL) {
     meta.data = CreateString(data);
   } else {
-    // NULL means the word is defined in C, not Forth.
-    // Use the name as the Forth source.
-    meta.data = CreateString(name);
+    meta.data = CreateString("");
   }
   return meta;
 }

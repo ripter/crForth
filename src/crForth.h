@@ -12,6 +12,8 @@
 
 
 #include <stdio.h>
+#include <raylib.h>
+
 #include "Stack.h"
 #include "String.h"
 #include "StringPool.h"

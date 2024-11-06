@@ -21,8 +21,6 @@ void SemiColon(KernelState *state) {
   ColonSys *colonSys = (ColonSys *)cell.value;
   FreeColonSys(colonSys);
 
-  /* TODO: Add Tests for nested definitions and then re-enable this code.
-   * 
   // Peek, is the the top now something we can point the compilePtr at?
   // This enables nested definitions.
   if (CellStackSize(&state->returnStack) == 0) { return; }
@@ -32,5 +30,4 @@ void SemiColon(KernelState *state) {
     state->IsInCompileMode = true;
     state->compilePtr = colonSys->src;
   }
-  */
 }
