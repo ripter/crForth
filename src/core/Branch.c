@@ -44,49 +44,62 @@ void SkipOnZero(KernelState *state) {
 }
 
 
-// ( R: u c-addr -- )
-// Branches to the address on the return stack.
-// The address and length are in reverse order so they don't require a swap when moving from/to the data stack.
+// ( R: XT -- )
+// Branches/Jumps/Executes the XT on the return stack.
 void Branch(KernelState *state) {
-  BAIL_IF_EMPTY_RETURN_STACK();
-
-  Cell word = CellStackPop(&state->returnStack);
-  Cell length = CellStackPop(&state->returnStack);
-  if (word.type != CELL_TYPE_WORD || length.type != CELL_TYPE_NUMBER) {
-    fprintf(state->errorStream, ERR_INVALID_WORD_ON_RETURN_STACK);
-    return;
-  }
-  if (!IsNullTerminatedString((const char *)word.value, length.value+1)) {
-    fprintf(state->errorStream, ERR_WORD_NOT_FOUND, (char *)word.value);
+  size_t stackSize = CellStackSize(&state->returnStack);
+  if (stackSize == 0) {
+    fprintf(state->errorStream, ERR_MISSING_XT_DUE_TO_EMPTY_STACK);
     return;
   }
 
-  DoForthString(state, (const char *)word.value, (const char *)word.value);
+  Cell cell = CellStackPop(&state->returnStack); 
+  if (cell.type != CELL_TYPE_XT) {
+    fprintf(state->errorStream, ERR_MISSING_XT_DUE_BAD_TYPE, CellTypeToName(cell.type));
+    return;
+  }
+
+  RunForthOnString(state, (String *)cell.value);
+  // BAIL_IF_EMPTY_RETURN_STACK();
+
+  // Cell word = CellStackPop(&state->returnStack);
+  // Cell length = CellStackPop(&state->returnStack);
+  // if (word.type != CELL_TYPE_WORD || length.type != CELL_TYPE_NUMBER) {
+  //   fprintf(state->errorStream, ERR_INVALID_WORD_ON_RETURN_STACK);
+  //   return;
+  // }
+  // if (!IsNullTerminatedString((const char *)word.value, length.value+1)) {
+  //   fprintf(state->errorStream, ERR_WORD_NOT_FOUND, (char *)word.value);
+  //   return;
+  // }
+
+  // DoForthString(state, (const char *)word.value, (const char *)word.value);
 }
 
 
 
-// ( flag -- ) ( R: u c-addr -- )
-// Branches to the address on the return stack if flag is true.
-// The address and length are in reverse order so they don't require a swap when moving from/to the data stack.
-// Example: ' + >r >r 10 9 -1 ?branch
+// ( flag -- ) ( R:  XT -- )
+// Runs the XT on the return stack if flag is true.
 void BranchNZ(KernelState *state) {
-  // Pop the flag off the data stack.
-  BAIL_IF_EMPTY_DATA_STACK();
-  Cell flag = CellStackPop(&state->dataStack);
+  size_t stackSize = CellStackSize(&state->dataStack);
+  size_t returnStackSize = CellStackSize(&state->returnStack);
 
-  // Pop the address and length off the return stack.
-  BAIL_IF_RETURN_STACK_LESS_THAN(2);
-  Cell word = CellStackPop(&state->returnStack);
-  Cell length = CellStackPop(&state->returnStack);
-  if (word.type != CELL_TYPE_WORD || length.type != CELL_TYPE_NUMBER) {
-    fprintf(state->errorStream, ERR_INVALID_WORD_ON_RETURN_STACK);
+  if (stackSize == 0 || returnStackSize == 0) {
+    fprintf(state->errorStream, "Error: BranchNZ requires a flag on the stack and an XT on the return stack.\n");
+    return;
+  }
+  // Pop the Stacks
+  Cell cellFlag = CellStackPop(&state->dataStack);
+  Cell cellXT = CellStackPop(&state->returnStack);
+
+  if (cellXT.type != CELL_TYPE_XT) {
+    fprintf(state->errorStream, "Error: BranchNZ requires an XT on the return stack but found '%s' instead.\n", CellTypeToName(cellXT.type));
     return;
   }
 
-  // If the flag is true, branch to the address on the return stack.
-  if (flag.value) {
-    ForthWord *meta = GetItemFromDictionary(&state->dict, (const char *)word.value);
-    meta->func(state);
+  // If the flag is true, run the XT.
+  // In Forth anything that is not 0 is true.
+  if (cellFlag.value != 0) {
+    RunForthOnString(state, (String *)cellXT.value);
   }
 }

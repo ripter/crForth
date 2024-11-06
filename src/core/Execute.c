@@ -12,6 +12,5 @@ void Execute(KernelState *state) {
     return;
   }
 
-  // RunForthWord(state, (const char *)word.value);
   RunForthOnString(state, (String *)cell.value);
 }

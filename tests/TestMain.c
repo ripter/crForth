@@ -7,8 +7,8 @@ int main(void) {
   printf("Running Tests...\n");
 
   // Array of test functions and corresponding names
-  TestFunc tests[] = {TestGetNext, TestDoForth, TestSys};
-  const char *testNames[] = {"GetNextWord", "DoForth", "Sys Structs"};
+  TestFunc tests[] = {TestGetNext, TestDoForth, TestSys, TestBranch };
+  const char *testNames[] = {"GetNextWord", "DoForth", "Sys Structs", "Branch" };
   // TestFunc tests[] = {TestGetNext,     TestDoForth,   TestBranch,
   //                     TestCompileMode, TestVariables, TestStrings,
   //                     TestSys};

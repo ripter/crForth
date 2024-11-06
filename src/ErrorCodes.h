@@ -13,6 +13,8 @@
 #define ERR_INVALID_ADDRESS               "Error 010: Invalid address type for evaluation.\n"
 #define ERR_ZERO_LENGTH                   "Error 011: Length for evaluation cannot be zero.\n"
 #define ERR_MISSING_STACK_VALUES          "Error 012: Expected %d values on the stack, but found %ld instead.\n"
+#define ERR_MISSING_XT_DUE_TO_EMPTY_STACK "Error 013: Expected an XT on the return stack, but found an empty stack instead.\n"
+#define ERR_MISSING_XT_DUE_BAD_TYPE       "Error 014: Expected XT, got %s instead.\n"
 
 #define BAIL_IF_EMPTY_RETURN_STACK()                                           \
   if (IsCellStackEmpty(&state->returnStack)) {                                 \
