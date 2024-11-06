@@ -6,7 +6,7 @@
 // Initializes a ForthWord structure
 // Name is copied into the structure, so the caller can free the original string. The copy will be freed by FreeForthWord.
 // isImmediate is a flag to indicate if the word is immediate
-// data is an optional string buffer used by the word, can be NULL if not needed. Will be freed by FreeForthWord.
+// data is the string source code for the word, set to NULL if the word is defined in C.
 ForthWord CreateForthWord(const char *name, xt_func_ptr func, bool isImmediate, const char *data) {
   ForthWord meta;
   // Allocate memory for the name and copy it
@@ -22,7 +22,9 @@ ForthWord CreateForthWord(const char *name, xt_func_ptr func, bool isImmediate, 
   if (data != NULL) {
     meta.data = CreateString(data);
   } else {
-    meta.data = CreateString("");
+    // NULL means the word is defined in C, not Forth.
+    // Use the name as the Forth source.
+    meta.data = CreateString(name);
   }
   return meta;
 }

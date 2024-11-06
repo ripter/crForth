@@ -7,10 +7,11 @@ void SemiColon(KernelState *state) {
   // Stop Compile Mode.
   state->IsInCompileMode = false;
 
-  // Pop until we find a ColonSys.
+  // if the return stack is empty, there is nothing to clean up.
   size_t stackSize = CellStackSize(&state->returnStack);
   if (stackSize == 0) { return; }
 
+  // Pop until we find a ColonSys.
   ColonSys *colonSys = NULL;
   Cell cellResult;
   while (CellStackSize(&state->returnStack) > 0) {
@@ -20,21 +21,6 @@ void SemiColon(KernelState *state) {
       break;
     }
   }
-
-  // do {
-  //   cellResult = CellStackPop(&state->returnStack);
-  //   if (cellResult.type == CELL_TYPE_COLON_SYS) {
-  //     colonSys = (ColonSys *)cellResult.value;
-  //     break;
-  //   }
-  // } while(CellStackSize(&state->returnStack) > 0);
-  // do {
-  //   cellResult = CellStackPop(&state->returnStack);
-  //   if (cellResult.type == CELL_TYPE_COLON_SYS) {
-  //     colonSys = (ColonSys *)cellResult.value;
-  //     break;
-  //   }
-  // } while (CellStackSize(&state->returnStack) > 0);
 
   // Clean up the ColonSys.
   FreeColonSys(colonSys);
