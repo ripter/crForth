@@ -356,6 +356,8 @@ MU_TEST(for_loop_leave) {
   OPEN_STREAM("5 0 DO I 3 = IF LEAVE THEN I LOOP");
   DoForth(&state);
   CLOSE_STREAM();
+  String *error = StreamToString(state.errorStream);
+  mu_assert_string_eq("", GetStringValue(error));
   mu_assert_double_eq(3, CellStackSize(&state.dataStack));
   mu_assert_double_eq(2, CellStackPop(&state.dataStack).value);
   mu_assert_double_eq(1, CellStackPop(&state.dataStack).value);
@@ -370,6 +372,8 @@ MU_TEST(for_loop_basic_with_qdo) {
 
   String *error = StreamToString(state.errorStream);
   mu_assert_string_eq("", GetStringValue(error));
+  String *output = StreamToString(state.outputStream);
+  mu_assert_string_eq("", GetStringValue(output));
   // Assert that the loop ran and output is correct
   mu_assert_double_eq(5, CellStackSize(&state.dataStack));
   mu_assert_double_eq(4, CellStackPop(&state.dataStack).value);
@@ -419,8 +423,8 @@ MU_TEST_SUITE(loop_tests) {
   MU_RUN_TEST(for_loop_negative_indices);
   MU_RUN_TEST(for_loop_modify_index);
   MU_RUN_TEST(for_loop_nested);
-  // MU_RUN_TEST(for_loop_leave);
-  // MU_RUN_TEST(for_loop_basic_with_qdo);
+  MU_RUN_TEST(for_loop_leave);
+  MU_RUN_TEST(for_loop_basic_with_qdo);
   // MU_RUN_TEST(for_loop_empty_with_qdo);
   // MU_RUN_TEST(for_loop_negative_with_qdo);
   // MU_RUN_TEST(for_loop_single_iteration_with_qdo);

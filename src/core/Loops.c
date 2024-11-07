@@ -154,44 +154,27 @@ void J(KernelState *state) {
 }
 
 
+// ( R: DoSys -- )
 // Exit the current loop.
 // This will also destroy any System structs on the return stack until it finds the DoSys struct.
 // https://forth-standard.org/standard/core/LEAVE
 void Leave(KernelState *state) {
-  DoSys *doSys = NULL;
   bool foundDoSys = false;
-  Cell cell;
+  // End the current stream/branch/loop.
+  fseek(state->inputStream, 0, SEEK_END);
 
-  do {
-    // If there is nothing left on the stack, bail.
-    if (IsCellStackEmpty(&state->returnStack)) {
-      fprintf(state->errorStream, "LEAVE: No DoSys struct found on the return stack.\n");
-      break;
-    }
-    // Find the DoSys struct on the return stack.
-    cell = CellStackPop(&state->returnStack);
+  while (!foundDoSys && CellStackSize(&state->returnStack) > 0) {
+    Cell cell = CellStackPop(&state->returnStack);
     if (cell.type == CELL_TYPE_DO_SYS) {
-      doSys = (DoSys *)cell.value;
+      // printf("LEAVE: Found DoSys struct on the return stack.\n");
       foundDoSys = true;
+      FreeDoSys((DoSys *)cell.value);
+    } else if (cell.type == CELL_TYPE_IF_SYS) {
+      // printf("LEAVE: Found IfSys struct on the return stack.\n");
+      MemFree((IfSys *)cell.value);
+    } else {
+      fprintf(state->errorStream, "LEAVE: Unable to free cell of type '%s'.\n", CellTypeToName(cell.type));
     }
-    // We can drop any values on the return stack until we find the DoSys struct.
-    else {
-      // cleanup based on the cell type. Otherwise, we could leak memory.
-      if (cell.type == CELL_TYPE_IF_SYS) {
-        MemFree((IfSys *)cell.value);
-      }
-    }
-  } while (foundDoSys == false);
-
-  if (foundDoSys) {
-    // change the loop control parameters to exit the loop.
-    doSys->index = doSys->limit - 1; // -1 because the loop will increment the index.
-    // Push the Cell struct back onto the return stack.
-    CellStackPush(&state->returnStack, cell);
-    // Skip to the end
-    fseek(state->inputStream, 0, SEEK_END);
-  } else {
-    printf("LEAVE: No DoSys struct was found on the return stack.\n");
   }
 }
 
