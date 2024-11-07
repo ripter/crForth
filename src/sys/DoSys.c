@@ -3,7 +3,7 @@
 
 DoSys *CreateDoSys(void) {
   DoSys *doSys = MemAlloc(sizeof(DoSys));
-  doSys->loopSrc = CreateString("");
+  doSys->src = CreateString("");
   doSys->limit = 0;
   doSys->index = 0;
   doSys->isNested = false;
@@ -11,7 +11,7 @@ DoSys *CreateDoSys(void) {
 }
 
 void FreeDoSys(DoSys *doSys) {
-  FreeString(doSys->loopSrc);
+  FreeString(doSys->src);
   MemFree(doSys);
 }
 

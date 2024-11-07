@@ -4,27 +4,25 @@
 
 
 // ( limit index -- ) ( R: -- do-sys ) 
+// Compilation: ( R: -- do-sys )
 // Set up loop control parameters with index and limit. 
 // Anything already on the return stack becomes unavailable until the loop-control parameters are discarded. 
 // https://forth-standard.org/standard/core/DO
 void DO(KernelState *state) {
-  // Create a new DoSys struct to hold the loop control parameters.
   DoSys *doSys = CreateDoSys();
 
-  //
-  // Compile Mode
-  // When in Compile Mode, postpone thte word "do" to the current definition.
+  // Is the kernel in compile mode?
+  // If so, this is a nested loop, so we need to postpone the word "do" to the current definition.
+  // We still need to create the DoSys struct and push it onto the return stack so we can find it later.
   if (state->IsInCompileMode) {
-    printf("DO: already compiling, postponing the word \"do\".\n");
-    // Put a nested DoSys struct on the return stack so LOOP can find it.
-    // doSys->isNested = true;
-    // CellStackPush(&state->returnStack, (Cell){(CellValue)doSys, CELL_TYPE_DOSYS});
-    AppendToString(state->compilePtr, "do ");
+    AppendWordToString(state->compilePtr, "do ");
+    doSys->isNested = true;
+    CellStackPush(&state->returnStack, (Cell){(CellValue)doSys, CELL_TYPE_DO_SYS});
     return;
   }
 
   //
-  // Interpret Mode
+  // Runtime Mode
   // Pop the stack to setup the loop control parameters.
   Cell index = CellStackPop(&state->dataStack);
   Cell limit = CellStackPop(&state->dataStack);
@@ -34,12 +32,71 @@ void DO(KernelState *state) {
   }
   doSys->limit = limit.value;
   doSys->index = index.value;
+
+  // Start compiling to the DoSys struct.
+  state->compilePtr = doSys->src;
+  state->IsInCompileMode = true;
   // Push the DoSys struct onto the return stack.
   CellStackPush(&state->returnStack, (Cell){(CellValue)doSys, CELL_TYPE_DO_SYS});
-  // Start compiling to the DoSys struct.
-  state->compilePtr = doSys->loopSrc;
-  state->IsInCompileMode = true;
 }
+
+
+// (R: do-sys -- | do-sys )
+// Compilation: ( R: do-sys -- )
+// Runs the loop body until the index is equal to or greater than the limit.
+// https://forth-standard.org/standard/core/LOOP
+void LOOP(KernelState *state) {
+  // Get the DoSys struct from the return stack.
+  Cell cellDoSys = CellStackPop(&state->returnStack);
+  if (cellDoSys.type != CELL_TYPE_DO_SYS) {
+    fprintf(state->errorStream, "Expected a DoSys struct on the return stack, but got \"%d\".\n", cellDoSys.type);
+    return;
+  }
+  DoSys *doSys = (DoSys *)cellDoSys.value;
+
+  // If this is a nested loop, we need to postpone the word "loop" to the current definition.
+  // We can free the DoSys struct now, as we are done with it.
+  if (doSys->isNested) {
+    // printf("LOOP: Found Nested Loop: src=%s\nFreed The DoSys.\n", GetStringValue(doSys->src));
+    AppendWordToString(state->compilePtr, "loop ");
+    FreeDoSys(doSys);
+    return;
+  }
+
+  // Interpret Mode
+  // Stop compiling the loop body.
+  state->IsInCompileMode = false;
+  // Push the DoSys struct back onto the return stack.
+  CellStackPush(&state->returnStack, cellDoSys);
+
+  // Run the loop!
+  // index and limit can be modified by the loop body.
+  while (doSys->index < doSys->limit) {
+    // Run the loop body. This can update the doSys struct.
+    RunForthOnString(state, doSys->src);
+    // Increment the loop index.
+    doSys->index += 1;
+  }
+
+  // Post loop cleanup
+  // Pop and Free the DoSys struct.
+  (void)CellStackPop(&state->returnStack);
+  FreeDoSys(doSys);
+
+
+  // Peek, is the the top now something we can point the compilePtr at?
+  if (CellStackSize(&state->returnStack) == 0) {
+    return;
+  }
+  Cell peekCell = CellStackPeekTop(&state->returnStack);
+  if (peekCell.type == CELL_TYPE_DO_SYS) {
+    state->compilePtr = ((DoSys *)peekCell.value)->src;
+  } else if (peekCell.type == CELL_TYPE_COLON_SYS) {
+    state->compilePtr = ((ColonSys *)peekCell.value)->src;
+  }
+}
+
+
 
 // ( -- n )
 // n is a copy of the current (innermost) loop index.
@@ -96,69 +153,6 @@ void J(KernelState *state) {
   }
 }
 
-// (R: do-sys -- )
-// Runs the loop body until the index is equal to or greater than the limit.
-// https://forth-standard.org/standard/core/LOOP
-void LOOP(KernelState *state) {
-  // DOs and Colon definitions mean we are in compile mode, or at least it's not useful to check for compile mode.
-  // Instead we need to loop through the return stack to find the DoSys struct.
-  size_t rstackSize = CellStackSize(&state->returnStack);
-  // If there is nothing on the return stack, postpone the word "loop" to the current definition.
-  if (rstackSize == 0) {
-    printf("LOOP: No DoSys struct found on the return stack.\n");
-    AppendToString(state->compilePtr, "loop ");
-    return;
-  }
-
-  // Get the DoSys struct from the return stack.
-  Cell cellDoSys = CellStackPop(&state->returnStack);
-  if (cellDoSys.type != CELL_TYPE_DO_SYS) {
-    fprintf(state->errorStream, "Expected a DoSys struct on the return stack, but got \"%d\".\n", cellDoSys.type);
-    return;
-  }
-  DoSys *doSys = (DoSys *)cellDoSys.value;
-
-  // 
-  // Compile Mode
-  // Is this a nested loop?
-  if (doSys->isNested) {
-    // Postpone the word "loop" to the current definition.
-    AppendToString(state->compilePtr, "loop ");
-    return;
-  }
-
-  // 
-  // Interpret Mode
-  // Stop compiling the loop body.
-  state->IsInCompileMode = false;
-  // Push the DoSys struct back onto the return stack.
-  CellStackPush(&state->returnStack, cellDoSys);
-  // Run the loop!
-  // index and limit can be modified by the loop body.
-  while (doSys->index < doSys->limit) {
-    // Run the loop body. This can update the doSys struct.
-    RunForthOnCharPtr(state, GetStringValue(doSys->loopSrc), GetStringLength(doSys->loopSrc));
-    // Increment the loop index.
-    doSys->index += 1;
-  }
-
-  // Clean up after the loop.
-  // Pop the DoSys struct off the return stack, we are done with it.
-  (void)CellStackPop(&state->returnStack);
-  // Try to get an outer loop.
-  Cell cellOuterDoSys = CellStackPeek(&state->returnStack, 0);
-  // Restore the compile pointer to the outer loop or the latest word.
-  if (cellOuterDoSys.type == CELL_TYPE_DO_SYS) {
-    DoSys *outerDoSys = (DoSys *)cellOuterDoSys.value;
-    state->compilePtr = outerDoSys->loopSrc;
-  } else {
-    ForthWord *latestWord = GetLastItemFromDictionary(&state->dict);
-    state->compilePtr = latestWord->data;
-  }
-
-  // Free the loop body data.
-  FreeDoSys(doSys);
-}
 
 // Exit the current loop.
 // This will also destroy any System structs on the return stack until it finds the DoSys struct.
