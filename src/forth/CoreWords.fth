@@ -11,13 +11,13 @@
 : CR    ( -- ) 10 emit ;                        \ https://forth-standard.org/standard/core/CR
 
 \ https://forth-standard.org/standard/core/MAX
-: MAX ( n1 n2 -- n ) 
-  2dup > if 
-    drop
-  else
-    nip
-  then
-;
+\ : MAX ( n1 n2 -- n ) 
+\   2dup > if 
+\     drop
+\   else
+\     nip
+\   then
+\ ;
 
 \ https://forth-standard.org/standard/core/qDO
 \ : ?DO ( n1 n2 -- )

@@ -15,12 +15,14 @@ void DO(KernelState *state) {
   // If so, this is a nested loop, so we need to postpone the word "do" to the current definition.
   // We still need to create the DoSys struct and push it onto the return stack so we can find it later.
   if (state->IsInCompileMode) {
-    AppendWordToString(state->compilePtr, "do ");
+    printf("DO: Found Nested Loop");
+    AppendWordToString(state->compilePtr, "do");
     doSys->isNested = true;
     CellStackPush(&state->returnStack, (Cell){(CellValue)doSys, CELL_TYPE_DO_SYS});
     return;
   }
 
+  printf("DO: Setting up Do-Sys");
   //
   // Runtime Mode
   // Pop the stack to setup the loop control parameters.
@@ -41,8 +43,8 @@ void DO(KernelState *state) {
 }
 
 
-// (R: do-sys -- | do-sys )
-// Compilation: ( R: do-sys -- )
+// (R: DoSys -- | DoSys )
+// Compilation: ( R: DoSys -- )
 // Runs the loop body until the index is equal to or greater than the limit.
 // https://forth-standard.org/standard/core/LOOP
 void LOOP(KernelState *state) {
@@ -58,7 +60,7 @@ void LOOP(KernelState *state) {
   // We can free the DoSys struct now, as we are done with it.
   if (doSys->isNested) {
     // printf("LOOP: Found Nested Loop: src=%s\nFreed The DoSys.\n", GetStringValue(doSys->src));
-    AppendWordToString(state->compilePtr, "loop ");
+    AppendWordToString(state->compilePtr, "loop");
     FreeDoSys(doSys);
     return;
   }
@@ -72,6 +74,7 @@ void LOOP(KernelState *state) {
   // Run the loop!
   // index and limit can be modified by the loop body.
   while (doSys->index < doSys->limit) {
+    printf("LOOP: Running Loop Body: index=%ld, limit=%ld, src=%s\n", doSys->index, doSys->limit, GetStringValue(doSys->src));
     // Run the loop body. This can update the doSys struct.
     RunForthOnString(state, doSys->src);
     // Increment the loop index.
@@ -90,8 +93,10 @@ void LOOP(KernelState *state) {
   }
   Cell peekCell = CellStackPeekTop(&state->returnStack);
   if (peekCell.type == CELL_TYPE_DO_SYS) {
+    printf("LOOP: Found DoSys struct on the return stack.\n");
     state->compilePtr = ((DoSys *)peekCell.value)->src;
   } else if (peekCell.type == CELL_TYPE_COLON_SYS) {
+    printf("LOOP: Found ColonSys struct on the return stack.\n");
     state->compilePtr = ((ColonSys *)peekCell.value)->src;
   }
 }
@@ -166,12 +171,10 @@ void Leave(KernelState *state) {
   while (!foundDoSys && CellStackSize(&state->returnStack) > 0) {
     Cell cell = CellStackPop(&state->returnStack);
     if (cell.type == CELL_TYPE_DO_SYS) {
-      // printf("LEAVE: Found DoSys struct on the return stack.\n");
       foundDoSys = true;
       FreeDoSys((DoSys *)cell.value);
-    } else if (cell.type == CELL_TYPE_IF_SYS) {
-      // printf("LEAVE: Found IfSys struct on the return stack.\n");
-      MemFree((IfSys *)cell.value);
+    } else if (cell.type == CELL_TYPE_ORIG_SYS) {
+      FreeOrigSys((OrigSys *)cell.value);
     } else {
       fprintf(state->errorStream, "LEAVE: Unable to free cell of type '%s'.\n", CellTypeToName(cell.type));
     }

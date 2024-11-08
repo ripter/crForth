@@ -40,9 +40,17 @@ void FreeDoSys(DoSys *doSys);
 
 
 
+//
+// OrigSys
+// A struct used by words like IF, ELSE, REPEAT, WHILE, etc.
 typedef struct {
-  CellValue flag;
-} IfSys;
+  bool flag;
+  bool isNested;
+  String *src;
+} OrigSys;
+
+OrigSys *CreateOrigSys(void);
+void FreeOrigSys(OrigSys *origSys);
 
 
 #endif // SYS_H

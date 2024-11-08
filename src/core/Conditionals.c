@@ -3,9 +3,29 @@
 #include "CoreWords.h"
 
 // ( flag -- )  ( R: -- flag )
+// Compilation: ( R: -- OrigSys )
 // If flag is false, skip until THEN or ELSE. 
 // https://forth-standard.org/standard/core/IF
 void IF(KernelState *state) {
+  OrigSys *origSys = CreateOrigSys();
+
+  // Push the OrigSys struct to the return stack so ELSE and THEN can use it.
+  CellStackPush(&state->returnStack, (Cell){(CellValue)origSys, CELL_TYPE_ORIG_SYS});
+
+  // When in compile mode, postpone the word.
+  if (state->IsInCompileMode) {
+    origSys->isNested = true;
+    AppendWordToString(state->compilePtr, "if");
+    return; 
+  }
+
+  Cell flag = CellStackPop(&state->dataStack);
+  origSys->flag = flag.value == FFALSE ? false : true;
+
+  // Start compiling to the OrigSys struct.
+  state->IsInCompileMode = true;
+  state->compilePtr = origSys->src;
+  /*
   char word[MAX_WORD_LENGTH];
   Cell flag = CellStackPop(&state->dataStack);
 
@@ -26,6 +46,7 @@ void IF(KernelState *state) {
       }
     }
   }
+  */
 }
 
 // ( R: flag -- )
@@ -36,12 +57,12 @@ void ELSE(KernelState *state) {
 
   Cell cell = CellStackPop(&state->returnStack);
   CellStackPush(&state->returnStack, cell);
-  if (cell.type != CELL_TYPE_IF_SYS) {
+  if (cell.type != CELL_TYPE_ORIG_SYS) {
     fprintf(state->errorStream, "ELSE: Expected a flag on the return stack, but got \"%s\".\n", CellTypeToName(cell.type));
   }
 
-  IfSys *ifSys = (IfSys *)cell.value;
-  if (ifSys->flag != FFALSE) {
+  OrigSys *origSys = (OrigSys *)cell.value;
+  if (origSys->flag != FFALSE) {
     // Skip until THEN
     while (GetNextWord(state->inputStream, word, MAX_WORD_LENGTH)) {
       if (TextIsEqual(word, "then")) {
@@ -53,19 +74,36 @@ void ELSE(KernelState *state) {
   }
 }
 
-// ( R: flag -- )
+// ( R: OrigSys -- )
 // Completes the IF/ELSE words.
 // https://forth-standard.org/standard/core/THEN
 void THEN(KernelState *state) {
-  // Remove the flag from the return stack.
   Cell cell = CellStackPop(&state->returnStack);
-  if (cell.type != CELL_TYPE_IF_SYS) {
-    // oops, something else might have borked our return value.
-    // put it back and bail.
-    CellStackPush(&state->returnStack, cell);
+  if (cell.type != CELL_TYPE_ORIG_SYS) {
+    fprintf(state->errorStream, "THEN: Expected an OrigSys struct on the return stack, but got \"%s\".\n", CellTypeToName(cell.type));
     return;
   }
-  // Free the IfSys struct.
-  MemFree((IfSys *)cell.value);
+  OrigSys *origSys = (OrigSys *)cell.value;
+
+  // If this is a nested loop, we need to postpone the word "then" to the current definition.
+  if (origSys->isNested) {
+    AppendWordToString(state->compilePtr, "then");
+    FreeOrigSys(origSys);
+    return;
+  }
+
+  // Stop Compile Mode.
+  state->IsInCompileMode = false;
+  // Check the flag value, do we run the code?
+  if (origSys->flag) {
+    // Run the OrigSys struct.
+    RunForthOnString(state, origSys->src);
+  }
+
+  // Restore the compile pointer.
+  //TODO: refactor from LOOP, LEAVE, SEMICOLON
+
+  // Clean up
+  FreeOrigSys(origSys);
 }
 

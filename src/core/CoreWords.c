@@ -49,9 +49,9 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, CreateForthWord("lshift",          (xt_func_ptr)BitShiftLeft,  false,  NULL));
   AddWordToDictionary(&state->dict, CreateForthWord("rshift",          (xt_func_ptr)BitShiftRight, false,  NULL));
   AddWordToDictionary(&state->dict, CreateForthWord("0=",              (xt_func_ptr)ZeroEquals,    false,  NULL));
-  AddWordToDictionary(&state->dict, CreateForthWord("if",              (xt_func_ptr)IF,            false,  NULL));
-  AddWordToDictionary(&state->dict, CreateForthWord("else",            (xt_func_ptr)ELSE,          false,  NULL));
-  AddWordToDictionary(&state->dict, CreateForthWord("then",            (xt_func_ptr)THEN,          false,  NULL));
+  AddWordToDictionary(&state->dict, CreateForthWord("if",              (xt_func_ptr)IF,            true,   NULL));
+  AddWordToDictionary(&state->dict, CreateForthWord("else",            (xt_func_ptr)ELSE,          true,   NULL));
+  AddWordToDictionary(&state->dict, CreateForthWord("then",            (xt_func_ptr)THEN,          true,   NULL));
   AddWordToDictionary(&state->dict, CreateForthWord("do",              (xt_func_ptr)DO,            true,   NULL));
   AddWordToDictionary(&state->dict, CreateForthWord("i",               (xt_func_ptr)I,             false,  NULL));
   AddWordToDictionary(&state->dict, CreateForthWord("loop",            (xt_func_ptr)LOOP,          true,   NULL));

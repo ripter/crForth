@@ -22,7 +22,7 @@
   X(OF_SYS)                                                                    \
   X(LOOP_SYS)                                                                  \
   X(NEST_SYS)                                                                  \
-  X(IF_SYS)
+  X(ORIG_SYS)
 
 typedef enum {
   #define X(name) CELL_TYPE_##name,
