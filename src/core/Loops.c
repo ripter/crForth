@@ -15,7 +15,7 @@ void DO(KernelState *state) {
   // If so, this is a nested loop, so we need to postpone the word "do" to the current definition.
   // We still need to create the DoSys struct and push it onto the return stack so we can find it later.
   if (state->IsInCompileMode) {
-    // printf("DO: Found Nested Loop");
+    // printf("DO: Found Nested Loop\n");
     AppendWordToString(GetCompileBuffer(state), "do");
     doSys->isNested = true;
     CellStackPush(&state->controlStack, (Cell){(CellValue)doSys, CELL_TYPE_DO_SYS});
@@ -35,8 +35,8 @@ void DO(KernelState *state) {
   doSys->limit = limit.value;
   doSys->index = index.value;
 
+  // printf("DO: limit=%ld, index=%ld\n", doSys->limit, doSys->index);
   // Start compiling to the DoSys struct.
-  // state->compilePtr = doSys->src;
   state->IsInCompileMode = true;
   // Push the DoSys struct onto the return stack.
   CellStackPush(&state->controlStack, (Cell){(CellValue)doSys, CELL_TYPE_DO_SYS});
@@ -60,6 +60,7 @@ void LOOP(KernelState *state) {
   // We can free the DoSys struct now, as we are done with it.
   if (doSys->isNested) {
     // printf("LOOP: Found Nested Loop: src=%s\nFreed The DoSys.\n", GetStringValue(doSys->src));
+    AppendToString(GetCompileBuffer(state), GetStringValue(doSys->src));
     AppendWordToString(GetCompileBuffer(state), "loop");
     FreeDoSys(doSys);
     return;
@@ -85,20 +86,6 @@ void LOOP(KernelState *state) {
   // Pop and Free the DoSys struct.
   (void)CellStackPop(&state->controlStack);
   FreeDoSys(doSys);
-
-
-  // Peek, is the the top now something we can point the compilePtr at?
-  // if (CellStackSize(&state->returnStack) == 0) {
-  //   return;
-  // }
-  // Cell peekCell = CellStackPeekTop(&state->returnStack);
-  // if (peekCell.type == CELL_TYPE_DO_SYS) {
-  //   printf("LOOP: Found DoSys struct on the return stack.\n");
-  //   state->compilePtr = ((DoSys *)peekCell.value)->src;
-  // } else if (peekCell.type == CELL_TYPE_COLON_SYS) {
-  //   printf("LOOP: Found ColonSys struct on the return stack.\n");
-  //   state->compilePtr = ((ColonSys *)peekCell.value)->src;
-  // }
 }
 
 
