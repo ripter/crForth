@@ -2,7 +2,7 @@
 #include "../crForth.h"
 #include "CoreWords.h"
 
-// ( "<spaces>name" -- ) ( R: -- colon-sys )
+// ( "<spaces>name" -- ) ( C: -- ColonSys )
 // Create a definition for name, called a "colon definition". Enter compilation state and start the current definition, producing colon-sys. 
 // https://forth-standard.org/standard/core/Colon
 void Colon(KernelState *state) {
@@ -17,10 +17,9 @@ void Colon(KernelState *state) {
   // Create the ColonSys struct.
   ColonSys *colonSys = CreateColonSys(newName, word.data);
   // Push the ColonSys struct onto the stack.
-  CellStackPush(&state->returnStack, (Cell){(CellValue)colonSys, CELL_TYPE_COLON_SYS}); 
+  CellStackPush(&state->controlStack, (Cell){(CellValue)colonSys, CELL_TYPE_COLON_SYS}); 
+  // printf("Colon pushed to stack: Created new word '%s'.\n", newName);
 
-  // Set the Compile Pointer to the new word.
-  state->compilePtr = word.data;
   // Start Compile Mode
   state->IsInCompileMode = true;
 }

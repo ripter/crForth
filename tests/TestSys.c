@@ -9,8 +9,8 @@ MU_TEST(colon_should_put_colonsys_on_stack) {
   OPEN_STREAM(": foobar");
   DoForth(&state);
   CLOSE_STREAM();
-  // Check the return stack for the ColonSys struct.
-  Cell cellResult = CellStackPop(&state.returnStack);
+  // Check the control stack for the ColonSys struct.
+  Cell cellResult = CellStackPop(&state.controlStack);
   mu_assert_double_eq(CELL_TYPE_COLON_SYS, cellResult.type);
   // ColonSys should have the newly created word.
   ColonSys *colonSys = (ColonSys *)cellResult.value;

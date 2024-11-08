@@ -23,5 +23,5 @@ void Create(KernelState *state) {
   newWord.data = state->hereBuffer;
   state->hereBuffer = CreateString("");
   // Move the compile pointer to the new word.
-  state->compilePtr = newWord.data; 
+  // state->compilePtr = newWord.data; 
 }

@@ -4,18 +4,22 @@
 // Stops Compile Mode and consumes the ColonSys.
 // https://forth-standard.org/standard/core/Semi
 void SemiColon(KernelState *state) {
-  // Stop Compile Mode.
-  state->IsInCompileMode = false;
-
-  // If the return stack is empty, there is nothing to clean up.
-  size_t stackSize = CellStackSize(&state->returnStack);
-  if (stackSize == 0) { return; }
+  // If the stack is empty, there is nothing to clean up.
+  size_t stackSize = CellStackSize(&state->controlStack);
+  if (stackSize == 0) { 
+    // printf("SemiColon: No Sys structs on control stack.\n");
+    // Stop Compile Mode.
+    state->IsInCompileMode = false;
+    return; 
+  }
 
   // Close the current ColonSys.
-  // If there are any other Sys on the return stack, free them.
+  // Free any Sys structs on the control stack until a ColonSys is found.
   bool foundColonSys = false;
-  while (!foundColonSys && CellStackSize(&state->returnStack) > 0) {
-    Cell cell = CellStackPop(&state->returnStack);
+  while (!foundColonSys && CellStackSize(&state->controlStack) > 0) {
+    Cell cell = CellStackPop(&state->controlStack);
+    // printf("SemiColon: Freeing cell of type '%s'.\n", CellTypeToName(cell.type));
+    //TODO: Refactor this Sys cleanup into a function.
     if (cell.type == CELL_TYPE_COLON_SYS) {
       foundColonSys = true;
       FreeColonSys((ColonSys *)cell.value);
@@ -28,13 +32,9 @@ void SemiColon(KernelState *state) {
     }
   }
 
-  // Peek, is the the top now something we can point the compilePtr at?
-  // This enables nested definitions.
-  if (CellStackSize(&state->returnStack) == 0) { return; }
-  Cell peekCell = CellStackPeekTop(&state->returnStack);
-  if (peekCell.type == CELL_TYPE_COLON_SYS) {
-    ColonSys *colonSys = (ColonSys *)peekCell.value;
-    state->IsInCompileMode = true;
-    state->compilePtr = colonSys->src;
+  // If the Control Stack is empty, we can stop compile mode.
+  if (CellStackSize(&state->controlStack) == 0) {
+    state->IsInCompileMode = false;
+    return;
   }
 }

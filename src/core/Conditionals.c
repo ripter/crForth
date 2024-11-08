@@ -2,20 +2,20 @@
 #include "../crForth.h"
 #include "CoreWords.h"
 
-// ( flag -- )  ( R: -- flag )
-// Compilation: ( R: -- OrigSys )
+// ( flag -- )  ( C: -- flag )
+// Compilation: ( C: -- OrigSys )
 // If flag is false, skip until THEN or ELSE. 
 // https://forth-standard.org/standard/core/IF
 void IF(KernelState *state) {
   OrigSys *origSys = CreateOrigSys();
 
   // Push the OrigSys struct to the return stack so ELSE and THEN can use it.
-  CellStackPush(&state->returnStack, (Cell){(CellValue)origSys, CELL_TYPE_ORIG_SYS});
+  CellStackPush(&state->controlStack, (Cell){(CellValue)origSys, CELL_TYPE_ORIG_SYS});
 
   // When in compile mode, postpone the word.
   if (state->IsInCompileMode) {
     origSys->isNested = true;
-    AppendWordToString(state->compilePtr, "if");
+    AppendWordToString(GetCompileBuffer(state), "if");
     return; 
   }
 
@@ -24,7 +24,7 @@ void IF(KernelState *state) {
 
   // Start compiling to the OrigSys struct.
   state->IsInCompileMode = true;
-  state->compilePtr = origSys->src;
+  // state->compilePtr = origSys->src;
   /*
   char word[MAX_WORD_LENGTH];
   Cell flag = CellStackPop(&state->dataStack);
@@ -74,11 +74,11 @@ void ELSE(KernelState *state) {
   }
 }
 
-// ( R: OrigSys -- )
+// ( C: OrigSys -- )
 // Completes the IF/ELSE words.
 // https://forth-standard.org/standard/core/THEN
 void THEN(KernelState *state) {
-  Cell cell = CellStackPop(&state->returnStack);
+  Cell cell = CellStackPop(&state->controlStack);
   if (cell.type != CELL_TYPE_ORIG_SYS) {
     fprintf(state->errorStream, "THEN: Expected an OrigSys struct on the return stack, but got \"%s\".\n", CellTypeToName(cell.type));
     return;
@@ -87,7 +87,7 @@ void THEN(KernelState *state) {
 
   // If this is a nested loop, we need to postpone the word "then" to the current definition.
   if (origSys->isNested) {
-    AppendWordToString(state->compilePtr, "then");
+    AppendWordToString(GetCompileBuffer(state), "then");
     FreeOrigSys(origSys);
     return;
   }
