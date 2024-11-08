@@ -11,9 +11,9 @@ void AddCoreWords(KernelState *state) {
   AddWordToDictionary(&state->dict, CreateForthWord("-",               (xt_func_ptr)Subtract,      false,  NULL));
   AddWordToDictionary(&state->dict, CreateForthWord(".",               (xt_func_ptr)Dot,           false,  NULL));
   AddWordToDictionary(&state->dict, CreateForthWord("skip",            (xt_func_ptr)Skip,          false,  NULL));
-  AddWordToDictionary(&state->dict, CreateForthWord("0skip",           (xt_func_ptr)SkipOnZero,    false,  NULL));
-  AddWordToDictionary(&state->dict, CreateForthWord("branch",          (xt_func_ptr)Branch,        false,  NULL));
-  AddWordToDictionary(&state->dict, CreateForthWord("?branch",         (xt_func_ptr)BranchNZ,      false,  NULL));
+  // AddWordToDictionary(&state->dict, CreateForthWord("0skip",           (xt_func_ptr)SkipOnZero,    false,  NULL));
+  // AddWordToDictionary(&state->dict, CreateForthWord("branch",          (xt_func_ptr)Branch,        false,  NULL));
+  // AddWordToDictionary(&state->dict, CreateForthWord("?branch",         (xt_func_ptr)BranchNZ,      false,  NULL));
   AddWordToDictionary(&state->dict, CreateForthWord(".s",              (xt_func_ptr)DotS,          true,   NULL));
   AddWordToDictionary(&state->dict, CreateForthWord(":",               (xt_func_ptr)Colon,         true,   NULL));
   AddWordToDictionary(&state->dict, CreateForthWord(";",               (xt_func_ptr)SemiColon,     true,   NULL));

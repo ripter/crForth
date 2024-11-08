@@ -13,20 +13,20 @@
 
 // ( n -- )
 // Skip the next n words in the input stream.
-void Skip(KernelState *state) {
-  char wordBuffer[MAX_WORD_LENGTH];
-  Cell num = CellStackPop(&state->dataStack);
+// void Skip(KernelState *state) {
+//   char wordBuffer[MAX_WORD_LENGTH];
+//   Cell num = CellStackPop(&state->dataStack);
 
-  if (num.type != CELL_TYPE_NUMBER) {
-    fprintf(state->errorStream, "Error: Skip requires a number on the stack.\n");
-    return;
-  }
+//   if (num.type != CELL_TYPE_NUMBER) {
+//     fprintf(state->errorStream, "Error: Skip requires a number on the stack.\n");
+//     return;
+//   }
 
-  // Skip the number of words specified by the parsed number.
-  for (CellValue i = 0; i < num.value; i++) {
-    GetNextWord(state->inputStream, wordBuffer, MAX_WORD_LENGTH);
-  }
-}
+//   // Skip the number of words specified by the parsed number.
+//   for (CellValue i = 0; i < num.value; i++) {
+//     GetNextWord(state->inputStream, wordBuffer, MAX_WORD_LENGTH);
+//   }
+// }
 
 // ( n1 n2 -- )
 // Skips n2 words in the input stream if n1 is 0.
@@ -42,6 +42,7 @@ void SkipOnZero(KernelState *state) {
     }
   }
 }
+
 
 
 // ( R: XT -- )
@@ -60,20 +61,6 @@ void Branch(KernelState *state) {
   }
 
   RunForthOnString(state, (String *)cell.value);
-  // BAIL_IF_EMPTY_RETURN_STACK();
-
-  // Cell word = CellStackPop(&state->returnStack);
-  // Cell length = CellStackPop(&state->returnStack);
-  // if (word.type != CELL_TYPE_WORD || length.type != CELL_TYPE_NUMBER) {
-  //   fprintf(state->errorStream, ERR_INVALID_WORD_ON_RETURN_STACK);
-  //   return;
-  // }
-  // if (!IsNullTerminatedString((const char *)word.value, length.value+1)) {
-  //   fprintf(state->errorStream, ERR_WORD_NOT_FOUND, (char *)word.value);
-  //   return;
-  // }
-
-  // DoForthString(state, (const char *)word.value, (const char *)word.value);
 }
 
 

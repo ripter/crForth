@@ -22,7 +22,7 @@ void DO(KernelState *state) {
     return;
   }
 
-  printf("DO: Setting up Do-Sys");
+  // printf("DO: Setting up Do-Sys");
   //
   // Runtime Mode
   // Pop the stack to setup the loop control parameters.
@@ -74,7 +74,7 @@ void LOOP(KernelState *state) {
   // Run the loop!
   // index and limit can be modified by the loop body.
   while (doSys->index < doSys->limit) {
-    printf("LOOP: Running Loop Body: index=%ld, limit=%ld, src=%s\n", doSys->index, doSys->limit, GetStringValue(doSys->src));
+    // printf("LOOP: Running Loop Body: index=%ld, limit=%ld, src=%s\n", doSys->index, doSys->limit, GetStringValue(doSys->src));
     // Run the loop body. This can update the doSys struct.
     RunForthOnString(state, doSys->src);
     // Increment the loop index.
@@ -108,13 +108,13 @@ void LOOP(KernelState *state) {
 // https://forth-standard.org/standard/core/I
 void I(KernelState *state) {
   // Loop for the first DoSys struct on the return stack.
-  size_t stackSize = CellStackSize(&state->returnStack); 
+  size_t stackSize = CellStackSize(&state->controlStack); 
   if (stackSize == 0) {
     fprintf(state->errorStream, "I: No DoSys struct found on the return stack.\n");
     return;
   }
   for (size_t i=stackSize-1; i >= 0; i--) {
-    Cell cell = CellStackPeek(&state->returnStack, i);
+    Cell cell = CellStackPeek(&state->controlStack, i);
     // Skip any non-DoSys structs.
     if (cell.type != CELL_TYPE_DO_SYS) {
       continue;
@@ -130,7 +130,7 @@ void I(KernelState *state) {
 // https://forth-standard.org/standard/core/J
 void J(KernelState *state) {
   // Loop for the second DoSys struct on the return stack.
-  size_t stackSize = CellStackSize(&state->returnStack);
+  size_t stackSize = CellStackSize(&state->controlStack);
   if (stackSize < 2) {
     fprintf(state->errorStream,
             stackSize == 0
@@ -140,7 +140,7 @@ void J(KernelState *state) {
   }
   int foundCount = 0;
   for (size_t i = stackSize - 1; i >= 0; i--) {
-    Cell cell = CellStackPeek(&state->returnStack, i);
+    Cell cell = CellStackPeek(&state->controlStack, i);
     // Skip any non-DoSys structs.
     if (cell.type != CELL_TYPE_DO_SYS) {
       continue;
