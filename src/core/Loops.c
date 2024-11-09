@@ -75,13 +75,15 @@ void LOOP(KernelState *state) {
   // Run the loop!
   // index and limit can be modified by the loop body.
   while (doSys->index < doSys->limit) {
-    // printf("LOOP: Running Loop Body: index=%ld, limit=%ld, src=%s\n", doSys->index, doSys->limit, GetStringValue(doSys->src));
+    printf("\nLOOP: Running Loop Body: index=%ld, limit=%ld, src=%s\n", doSys->index, doSys->limit, GetStringValue(doSys->src));
     // Run the loop body. This can update the doSys struct.
     RunForthOnString(state, doSys->src);
     // Increment the loop index.
     doSys->index += 1;
+    printf("\nLOOP: Loop Body Finished, Incremented Index\n");
   }
 
+  // printf("LOOP: Loop Finished: Freeing DoSys\n");
   // Post loop cleanup
   // Pop and Free the DoSys struct.
   (void)CellStackPop(&state->controlStack);
@@ -97,7 +99,7 @@ void I(KernelState *state) {
   // Loop for the first DoSys struct on the return stack.
   size_t stackSize = CellStackSize(&state->controlStack); 
   if (stackSize == 0) {
-    fprintf(state->errorStream, "I: No DoSys struct found on the return stack.\n");
+    fprintf(state->errorStream, "I: Control stack is empty.\n");
     return;
   }
   for (size_t i=stackSize-1; i >= 0; i--) {
@@ -152,18 +154,23 @@ void J(KernelState *state) {
 // https://forth-standard.org/standard/core/LEAVE
 void Leave(KernelState *state) {
   bool foundDoSys = false;
+  // DebugStream(state->inputStream);
   // End the current stream/branch/loop.
   fseek(state->inputStream, 0, SEEK_END);
 
-  while (!foundDoSys && CellStackSize(&state->returnStack) > 0) {
-    Cell cell = CellStackPop(&state->returnStack);
+  // printf("LEAVE: Free DoSys struct.\n");
+  while (!foundDoSys && CellStackSize(&state->controlStack) > 0) {
+    Cell cell = CellStackPop(&state->controlStack);
+    printf("\nLEAVE: Freeing cell of type '%s'.\n", CellTypeToName(cell.type));
     if (cell.type == CELL_TYPE_DO_SYS) {
       foundDoSys = true;
-      FreeDoSys((DoSys *)cell.value);
+      DoSys *doSys = (DoSys *)cell.value; 
+      doSys->index = doSys->limit;
     } else if (cell.type == CELL_TYPE_ORIG_SYS) {
-      FreeOrigSys((OrigSys *)cell.value);
+      // printf("\nLEAVE: Free OrigSys struct.\n");
+      // FreeOrigSys((OrigSys *)cell.value);
     } else {
-      fprintf(state->errorStream, "LEAVE: Unable to free cell of type '%s'.\n", CellTypeToName(cell.type));
+      fprintf(state->errorStream, "\nLEAVE: Unable to free cell of type '%s'.\n", CellTypeToName(cell.type));
     }
   }
 }

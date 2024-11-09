@@ -6,4 +6,7 @@ bool ConvertWordToNumber(const char* word, CellValue* numPtr);
 bool IsNumber(const char* word);
 bool IsWhitespace(char c);
 
+// Debugging function to print the current position, length, and remaining content of a stream.
+void DebugStream(FILE *stream);
+
 #endif // UTILS_H

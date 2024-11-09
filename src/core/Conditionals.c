@@ -13,6 +13,7 @@ void IF(KernelState *state) {
 
   // When in compile mode, postpone the word.
   if (state->IsInCompileMode) {
+    // printf("IF: Found Nested Loop\n");
     origSys->isNested = true;
     AppendWordToString(GetCompileBuffer(state), "if");
     return; 
@@ -72,6 +73,7 @@ void THEN(KernelState *state) {
 
   // If this is a nested loop, we need to postpone the word "then" to the current definition.
   if (origSys->isNested) {
+    AppendToString(GetCompileBuffer(state), GetStringValue(origSys->src));
     AppendWordToString(GetCompileBuffer(state), "then");
     FreeOrigSys(origSys);
     return;
@@ -81,8 +83,10 @@ void THEN(KernelState *state) {
   state->IsInCompileMode = false;
   // Check the flag value, do we run the code?
   if (origSys->flag) {
-    // Run the OrigSys struct.
+    CellStackPush(&state->controlStack, cell);
     RunForthOnString(state, origSys->src);
+    (void)CellStackPop(&state->controlStack);
+    printf("THEN: Ran the code src='%s'\n", GetStringValue(origSys->src));
   }
 
   // Clean up
