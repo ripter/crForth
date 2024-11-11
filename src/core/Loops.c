@@ -75,12 +75,13 @@ void LOOP(KernelState *state) {
   // Run the loop!
   // index and limit can be modified by the loop body.
   while (doSys->index < doSys->limit) {
-    printf("\nLOOP: Running Loop Body: index=%ld, limit=%ld, src=%s\n", doSys->index, doSys->limit, GetStringValue(doSys->src));
+    // printf("\nLOOP: Running Loop Body: index=%ld, limit=%ld, src=%s\n", doSys->index, doSys->limit, GetStringValue(doSys->src));
     // Run the loop body. This can update the doSys struct.
-    RunForthOnString(state, doSys->src);
+    // RunForthOnString(state, doSys->src);
+    RunSysBranch(state, &cellDoSys);
     // Increment the loop index.
     doSys->index += 1;
-    printf("\nLOOP: Loop Body Finished, Incremented Index\n");
+    // printf("\nLOOP: Loop Body Finished, Incremented Index\n");
   }
 
   // printf("LOOP: Loop Finished: Freeing DoSys\n");
@@ -156,17 +157,19 @@ void Leave(KernelState *state) {
   bool foundDoSys = false;
   // DebugStream(state->inputStream);
   // End the current stream/branch/loop.
-  fseek(state->inputStream, 0, SEEK_END);
+  // fseek(state->inputStream, 0, SEEK_END);
 
   // printf("LEAVE: Free DoSys struct.\n");
   while (!foundDoSys && CellStackSize(&state->controlStack) > 0) {
     Cell cell = CellStackPop(&state->controlStack);
-    printf("\nLEAVE: Freeing cell of type '%s'.\n", CellTypeToName(cell.type));
+    // printf("\nLEAVE: Freeing cell of type '%s'.\n", CellTypeToName(cell.type));
     if (cell.type == CELL_TYPE_DO_SYS) {
       foundDoSys = true;
       DoSys *doSys = (DoSys *)cell.value; 
       doSys->index = doSys->limit;
+      fseek(doSys->stream, 0, SEEK_END);
     } else if (cell.type == CELL_TYPE_ORIG_SYS) {
+      fseek(((OrigSys *)cell.value)->stream, 0, SEEK_END);
       // printf("\nLEAVE: Free OrigSys struct.\n");
       // FreeOrigSys((OrigSys *)cell.value);
     } else {

@@ -10,6 +10,7 @@
 typedef struct {
   String *name; // The name of the definition.
   String *src;  // The source code for the definition.
+  FILE *stream; // The stream for the definition.
 } ColonSys;
 
 // Function to create a ColonSys, src is not owned by the ColonSys.
@@ -33,6 +34,7 @@ typedef struct {
   CellValue index; // The current index of the loop.
   bool isNested;   // True if this is a nested loop.
   String *src;     // The source code for the loop body. When the loop runs, this code will be executed.
+  FILE *stream;    // The stream for the definition.
 } DoSys;
 
 DoSys *CreateDoSys(void);
@@ -46,7 +48,8 @@ void FreeDoSys(DoSys *doSys);
 typedef struct {
   bool flag;
   bool isNested;
-  String *src;
+  String *src;    // Source code as a Forth String
+  FILE *stream;   // The stream for the definition.
 } OrigSys;
 
 OrigSys *CreateOrigSys(void);

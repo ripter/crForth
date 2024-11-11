@@ -2,12 +2,13 @@
 #include "Sys.h"
 
 DoSys *CreateDoSys(void) {
-  DoSys *doSys = MemAlloc(sizeof(DoSys));
-  doSys->src = CreateString("");
-  doSys->limit = 0;
-  doSys->index = 0;
-  doSys->isNested = false;
-  return doSys;
+  DoSys *this = MemAlloc(sizeof(DoSys));
+  this->src = CreateString("");
+  this->limit = 0;
+  this->index = 0;
+  this->isNested = false;
+  this->stream = NULL;
+  return this;
 }
 
 void FreeDoSys(DoSys *doSys) {

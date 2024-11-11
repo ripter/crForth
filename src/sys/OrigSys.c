@@ -3,10 +3,11 @@
 
 
 OrigSys *CreateOrigSys(void) {
-  OrigSys *origSys = MemAlloc(sizeof(OrigSys));
-  origSys->flag = false;
-  origSys->src = CreateString("");
-  return origSys;
+  OrigSys *this = MemAlloc(sizeof(OrigSys));
+  this->flag = false;
+  this->src = CreateString("");
+  this->stream = NULL;
+  return this;
 }
 
 

@@ -5,6 +5,7 @@ ColonSys *CreateColonSys(const char* newName, String *src) {
   ColonSys *colonSys = (ColonSys *)MemAlloc(sizeof(ColonSys));
   colonSys->name = CreateString(newName);
   colonSys->src = src;
+  colonSys->stream = NULL;
   return colonSys;
 }
 

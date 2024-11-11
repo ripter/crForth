@@ -84,9 +84,11 @@ void THEN(KernelState *state) {
   // Check the flag value, do we run the code?
   if (origSys->flag) {
     CellStackPush(&state->controlStack, cell);
-    RunForthOnString(state, origSys->src);
+    // RunForthOnString(state, origSys->src);
+    RunSysBranch(state, &cell);
+
     (void)CellStackPop(&state->controlStack);
-    printf("THEN: Ran the code src='%s'\n", GetStringValue(origSys->src));
+    // printf("THEN: Ran the code src='%s'\n", GetStringValue(origSys->src));
   }
 
   // Clean up

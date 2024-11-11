@@ -37,6 +37,8 @@ void RunForthOnCharPtr(KernelState *state, const char *forthString, CellValue le
 void RunForthOnString(KernelState *state, String *src);
 // Runs the Forth word.
 void RunForthWord(KernelState *state, const char *forthWord);
+// Run A Sys Struct as a Branch.
+void RunSysBranch(KernelState *state, Cell *cell);
 
 // Gets the next word from the input stream.
 bool GetNextWord(FILE* input, char* buffer, size_t bufferSize);
