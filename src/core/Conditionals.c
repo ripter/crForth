@@ -13,7 +13,7 @@ void IF(KernelState *state) {
 
   // When in compile mode, postpone the word.
   if (state->IsInCompileMode) {
-    // printf("IF: Found Nested Loop\n");
+    // printf("\nIF: Found Nested Loop\n");
     origSys->isNested = true;
     AppendWordToString(GetCompileBuffer(state), "if");
     return; 
@@ -40,6 +40,7 @@ void ELSE(KernelState *state) {
 
   // If this is a nested loop, postpone the word.
   if (origSys->isNested) {
+    // printf("\nELSE: Found Nested Loop\n");
     AppendWordToString(GetCompileBuffer(state), "else");
     return;
   }
