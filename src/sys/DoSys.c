@@ -6,7 +6,8 @@ DoSys *CreateDoSys(void) {
   this->src = CreateString("");
   this->limit = 0;
   this->index = 0;
-  this->isNested = false;
+  // this->isNested = false;
+  this->depth = 0;
   this->stream = NULL;
   return this;
 }

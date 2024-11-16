@@ -65,7 +65,9 @@ String* GetCompileBuffer(KernelState *state) {
   case CELL_TYPE_DO_SYS:
     return ((DoSys *)cell.value)->src;
   case CELL_TYPE_ORIG_SYS:
-    return ((OrigSys *)cell.value)->src; 
+    return ((OrigSys *)cell.value)->src;
+  case CELL_TYPE_LOOP_SYS:
+    return ((LoopSys *)cell.value)->src;
   default:
     fprintf(state->errorStream, "GetCompileBuffer: Unknown Sys type on control stack: %s\n", CellTypeToName(cell.type));
   } 

@@ -20,10 +20,16 @@ void FreeColonSys(ColonSys *colonSys);
 
 
 //
-// NestSys
+// LoopSys
 typedef struct {
-  String *src; // The source code for the nest.
-} NestSys;
+  CellValue limit; // The limit of the loop, the loop will run until the index is equal to or greater than the limit.
+  CellValue index; // The current index of the loop.
+  String *src;     // The loop body.
+  FILE *stream;    // The stream for the definition.
+} LoopSys;
+
+LoopSys *CreateLoopSys(CellValue limit, CellValue index);
+void FreeLoopSys(LoopSys *loopSys);
 
 
 //
@@ -32,7 +38,8 @@ typedef struct {
 typedef struct {
   CellValue limit; // The limit of the loop, the loop will run until the index is equal to or greater than the limit.
   CellValue index; // The current index of the loop.
-  bool isNested;   // True if this is a nested loop.
+  // bool isNested;   // True if this is a nested loop.
+  int depth;       // The depth of the loop.
   String *src;     // The source code for the loop body. When the loop runs, this code will be executed.
   FILE *stream;    // The stream for the definition.
 } DoSys;

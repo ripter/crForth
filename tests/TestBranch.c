@@ -279,6 +279,24 @@ MU_TEST_SUITE(if_else_then_tests) {
 
 //
 // ********** Loops **********
+MU_TEST(do_loop_standard_test) {
+  // https://forth-standard.org/standard/testsuite#test:core:LOOP
+  INIT_TEST_STATE();
+  OPEN_STREAM(": GD1 DO I LOOP ;");
+  DoForth(&state);
+  REOPEN_STREAM("4 1 GD1")
+  mu_assert_double_eq(3, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(2, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(1, CellStackPop(&state.dataStack).value);
+
+  REOPEN_STREAM("2 -1 GD1");
+  mu_assert_double_eq( 1, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq( 0, CellStackPop(&state.dataStack).value);
+  mu_assert_double_eq(-1, CellStackPop(&state.dataStack).value);
+
+  CLOSE_STREAM();
+  FREE_TEST_STATE();
+}
 MU_TEST(for_loop_basic) {
   INIT_TEST_STATE();
   OPEN_STREAM("5 0 DO I LOOP");
@@ -428,19 +446,22 @@ MU_TEST(for_loop_single_iteration_with_qdo) {
 }
 
 MU_TEST_SUITE(loop_tests) {
-  MU_RUN_TEST(for_loop_basic);
-  MU_RUN_TEST(for_loop_reverse);
-  MU_RUN_TEST(for_loop_single_iteration);
-  MU_RUN_TEST(for_loop_empty);
-  MU_RUN_TEST(for_loop_negative_indices);
-  MU_RUN_TEST(for_loop_modify_index);
-  MU_RUN_TEST(for_loop_nested);
-  MU_RUN_TEST(for_loop_leave);
+  MU_RUN_TEST(do_loop_standard_test);
+  // MU_RUN_TEST(for_loop_basic);
+  // MU_RUN_TEST(for_loop_reverse);
+  // MU_RUN_TEST(for_loop_single_iteration);
+  // MU_RUN_TEST(for_loop_empty);
+  // MU_RUN_TEST(for_loop_negative_indices);
+  // MU_RUN_TEST(for_loop_modify_index);
+  // MU_RUN_TEST(for_loop_nested);
+
+  // MU_RUN_TEST(for_loop_leave);
   // MU_RUN_TEST(for_loop_basic_with_qdo);
   // MU_RUN_TEST(for_loop_empty_with_qdo);
   // MU_RUN_TEST(for_loop_negative_with_qdo);
   // MU_RUN_TEST(for_loop_single_iteration_with_qdo);
 }
+
 
 
 

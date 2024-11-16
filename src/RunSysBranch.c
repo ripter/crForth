@@ -16,6 +16,9 @@ void RunSysBranch(KernelState *state, Cell *cell) {
     case CELL_TYPE_ORIG_SYS:
       src = ((OrigSys *)cell->value)->src;
       break;
+    case CELL_TYPE_LOOP_SYS:
+      src = ((LoopSys *)cell->value)->src;
+      break;
     default:
       break;
   }
@@ -42,6 +45,9 @@ void RunSysBranch(KernelState *state, Cell *cell) {
     case CELL_TYPE_ORIG_SYS:
       ((OrigSys *)cell->value)->stream = inputStream;
       break;
+    case CELL_TYPE_LOOP_SYS:
+      ((LoopSys *)cell->value)->stream = inputStream;
+      break;
     default:
       break;
   }
@@ -51,6 +57,7 @@ void RunSysBranch(KernelState *state, Cell *cell) {
   FILE *originalInputStream = state->inputStream;
   state->inputStream = inputStream;
 
+  // printf("RunSysBranch: Running \"%s\"\n", GetStringValue(src));
   // Run the Forth system with the new stream.
   DoForth(state);
 

@@ -21,6 +21,8 @@ void AppendWordToString(String *str, const char *word) {
   if (str) {
     kputs(word, str);
     kputc(' ', str);
+
+    // printf("AppendWordToString: %s was appended to make '%s'\n", word, str->s);
   }
 }
 // Handles converting a cell to a string and then appends it with a space to the string.
