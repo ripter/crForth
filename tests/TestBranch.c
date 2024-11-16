@@ -285,11 +285,13 @@ MU_TEST(do_loop_standard_test) {
   OPEN_STREAM(": GD1 DO I LOOP ;");
   DoForth(&state);
   REOPEN_STREAM("4 1 GD1")
+  DoForth(&state);
   mu_assert_double_eq(3, CellStackPop(&state.dataStack).value);
   mu_assert_double_eq(2, CellStackPop(&state.dataStack).value);
   mu_assert_double_eq(1, CellStackPop(&state.dataStack).value);
 
   REOPEN_STREAM("2 -1 GD1");
+  DoForth(&state);
   mu_assert_double_eq( 1, CellStackPop(&state.dataStack).value);
   mu_assert_double_eq( 0, CellStackPop(&state.dataStack).value);
   mu_assert_double_eq(-1, CellStackPop(&state.dataStack).value);
