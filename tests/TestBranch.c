@@ -449,15 +449,15 @@ MU_TEST(for_loop_single_iteration_with_qdo) {
 
 MU_TEST_SUITE(loop_tests) {
   MU_RUN_TEST(do_loop_standard_test);
-  // MU_RUN_TEST(for_loop_basic);
-  // MU_RUN_TEST(for_loop_reverse);
-  // MU_RUN_TEST(for_loop_single_iteration);
-  // MU_RUN_TEST(for_loop_empty);
-  // MU_RUN_TEST(for_loop_negative_indices);
-  // MU_RUN_TEST(for_loop_modify_index);
-  // MU_RUN_TEST(for_loop_nested);
+  MU_RUN_TEST(for_loop_basic);
+  MU_RUN_TEST(for_loop_reverse);
+  MU_RUN_TEST(for_loop_single_iteration);
+  MU_RUN_TEST(for_loop_empty);
+  MU_RUN_TEST(for_loop_negative_indices);
+  MU_RUN_TEST(for_loop_modify_index);
+  MU_RUN_TEST(for_loop_nested);
 
-  // MU_RUN_TEST(for_loop_leave);
+  MU_RUN_TEST(for_loop_leave);
   // MU_RUN_TEST(for_loop_basic_with_qdo);
   // MU_RUN_TEST(for_loop_empty_with_qdo);
   // MU_RUN_TEST(for_loop_negative_with_qdo);
