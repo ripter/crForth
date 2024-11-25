@@ -4,7 +4,7 @@ UNFINISHED: Yet Another Forth implimentation, In C
 This is not a Forth for your embeded system. This is a Forth intergrated into Raylib. It will only work on systems where Raylib can be found.
 
 Core Libraries Used:
-* [Raylib](https://www.raylib.com/), linked via pkg-config.
+* [Raylib 5.5](https://www.raylib.com/), linked via pkg-config.
 * [minunit](https://github.com/siu/minunit/tree/master), source added to project.
 * [klib](https://github.com/attractivechaos/klib), source added to project.
 

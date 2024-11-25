@@ -5,6 +5,11 @@
 #include "../String.h"
 
 //
+// Helpers that work with all Sys structs.
+void FreeSys(Cell *cell);
+
+
+//
 // Colon-Sys
 // A struct for definitions.
 typedef struct {
