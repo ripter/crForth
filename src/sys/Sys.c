@@ -1,5 +1,6 @@
 #include "Sys.h"
 
+// Frees any type of Sys struct.
 void FreeSys(Cell *cell) {
   switch (cell->type) {
     case CELL_TYPE_COLON_SYS:
@@ -16,5 +17,25 @@ void FreeSys(Cell *cell) {
       break;
     default:
       fprintf(stderr, "FreeSys: Unknown type: %s\n", CellTypeToName(cell->type));
+  }
+}
+
+// Ends the stream of any type of Sys struct.
+void EndSysStream(Cell *cell) {
+  switch (cell->type) {
+    case CELL_TYPE_COLON_SYS:
+      fseek(((OrigSys *)cell->value)->stream, 0, SEEK_END);
+      break;
+    case CELL_TYPE_LOOP_SYS:
+      fseek(((LoopSys *)cell->value)->stream, 0, SEEK_END);
+      break;
+    case CELL_TYPE_DO_SYS:
+      fseek(((DoSys *)cell->value)->stream, 0, SEEK_END);
+      break;
+    case CELL_TYPE_ORIG_SYS:
+      fseek(((OrigSys *)cell->value)->stream, 0, SEEK_END);
+      break;
+    default:
+      fprintf(stderr, "EndSysStream: Unknown type: %s\n", CellTypeToName(cell->type));
   }
 }

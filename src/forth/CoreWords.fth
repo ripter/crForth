@@ -20,9 +20,9 @@
 ;
 
 \ https://forth-standard.org/standard/core/qDO
-\ : ?DO ( n1 n2 -- )
-\     2dup = if 2drop else DO then 
-\ ;
+: ?DO ( n1 n2 -- )
+    2dup = if 2drop else DO then 
+;
 
 
 \ https://forth-standard.org/standard/core/TYPE

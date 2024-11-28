@@ -91,33 +91,24 @@ void J(KernelState *state) {
 
 
 
-// ( R: DoSys -- )
+// ( C: LoopSys -- )
 // Exit the current loop.
 // This will also destroy any System structs on the return stack until it finds the DoSys struct.
 // https://forth-standard.org/standard/core/LEAVE
 void Leave(KernelState *state) {
-  bool foundLoopSys = false;
-
-  while (!foundLoopSys && CellStackSize(&state->controlStack) > 0) {
+  // Exit any current streams between us and the LoopSys.
+  while (CellStackSize(&state->controlStack) > 0) {
     Cell cell = CellStackPop(&state->controlStack);
+    // Stop the stream
+    EndSysStream(&cell);
 
-    // Check if we are inside an IF block.
-    if (cell.type == CELL_TYPE_ORIG_SYS) {
-      OrigSys *origSys = (OrigSys *)cell.value;
-      fseek(origSys->stream, 0, SEEK_END);
-    }
     // Check if we are in a LOOP block.
-    else if (cell.type == CELL_TYPE_LOOP_SYS) {
-      foundLoopSys = true;
+    if (cell.type == CELL_TYPE_LOOP_SYS) {
       // Update the loop index to the limit, this will exit the loop.
       LoopSys *loopSys = (LoopSys *)cell.value; 
       loopSys->index = loopSys->limit -1; // Need to subtract 1 because the loop will increment the index before checking the limit.
       CellStackPush(&state->controlStack, cell);
-      // Skip to the end of the stream, preventing the loop body from running.
-      fseek(loopSys->stream, 0, SEEK_END);
-    }
-    else {
-      fprintf(state->errorStream, "\nLEAVE: Unable to free cell of type '%s'.\n", CellTypeToName(cell.type));
+      break;
     }
   }
 }

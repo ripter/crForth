@@ -7,6 +7,7 @@
 //
 // Helpers that work with all Sys structs.
 void FreeSys(Cell *cell);
+void EndSysStream(Cell *cell);
 
 
 //
